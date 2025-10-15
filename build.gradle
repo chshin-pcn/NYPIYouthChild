@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group 'egov'
+version '1.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.egovframe.go.kr/maven/" }
+}
+
+configurations {
+	all {
+		exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	
+	implementation 'org.egovframe.rte:org.egovframe.rte.ptl.mvc:4.3.0'
+	implementation 'org.egovframe.rte:org.egovframe.rte.psl.dataaccess:4.3.0'
+	implementation 'org.egovframe.rte:org.egovframe.rte.fdl.idgnr:4.3.0'
+	implementation 'org.egovframe.rte:org.egovframe.rte.fdl.property:4.3.0'
+	
+ 	implementation 'org.hsqldb:hsqldb:2.7.3:jdk8'
+ 	compileOnly 'org.projectlombok:lombok:1.18.34'
+ 	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+ 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test { useJUnitPlatform() }
