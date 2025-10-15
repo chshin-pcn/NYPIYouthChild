@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="PostCodeSearchPopFragment">
+        <div class="post-search-pop modal">
+            <div class="modal-body">
+                <p>우체국 검색</p>
+                <div class="search-wrap">
+                    <div id="search-form">
+                        <div class="inner">
+                            <div class="form-item">
+                                <label for="wtjr_pstofc_nm-pop">우체국명</label>
+                                <div class="ip-txt01">
+                                    <input id="wtjr_pstofc_nm-pop" type="text">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label for="pstofc_se_cd-pop">우체국코드</label>
+                                <div class="ip-txt01">
+                                    <input id="pstofc_se_cd-pop" type="text">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <button class="btn01" id="btn-search-pop">조회</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-wrap">
+                    <div class="filter">
+                        <div class="count">총&nbsp;<span id="total-count-pop">0</span>건</div>
+                        <div>
+                            <label for="page-size-select-pop" style="display: none;">페이지사이즈선택</label>
+                            <select name="page-size" id="page-size-select-pop">
+                                <option value="5" selected>5개씩 보기</option>
+                                <option value="10">10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="tbl-sty01" id="results-table-pop">
+                            <caption></caption>
+                            <colgroup>
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">우체국명</th>
+                                    <th scope="col">우체국코드</th>
+                                    <th scope="col">우편번호</th>
+                                    <th scope="col">선택</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination-wrap pc">
+                        <div class="pagination-pop">
+                        </div>
+                    </div>
+                    <!-- 모바일 페이지네이션 -->
+                    <div class="pagination-wrap mo">
+                        <div class="pagination-pop">
+                        </div>
+                    </div>
+                    <!-- // 모바일 페이지네이션 -->
+                </div>
+            </div>
+            <button class="btn-close">닫기</button>
+            <div id="loading-pop" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; align-items: center;">
+                <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px;">
+                <span style="margin-top: 10px; font-size: 14px; font-weight: light;">Loading</span>
+            </div>
+        </div>
+		
+		<script th:inline="javascript">
+        /*<![CDATA[*/
+		$(document).ready(function () {
+			
+			$("#loading-pop").hide();
+			
+			var popData = [];
+		    var popCurrentPage = 1;
+		    var popPageSize = 5;
+		    var popTotalCount = 0;
+		    var targetInput;
+		    
+		 	// 검색 버튼 클릭 시 팝업 열기
+		    $(".btn-search-cd").click(function () {
+		    	targetInput = $(this).data("target");
+		    	$('.dim').show();
+		        $('.post-search-pop').show();
+		        var wtjrPstofcNm = $(targetInput).val();
+		        if (wtjrPstofcNm) {
+		            $("#wtjr_pstofc_nm-pop").val(wtjrPstofcNm);  // 코드 값 입력
+		            $("#btn-search-pop").click();  // 검색 버튼 자동 클릭
+		        }
+		    });
+
+		    // 팝업 닫기 버튼
+		    $(".btn-close").click(function () {
+		    	$('.modal').hide();
+		        $('.dim').hide();
+		        
+		        // 초기화
+		        $("#wtjr_pstofc_nm-pop").val("");
+		        $("#pstofc_se_cd-pop").val("");
+		        var tableBody = $("#results-table-pop tbody");
+		        tableBody.empty();
+		        $("#total-count-pop").text("0");
+		        $(".pagination-pop").empty();
+		    });
+		    
+		 	// 페이지사이즈 셀렉트박스(기본 5개)		    
+		    $("#page-size-select-pop").change(function () {
+		    	if (popTotalCount > 0) {
+		    		popPageSize = parseInt($(this).val());
+			        popCurrentPage = 1;
+			        searchDataPop($("#wtjr_pstofc_nm-pop").val(), $("#pstofc_se_cd-pop").val(), popCurrentPage);
+		    	} else {
+		    		popPageSize = parseInt($(this).val());
+		    	}
+		    });
+		    
+		    // 조회 버튼 클릭  이벤트
+		    $("#btn-search-pop").click(function () {
+		        var wtjrPstofcNmPop = $("#wtjr_pstofc_nm-pop").val();
+		        var pstofcSeCdPop = $("#pstofc_se_cd-pop").val();
+		        
+		        var tableBody = $("#results-table-pop tbody");
+		        var paginationContainer = $(".pagination-pop");
+		        tableBody.empty();
+		        paginationContainer.empty();
+		        
+		        popCurrentPage = 1;
+		        
+		        // 데이터 검색
+		        searchDataPop(wtjrPstofcNmPop, pstofcSeCdPop, popCurrentPage);
+		    });
+		 	
+		 	// 엔터 키 누르면 조회
+		 	$("#wtjr_pstofc_nm-pop, #pstofc_se_cd-pop").keydown(function(e) {
+		 		if (e.keyCode === 13) {
+		 			$("#btn-search-pop").click();
+		 		}
+		 	});
+
+
+		    // 데이터 표시
+		    function displayDataPop() {
+		        var tableBody = $("#results-table-pop tbody");
+		        tableBody.empty();  // 기존 데이터 삭제
+
+		        if (popData.length === 0) {
+		            tableBody.append("<tr><td colspan='4'>조회된 데이터가 없습니다.</td></tr>");
+		        } else {
+		        	popData.forEach(function (item) {
+		                var row = "<tr>" +
+							  	  "<td style='text-align: left;'>" + (item.wtjrPstofcNm ? escapeHtml(item.wtjrPstofcNm) : '') + "</td>" +
+		                          "<td>" + (item.pstofcSeCd ? escapeHtml(item.pstofcSeCd) : '') + "</td>" +
+		                          "<td>" + (item.pstofcZip ? escapeHtml(item.pstofcZip) : '') + "</td>" +
+		                          "<td><button class='select-btn' data-office-code='" + item.pstofcSeCd + "' data-office-name='" + item.wtjrPstofcNm + "'>선택</button></td>" +
+		                          "</tr>";
+		                tableBody.append(row);
+		            });
+		        }
+		        
+		     	// 총 건수 업데이트
+		        $("#total-count-pop").text(popTotalCount.toLocaleString());  // 총 건수
+		        // 페이지네이션 표시
+		        displayPaginationPop(popTotalCount);
+		    }
+
+		    // 선택 버튼 클릭 시 부모 창에 우체국 코드 넣기
+		    $(document).on("click", ".select-btn", function () {
+		        var selectedCd = $(this).data("office-code");
+		        var selectedNm = $(this).data("office-name");
+		        // 부모 창의 우체국 코드 입력 필드에 값 넣기
+		        $(targetInput).val(selectedNm);
+		        $(targetInput).next().val(selectedCd);
+
+		        $('.modal').hide();
+		        $('.dim').hide();
+		        
+		        // 초기화
+		        $("#wtjr_pstofc_nm-pop").val("");
+		        $("#pstofc_se_cd-pop").val("");
+		        var tableBody = $("#results-table-pop tbody");
+		        tableBody.empty();
+		        $("#total-count-pop").text("0");
+		        $(".pagination-pop").empty();
+		    });
+		    
+		    
+		    // 페이지네이션 표시 함수
+		    function displayPaginationPop(popTotalCount) {
+		        var totalPages = Math.ceil(popTotalCount / popPageSize);
+		        var paginationContainer = $(".pagination-pop");
+		        paginationContainer.empty();
+		        
+		        if (totalPages > 0) {
+			        var startPage = Math.floor((popCurrentPage - 1) / 10) * 10 + 1;
+		        	var endPage = Math.min(startPage + 9, totalPages);
+			        
+			        var firstButton = $('<button class="page-btn arrow first"><a>처음</a></button>');
+			        if (popCurrentPage === 1) {
+			        	firstButton.addClass('off');
+			            firstButton.prop('disabled', true);
+			        }
+			        paginationContainer.append(firstButton);
+
+			        var prevButton = $('<button class="page-btn arrow prev"><a>이전</a></button>');
+			        if (popCurrentPage === 1) {
+			        	prevButton.addClass('off');
+			            prevButton.prop('disabled', true);
+			        }
+			        paginationContainer.append(prevButton);
+			
+			        for (var i = startPage; i <= endPage; i++) {
+			        	var pageButton = $('<button class="page-btn" data-page="' + i + '"><a>' + i + '</a></button>');
+			            if (i === popCurrentPage) {
+			                pageButton.addClass('active');
+			            }
+			            paginationContainer.append(pageButton);
+			        }
+			        
+			        var nextButton = $('<button class="page-btn arrow next"><a>다음</a></button>');
+			        if (popCurrentPage === totalPages) {
+			        	nextButton.addClass('off');
+			            nextButton.prop('disabled', true);
+			        }
+			        paginationContainer.append(nextButton);
+
+			        var lastButton = $('<button class="page-btn arrow last"><a>마지막</a></button>');
+			        if (popCurrentPage === totalPages) {
+			        	lastButton.addClass('off');
+			            lastButton.prop('disabled', true);
+			        }
+			        paginationContainer.append(lastButton);
+			
+			        paginationContainer.show();
+			        
+			     	// 페이지 버튼 클릭 이벤트			        			        
+			        paginationContainer.find(".page-btn").click(function (e) {
+			        	var clickedPage = $(this).data("page");
+			            var totalPages = Math.ceil(popTotalCount / popPageSize);
+
+			            if (clickedPage) {
+			                popCurrentPage = clickedPage;
+			            } else if ($(this).hasClass('first')) {
+			                popCurrentPage = 1;
+			            } else if ($(this).hasClass('prev')) {
+			                popCurrentPage = popCurrentPage - 10;
+			                if (popCurrentPage < 1) popCurrentPage = 1;
+			            } else if ($(this).hasClass('next')) {
+			                popCurrentPage = popCurrentPage + 10;
+			                if (popCurrentPage > totalPages) popCurrentPage = totalPages;
+			            } else if ($(this).hasClass('last')) {
+			                popCurrentPage = totalPages;
+			            }
+
+			            searchDataPop($("#wtjr_pstofc_nm-pop").val(), 
+			            		$("#pstofc_se_cd-pop").val(), 
+			            		popCurrentPage);
+			        });
+		        }		        
+		    }
+		    
+		 	// HTML 인코딩
+		    function escapeHtml(str) {
+		        if (typeof str !== 'string') {
+		            return str;
+		        }
+		        return str.replace(/[&<>"'\/]/g, function (s) {
+		            return {
+		                '&': '&amp;',
+		                '<': '&lt;',
+		                '>': '&gt;',
+		                '"': '&quot;',
+		                "'": '&#039;',
+		                '/': '&#x2F;'
+		            }[s];
+		        });
+		    }
+		    
+		 	// 데이터 검색 함수
+		    function searchDataPop(wtjrPstofcNmPop, pstofcSeCdPop, popCurrentPage) {
+		 		
+		    	$("#loading-pop").show();
+		    	
+		 		$.ajax({
+                    url: /*[[@{/postdata/api/getTbPoInfoList}]]*/ '/postdata/api/getTbPoInfoList',
+		            method: 'POST',
+		            dataType: "json",
+		            data: {
+		            	pageNo: popCurrentPage,
+		                numOfRows: popPageSize,
+		            	wtjrPstofcNm: wtjrPstofcNmPop,
+		            	pstofcZip: "",
+		            	pstofcSeCd: pstofcSeCdPop
+		            },
+		            beforeSend: function(xhr) {
+		                xhr.setRequestHeader("Accept-Charset", "UTF-8");
+		                if (!$("#loading-pop").is(":visible")) {
+		                    $("#loading-pop").show();
+		                }
+		            },
+		            success: function (response) {
+		            	if (response.result === "success") {
+		        			popData = response.response.items.item;
+			            	popTotalCount = response.response.totalCount;
+			                displayDataPop(popData, popTotalCount);
+		            	} else if (response.result === "noData") {
+		            		popData = [];
+			            	popTotalCount = 0;
+			                displayDataPop(popData, popTotalCount);
+		            	} else if (response.result === "fail") {
+		            		alert("API 호출 실패");
+		            	}
+		            },
+		            error: function(err) {
+		            	alert("API 호출 실패");
+		            },
+		            complete: function() {
+		                $("#loading-pop").hide();
+		            }
+		        });
+		    }
+		});
+        /*]]>*/
+		</script>
+    </div>
+</body>
+</html>

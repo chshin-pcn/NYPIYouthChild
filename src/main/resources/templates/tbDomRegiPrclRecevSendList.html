@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko" xml:lang="ko">
+<head>
+<title>국내 창구소포 물류이동</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script th:src="@{/js/jquery-1.12.4.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery-ui.css}">
+
+</head>
+
+<body>
+    <!-- wrap -->
+    <div id="wrap">
+        <!-- <div class="wrap-inner"> -->
+        <div class="side-nav-wrap">
+            <nav class="side-nav">
+            	<div class="side-nav-header1">우편물류데이터</div>
+            	<div class="side-nav-header">오픈API 목록</div>
+                <div class="side-nav-menu">
+                    <ul>
+                        <li class="active"><a th:href="@{/tbDomRegiPrclRecevSendList}">국내 창구소포 물류이동</a></li>
+                        <li><a href="#">국내 방문소포 물류이동</a></li>
+                        <li><a href="#">우체국 쇼핑 주문</a></li>
+                        <li><a href="#">우체국 쇼핑 물품</a></li>
+                        <li><a href="#">우체국 정보</a></li>
+                    </ul>
+                </div>
+                <div class="side-nav-footer">
+                    <img th:src="@{/images/logo.png}" alt="우정사업본부">
+                </div>
+            </nav>
+            <!-- 모바일 메뉴닫기 버튼 -->
+            <button class="btn-menu-close mo">닫기</button>
+            <!-- // 모바일 메뉴닫기 버튼 -->
+        </div>
+        <div class="content-wrap">
+            <!-- 모바일 헤더 -->
+            <header class="m-header mo">
+                <button class="btn-menu">메뉴</button>
+            </header>
+            <!-- // 모바일 헤더 -->
+            <div id="mainContent">
+                <h1>국내 창구소포 물류이동</h1>
+                <div class="search-wrap">
+                    <div class="con-box">
+                        <div class="search-form">
+                            <div class="inner">
+                                <div class="form-item">
+                                    <label for="rcpt_pstofc_wtjr_pstof_nm">접수우체국</label>
+                                    <div class="ip-txt01">
+                                        <input id="rcpt_pstofc_wtjr_pstof_nm" type="text">
+                                    	<input type="hidden" id="rcpt_pstofc_se_cd" value="">
+                                        <button type="button" class="btn-search-cd" data-target="#rcpt_pstofc_wtjr_pstof_nm">
+                                            <em class="hidden-txt">검색</em>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label for="deliv_pstofc_wtjr_pstof_nm">배달우체국</label>
+                                    <div class="ip-txt01">
+                                        <input id="deliv_pstofc_wtjr_pstof_nm" type="text">
+                                        <input type="hidden" id="deliv_pstofc_se_cd" value="">
+                                        <button type="button" class="btn-search-cd" data-target="#deliv_pstofc_wtjr_pstof_nm">
+                                            <em class="hidden-txt">검색</em>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <label for="rcpt_ymd-start">접수기간</label>
+                                    <div class="box">
+                                        <div class="ip-txt01">
+                                            <input id="rcpt_ymd-start" class="datepicker1" type="text" readonly>
+                                        </div>
+                                        ~
+                                        <div class="ip-txt01">
+                                            <label for="rcpt_ymd-end" style="display: none;">접수기간</label>
+                                            <input id="rcpt_ymd-end" class="datepicker2" type="text" readonly>
+                                        </div>
+                                    </div>
+                                    <p class="txt-blue">* 기간은 2024년 3월 이후 조회 가능<br>* 조회되는 데이터는 샘플 데이터로 공공데이터포털(data.go.kr) 에서 활용신청시 전체 데이터를 활용 하실 수 있습니다.</p>
+                                </div>
+
+                                <div class="form-item">
+                                    <button class="btn01" id="btn-search">조회</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="result-wrap">
+                    <div class="filter">
+                        <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
+                        <div>
+                            <label for="page-size-select" style="display: none;">페이지사이즈선택</label>
+                            <select name="page-size" id="page-size-select">
+                                <option value="5">5개씩 보기</option>
+                                <option value="10" selected>10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="con-box">
+                        <div class="table-wrap">
+                            <table class="tbl-sty01" id="results-table">
+                                <caption></caption>
+                                <colgroup>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">접수일자</th>
+                                        <th scope="col">종별구분</th>
+                                        <th scope="col">접수우체국</th>
+                                        <th scope="col">배달우체국</th>
+                                        <th scope="col">발송인주소</th>
+                                        <th scope="col">수취인주소</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="pagination-wrap pc">
+                        <div class="pagination">
+                        </div>
+                    </div>
+                    <!-- 모바일 페이지네이션 -->
+                    <div class="pagination-wrap mo">
+                        <div class="pagination">
+                        </div>
+                    </div>
+                    <!-- // 모바일 페이지네이션 -->
+                </div>
+
+            </div>
+            <footer>
+                <p>(30114) 세종특별자치시 도움5로 19 (어진동)</p>
+            </footer>
+            
+            <!-- 팝업 영역 -->
+        	<div th:replace="~{PostCodeSearchPop :: PostCodeSearchPopFragment}"></div>
+            
+        </div>
+
+        <!-- </div> -->
+    </div>
+    <!-- //wrap -->
+    <div class="dim"></div>
+	
+	<div id="loading" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; align-items: center;">
+	    <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px;">
+	    <span style="margin-top: 10px; font-size: 14px; font-weight: light;">Loading</span>
+	</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+$(document).ready(function () {
+	$("#loading").hide();
+	
+    var data = [];
+    var currentPage = 1;
+    var pageSize = 10;
+    var totalCount = 0;
+    
+    // 현재월의 1일로 초기값 세팅
+    $('#rcpt_ymd-start').val(new Date().toISOString().substring(0,8) + "01");
+    $('#rcpt_ymd-end').val(new Date().toISOString().substring(0,8) + "01");
+    	        
+ 	// 엔터 키 누르면 접수우체국코드검색
+    $("#rcpt_pstofc_wtjr_pstof_nm").keydown(function(e) {
+        if (e.keyCode === 13) {
+            $(".btn-search-cd[data-target='#rcpt_pstofc_wtjr_pstof_nm']").click();
+        }
+    });
+ 	
+ 	// 엔터 키 누르면 배달우체국코드검색
+    $("#deliv_pstofc_wtjr_pstof_nm").keydown(function(e) {
+        if (e.keyCode === 13) {
+            $(".btn-search-cd[data-target='#deliv_pstofc_wtjr_pstof_nm']").click();
+        }
+    });
+ 	
+ 	// 페이지사이즈 셀렉트박스(기본 10개)
+    $("#page-size-select").change(function () {
+    	if (totalCount > 0) {
+    		pageSize = parseInt($(this).val());
+    		currentPage = 1;
+    		
+    		if(!$("#rcpt_pstofc_wtjr_pstof_nm").val().trim()) {
+    			$("#rcpt_pstofc_se_cd").val("");
+    		}
+    		
+    		if(!$("#deliv_pstofc_wtjr_pstof_nm").val().trim()) {
+    			$("#deliv_pstofc_se_cd").val("");
+    		}
+    		
+    		searchData($("#rcpt_pstofc_se_cd").val(), 
+                    $("#deliv_pstofc_se_cd").val(), 
+                    $("#rcpt_ymd-start").val().replace(/-/g, ""),
+                    $("#rcpt_ymd-end").val().replace(/-/g, ""),
+                    currentPage);
+    	} else {
+    		pageSize = parseInt($(this).val());
+    	}
+    });
+ 	
+    function calculateDateDifference(startDate, endDate) {
+        var start = new Date(startDate.substring(0, 4), startDate.substring(4, 6) - 1, startDate.substring(6, 8));
+        var end = new Date(endDate.substring(0, 4), endDate.substring(4, 6) - 1, endDate.substring(6, 8));
+        var diffTime = end - start;
+        var diffDays = diffTime / (1000 * 60 * 60 * 24);
+        return diffDays;
+    }
+
+    // 조회 버튼 클릭 이벤트
+    $("#btn-search").click(function () {
+    	
+    	if(!$("#rcpt_pstofc_wtjr_pstof_nm").val().trim()) {
+			$("#rcpt_pstofc_se_cd").val("");
+		}
+		
+		if(!$("#deliv_pstofc_wtjr_pstof_nm").val().trim()) {
+			$("#deliv_pstofc_se_cd").val("");
+		}
+    	
+    	var rcptPstofcSeCd = $("#rcpt_pstofc_se_cd").val();
+        var delivPstofcSeCd = $("#deliv_pstofc_se_cd").val();
+        var rcptYmdStart = $("#rcpt_ymd-start").val().replace(/-/g, "");
+        var rcptYmdEnd = $("#rcpt_ymd-end").val().replace(/-/g, "");
+        
+        /* if (!rcptPstofcSeCd) {
+            alert("접수우체국를 입력하세요.");
+            $("#rcpt_pstofc_se_cd").focus();
+            return;
+        } */
+
+        /* if (!delivPstofcSeCd) {
+            alert("배달우체국를 입력하세요.");
+            $("#deliv_pstofc_se_cd").focus();
+            return;
+        } */
+
+        if (!rcptYmdStart) {
+            alert("접수 시작일을 입력하세요.");
+            $("#rcpt_ymd-start").focus();
+            return;
+        }
+
+        if (!rcptYmdEnd) {
+            alert("접수 종료일을 입력하세요.");
+            $("#rcpt_ymd-end").focus();
+            return;
+        }
+        
+        if (rcptYmdStart < "20240301" || rcptYmdEnd < "20240301") {
+            alert("2024년 3월 이후 조회 가능합니다.");
+            return;
+        }
+        
+        if (rcptYmdStart && rcptYmdEnd && rcptYmdStart > rcptYmdEnd) {
+            alert("접수 시작일은 접수 종료일보다 클 수 없습니다.");
+            $("#rcpt_ymd-end").focus();
+            return;
+        }
+        
+        var diffDays = calculateDateDifference(rcptYmdStart, rcptYmdEnd);
+        if (diffDays > 2) {
+            alert("검색 기간은 최대 2일까지 가능합니다.");
+            return;
+        }
+        
+        var tableBody = $("#results-table tbody");
+        var paginationContainer = $(".pagination");
+        tableBody.empty();
+        paginationContainer.empty();
+        
+        currentPage = 1;
+        
+        // 데이터 검색
+        searchData(rcptPstofcSeCd, delivPstofcSeCd, rcptYmdStart, rcptYmdEnd, currentPage);
+    });
+    
+    // 엔터 키 누르면 조회
+    $('#rcpt_ymd-start, #rcpt_ymd-end').keydown(function (e) {
+        if (e.keyCode === 13) {
+            $("#btn-search").click();
+        }
+    });
+
+    // 데이터 표시
+    function displayData(data, totalCount) {
+        var tableBody = $("#results-table tbody");
+        tableBody.empty();  // 기존 데이터 삭제
+
+        if (data.length === 0) {
+            tableBody.append("<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>");
+        } else {
+            data.forEach(function (item) {
+            	var formattedRcptYmd = formatDate(item.rcptYmd);
+            	
+                var row = "<tr>" +
+		                  "<td>" + (formattedRcptYmd ? escapeHtml(formattedRcptYmd) : '') + "</td>" +
+		                  "<td>" + (item.domPopdSeNm ? escapeHtml(item.domPopdSeNm) : '') + "</td>" +
+		                  "<td>" + (item.rcptPstofcSeCd ? escapeHtml(item.rcptPstofcSeCd) : '') + "</td>" +
+		                  "<td>" + (item.delivPstofcSeCd ? escapeHtml(item.delivPstofcSeCd) : '') + "</td>" +
+		                  "<td style='text-align: left;'>" + (item.sndrAddr ? escapeHtml(item.sndrAddr) : '') + "</td>" +
+		                  "<td style='text-align: left;'>" + (item.addrseAddr ? escapeHtml(item.addrseAddr) : '') + "</td>" +
+                          "</tr>";
+                tableBody.append(row);
+            });
+        }
+        
+        // 총 건수 업데이트
+        $("#total-count").text(totalCount.toLocaleString());  // 총 건수
+        // 페이지네이션 표시
+        displayPagination(totalCount);
+    }
+
+ 	// 페이지네이션 표시 함수
+    function displayPagination(totalCount) {
+        var totalPages = Math.ceil(totalCount / pageSize);
+        var paginationContainer = $(".pagination");
+        paginationContainer.empty();
+        
+        if (totalPages > 0) {
+        	var startPage = Math.floor((currentPage - 1) / 10) * 10 + 1;
+        	var endPage = Math.min(startPage + 9, totalPages);
+        	
+            var firstButton = $('<button class="page-btn arrow first"><a>처음</a></button>');
+            if (currentPage === 1) {
+            	firstButton.addClass('off');
+                firstButton.prop('disabled', true);
+            }
+            paginationContainer.append(firstButton);
+
+            var prevButton = $('<button class="page-btn arrow prev"><a>이전</a></button>');
+            if (currentPage === 1) {
+            	prevButton.addClass('off');
+                prevButton.prop('disabled', true);
+            }
+            paginationContainer.append(prevButton);
+
+            for (var i = startPage; i <= endPage; i++) {
+                var pageButton = $('<button class="page-btn" data-page="' + i + '"><a>' + i + '</a></button>');
+                if (i === currentPage) {
+                    pageButton.addClass('active');
+                }
+                paginationContainer.append(pageButton);
+            }
+
+            var nextButton = $('<button class="page-btn arrow next"><a>다음</a></button>');
+            if (currentPage === totalPages) {
+            	nextButton.addClass('off');
+                nextButton.prop('disabled', true);
+            }
+            paginationContainer.append(nextButton);
+
+            var lastButton = $('<button class="page-btn arrow last"><a>마지막</a></button>');
+            if (currentPage === totalPages) {
+            	lastButton.addClass('off');
+                lastButton.prop('disabled', true);
+            }
+            paginationContainer.append(lastButton);
+
+            paginationContainer.show();
+            
+            // 페이지 버튼 클릭 이벤트
+            $(".page-btn").click(function (e) {
+            	var clickedPage = $(this).data("page");
+                var totalPages = Math.ceil(totalCount / pageSize);
+
+                if (clickedPage) {
+                    currentPage = clickedPage;
+                } else if ($(this).hasClass('first')) {
+                    currentPage = 1;
+                } else if ($(this).hasClass('prev')) {
+                    currentPage = currentPage - 10;
+                    if (currentPage < 1) currentPage = 1;
+                } else if ($(this).hasClass('next')) {
+                    currentPage = currentPage + 10;
+                    if (currentPage > totalPages) currentPage = totalPages;
+                } else if ($(this).hasClass('last')) {
+                    currentPage = totalPages;
+                }
+                
+                if(!$("#rcpt_pstofc_wtjr_pstof_nm").val().trim()) {
+        			$("#rcpt_pstofc_se_cd").val("");
+        		}
+        		
+        		if(!$("#deliv_pstofc_wtjr_pstof_nm").val().trim()) {
+        			$("#deliv_pstofc_se_cd").val("");
+        		}
+
+                searchData($("#rcpt_pstofc_se_cd").val(), 
+                            $("#deliv_pstofc_se_cd").val(), 
+                            $("#rcpt_ymd-start").val().replace(/-/g, ""),
+                            $("#rcpt_ymd-end").val().replace(/-/g, ""),
+                            currentPage);
+            });
+        }
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) {
+            return "";
+        }
+        if (dateString.length === 19 && dateString.includes('-') && dateString.includes(':')) {
+            return dateString.substring(0, 13);
+        }
+        if (dateString.length === 10) {
+            return dateString.substring(0, 4) + '-' + dateString.substring(4, 6) + '-' + dateString.substring(6, 8) + ' ' + dateString.substring(8, 10);
+        }
+        if (dateString.length === 8) {
+            return dateString.substring(0, 4) + '-' + dateString.substring(4, 6) + '-' + dateString.substring(6, 8);
+        }
+        if (dateString.length === 6) {
+            return dateString.substring(0, 4) + '-' + dateString.substring(4, 6);
+        }
+        return dateString;
+    }
+    
+ 	// HTML 인코딩
+    function escapeHtml(str) {
+        if (typeof str !== 'string') {
+            return str;
+        }
+        return str.replace(/[&<>"'\/]/g, function (s) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;',
+                '/': '&#x2F;'
+            }[s];
+        });
+    }
+    
+    // 데이터 검색 함수
+    function searchData(rcptPstofcSeCd, delivPstofcSeCd, rcptYmdStart, rcptYmdEnd, currentPage) {
+    	
+    	$("#loading").show();
+    	
+        $.ajax({
+            url: /*[[@{/api/getTbDomRegiPrclRecevSendList}]]*/ '/api/getTbDomRegiPrclRecevSendList',
+            method: 'POST',
+            dataType: "json",
+            data: {
+                pageNo: currentPage,
+                numOfRows: pageSize,
+                rcptPstofcSeCd: rcptPstofcSeCd,
+                delivPstofcSeCd: delivPstofcSeCd,
+                rcptYmdStt: rcptYmdStart,
+                rcptYmdEnd: rcptYmdEnd
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept-Charset", "UTF-8");
+                if (!$("#loading").is(":visible")) {
+                    $("#loading").show();
+                }
+            },
+            success: function (response) {
+            	if (response.result === "success") {
+            		data = response.response.items.item;
+	            	totalCount = response.response.totalCount;
+	                displayData(data, totalCount);
+	                displayPagination(totalCount);
+            	} else if (response.result === "noData") {
+            		data = [];
+	            	totalCount = 0;
+	                displayData(data, totalCount);
+	                displayPagination(totalCount);
+            	} else if (response.result === "fail") {
+            		alert("API 호출 실패");
+            	}
+            },
+            error: function(err) {
+            	alert("API 호출 실패");
+            },
+            complete: function() {
+                $("#loading").hide();
+            }
+        });
+    }
+});
+/*]]>*/
+</script>
+</body>
+</html>
