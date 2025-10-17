@@ -26,7 +26,7 @@ public class HttpUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtil.class);
     private final Map<String, URL> urlMap = new HashMap<String, URL>();
 
-    @Value("${globals.baseUrl}")
+    @Value("${baseUrl}")
     private String baseUrl;
 
     public static String sendHttpRequest(String targetURL) throws Exception {
