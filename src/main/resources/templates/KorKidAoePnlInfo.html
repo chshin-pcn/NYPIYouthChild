@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="ko" xml:lang="ko">
+
+<head>
+    <title>한국아동청소년패널조사</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <!-- wrap -->
+    <div id="wrap">
+        <!-- <div class="wrap-inner"> -->
+        <div class="side-nav-wrap">
+            <nav class="side-nav">
+                <div class="side-nav-header1">한국 아동&middot;청소년&middot;청년 데이터</div>
+                <div class="side-nav-header">오픈API 목록</div>
+                <div class="side-nav-menu">
+                    <ul>
+                        <li><a href="#">아동&middot;청소년&middot;청년 데이터 통합검색</a></li>
+                        <li class="active">
+                            <a href="#">한국아동&middot;청소년패널조사</a>
+                        </li>
+                        <li><a href="#">다문화청소년패널조사</a></li>
+                        <li><a href="#">한국청소년패널조사</a></li>
+                        <li><a href="#">학업중단청소년패널조사</a></li>
+                        <li><a href="#">아동청소년인권실태조사</a></li>
+                        <li><a href="#">청년사회경제실태조사</a></li>
+                    </ul>
+                </div>
+                <div class="side-nav-footer">
+                    <img th:src="@{/images/logo.jpg}" alt="" />
+                </div>
+            </nav>
+            <!-- 모바일 메뉴닫기 버튼 -->
+            <button class="btn-menu-close mo">닫기</button>
+            <!-- // 모바일 메뉴닫기 버튼 -->
+        </div>
+        <div class="content-wrap">
+            <!-- 모바일 헤더 -->
+            <header class="m-header mo">
+                <button class="btn-menu">메뉴</button>
+            </header>
+
+            <div id="mainContent">
+                <h1>한국아동&middot;청소년패널조사</h1>
+                <div class="search-wrap">
+                    <div class="search-form">
+                        <div class="form-item">
+                            <label for="cohort-select">코호트</label>
+                            <select id="cohort-select">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="survey-round-select">조사차수</label>
+                            <select id="survey-round-select">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="respondent-name-select">응답주체명</label>
+                            <select id="respondent-name-select">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="survey-area-select">설문영역</label>
+                            <select id="survey-area-select">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="banner-variable-select">배너변수</label>
+                            <select id="banner-variable-select">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <button class="btn01" id="btn-search">조회</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-wrap">
+                    <div class="filter">
+                        <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
+                        <div>
+                            <label for="page-size-select" style="display: none">페이지사이즈선택</label>
+                            <select name="page-size" id="page-size-select">
+                                <option value="5">5개씩 보기</option>
+                                <option value="10" selected>10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="tbl-sty01" id="results-table">
+                            <caption></caption>
+                            <colgroup>
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">설문문항아이디</th>
+                                    <th scope="col">코드북문항내용</th>
+                                    <th scope="col">응답값</th>
+                                    <th scope="col">응답명</th>
+                                    <th scope="col">사례수</th>
+                                    <th scope="col">빈도비율</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- pc 페이지네이션 -->
+                    <div class="pagination-wrap pc">
+                        <div class="pagination"></div>
+                    </div>
+                    <!-- 모바일 페이지네이션 -->
+                    <div class="pagination-wrap mo">
+                        <div class="pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <p>세종특별자치시 시청대로370 세종국책연구단지 사회정책동(D동) 한국청소년정책연구원 6/7층</p>
+            </footer>
+        </div>
+
+        <!-- </div> -->
+    </div>
+    <!-- //wrap -->
+    <div class="dim"></div>
+
+    <!-- 로딩 스피너 -->
+    <!--
+    <div id="loading" style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    ">
+        <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px" />
+        <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
+    </div>
+    -->
+</body>
+
+</html>
