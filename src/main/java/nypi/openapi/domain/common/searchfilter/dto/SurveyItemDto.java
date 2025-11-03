@@ -1,4 +1,4 @@
-package nypi.openapi.domain.search.dto;
+package nypi.openapi.domain.common.searchfilter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,7 +1,7 @@
-package nypi.openapi.domain.search.controller;
+package nypi.openapi.domain.mcltaoepnlinfo.controller;
 
-import nypi.openapi.domain.search.dto.ProcessedDataDto;
-import nypi.openapi.domain.search.service.SearchService;
+import nypi.openapi.domain.common.searchfilter.dto.ProcessedDataDto;
+import nypi.openapi.domain.common.searchfilter.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.io.IOException;
 
 @Controller
-public class SearchController {
+public class McltAoePnlInfoController {
 
     @Autowired
     private SearchService searchService;
 
-    @GetMapping("/search")
-    public String searchFilter(Model model) throws IOException {
+    @GetMapping("/mcltAoePnlInfo")
+    public String mcltAoePnlInfo(Model model) throws IOException {
         ProcessedDataDto processedData = searchService.getProcessedData();
         model.addAttribute("data", processedData);
-        return "SearchFilter";
+        return "McltAoePnlInfo";
     }
 }

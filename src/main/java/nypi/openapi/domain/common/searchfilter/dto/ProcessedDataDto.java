@@ -1,4 +1,4 @@
-package nypi.openapi.domain.search.dto;
+package nypi.openapi.domain.common.searchfilter.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.Map;
 @Getter
 @Builder
 public class ProcessedDataDto {
-    private List<Map<String, String>> yearOrderData;
+    private List<Map<String, String>> yearData;
     private List<Map<String, String>> respondentData;
     private List<Map<String, String>> categoryMajorData;
     private List<Map<String, String>> categoryMediumData;

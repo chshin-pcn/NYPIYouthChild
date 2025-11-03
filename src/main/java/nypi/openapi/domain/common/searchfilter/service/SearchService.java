@@ -1,9 +1,9 @@
-package nypi.openapi.domain.search.service;
+package nypi.openapi.domain.common.searchfilter.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nypi.openapi.domain.search.dto.DummyDataDto;
-import nypi.openapi.domain.search.dto.ProcessedDataDto;
-import nypi.openapi.domain.search.dto.SurveyItemDto;
+import nypi.openapi.domain.common.searchfilter.dto.DummyDataDto;
+import nypi.openapi.domain.common.searchfilter.dto.ProcessedDataDto;
+import nypi.openapi.domain.common.searchfilter.dto.SurveyItemDto;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,8 @@ public class SearchService {
     }
 
     private ProcessedDataDto processSurveyItems(List<SurveyItemDto> surveyItems) {
-        // yearOrderData,respondentData,categoryMajorData,categoryMediumData,categoryMinorData,categoryDetailedData,questionData 중복 제거 및 조회 속도를 위해 해시셋으로 생성(나중에 리스트로 변환)
-        Set<Map<String, String>> yearOrderData = new HashSet<>();
+        // yearData,respondentData,categoryMajorData,categoryMediumData,categoryMinorData,categoryDetailedData,questionData 중복 제거 및 조회 속도를 위해 해시셋으로 생성(나중에 리스트로 변환)
+        Set<Map<String, String>> yearData = new HashSet<>();
         Set<Map<String, String>> respondentData = new HashSet<>();
         Set<Map<String, String>> categoryMajorData = new HashSet<>();
         Set<Map<String, String>> categoryMediumData = new HashSet<>();
@@ -37,7 +37,7 @@ public class SearchService {
         // for문 시작 surveyItems를 돌려 surveyItem 하나씩
         for (SurveyItemDto surveyItem : surveyItems) {
             // surveyItem에서 연도/차수, 응답주체, 카테고리 id, 출력 카테고리명, 문항 ID, 문항 내용을 각각 변수로 저장(for문이 돌때마다 재할당)
-            String yearOrder = surveyItem.getYear();
+            String year = surveyItem.getYear();
             String respondent = surveyItem.getRespondent();
             String categoryId = surveyItem.getCategoryId();
             String majorCategory = surveyItem.getMajorCategory();
@@ -50,8 +50,8 @@ public class SearchService {
             // id라는 스트링빌더 생성(이후 문자열을 지속적으로 추가해서 사용할 예정)
             StringBuilder id = new StringBuilder();
 
-            // yearOrderData 연도/차수 처리(별도 함수 분리)
-            processYearOrder(yearOrderData, yearOrder, id);
+            // yearData 연도/차수 처리(별도 함수 분리)
+            processYear(yearData, year, id);
 
             // respondentData 응답주체 처리(별도 함수 분리)
             processRespondent(respondentData, respondent, id);
@@ -67,7 +67,7 @@ public class SearchService {
         }
 
         return ProcessedDataDto.builder()
-                .yearOrderData(getSortedList(yearOrderData))
+                .yearData(getSortedList(yearData))
                 .respondentData(getSortedList(respondentData))
                 .categoryMajorData(getSortedList(categoryMajorData))
                 .categoryMediumData(getSortedList(categoryMediumData))
@@ -83,13 +83,14 @@ public class SearchService {
         return list;
     }
 
-    private void processYearOrder(Set<Map<String, String>> yearOrderData, String yearOrder, StringBuilder id) {
+    private void processYear(Set<Map<String, String>> yearData, String year, StringBuilder id) {
         Map<String, String> tmpMap = new HashMap<>();
         tmpMap.put("parentId", null);
-        id.append(yearOrder);
-        tmpMap.put("id", yearOrder);
-        tmpMap.put("name", yearOrder);
-        yearOrderData.add(tmpMap);
+        id.append(year);
+        tmpMap.put("id", year);
+        tmpMap.put("name", year);
+        tmpMap.put("value", year);
+        yearData.add(tmpMap);
     }
 
     private void processRespondent(Set<Map<String, String>> respondentData, String respondent, StringBuilder id) {
@@ -98,6 +99,7 @@ public class SearchService {
         id.append("-").append(respondent);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", respondent);
+        tmpMap.put("value", respondent);
         respondentData.add(tmpMap);
     }
 
@@ -119,6 +121,7 @@ public class SearchService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMajorCategory);
+        tmpMap.put("value", tmpCategoryId);
         categoryMajorData.add(tmpMap);
     }
 
@@ -140,6 +143,7 @@ public class SearchService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMediumCategory);
+        tmpMap.put("value", tmpCategoryId);
         categoryMediumData.add(tmpMap);
     }
 
@@ -161,6 +165,7 @@ public class SearchService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMinorCategory);
+        tmpMap.put("value", tmpCategoryId);
         categoryMinorData.add(tmpMap);
     }
 
@@ -182,6 +187,7 @@ public class SearchService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpDetailedCategory);
+        tmpMap.put("value", tmpCategoryId);
         categoryDetailedData.add(tmpMap);
     }
 
@@ -191,6 +197,7 @@ public class SearchService {
         id.append("-").append(questionId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", questionContent);
+        tmpMap.put("value", questionId);
         questionData.add(tmpMap);
     }
 }

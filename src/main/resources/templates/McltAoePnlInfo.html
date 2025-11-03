@@ -2,7 +2,7 @@
 <html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>한국아동&middot;청소년패널조사</title>
+    <title>다문화청소년패널정보</title>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
@@ -28,7 +28,7 @@
         </header>
 
         <div id="mainContent">
-            <h1>한국아동&middot;청소년패널조사</h1>
+            <h1>다문화청소년패널조사</h1>
             <div class="filter-container">
                 <div class="filter-header">
                     <h2>검색 필터</h2>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="filter-row">
                     <div class="filter-group">
-                        <label for="year">설문연도</label>
+                        <label for="year">기수명/설문연도</label>
                         <select id="year">
                             <option value="">선택</option>
                         </select>
@@ -180,14 +180,37 @@
 <script th:src="@{/js/filter.js}"></script>
 <script th:inline="javascript">
     /*<![CDATA[*/
+
+    // 1. 이 페이지의 필터 구성을 정의합니다.
+    const pageFilterConfig = {
+        selects: [
+            { key: "year", elementId: "year", data: "yearData" },
+            { key: "respondent", elementId: "respondent", data: "respondentData" },
+            { key: "categoryMajor", elementId: "category-major", data: "categoryMajorData", excludeFromParams: true },
+            { key: "categoryMedium", elementId: "category-medium", data: "categoryMediumData", excludeFromParams: true },
+            { key: "categoryMinor", elementId: "category-minor", data: "categoryMinorData", excludeFromParams: true },
+            { key: "categoryDetailed", elementId: "category-detailed", data: "categoryDetailedData", excludeFromParams: true },
+            { key: "questionId", elementId: "question", data: "questionData" }
+        ],
+        bannerVariables: [
+            { elementId: 'gender', paramName: 'svbnClsfCd01', paramValue: 'BANN020200' },
+            { elementId: 'age', paramName: 'svbnClsfCd02', paramValue: 'BANN020300' },
+            { elementId: 'region', paramName: 'svbnClsfCd03', paramValue: 'BANN020400' }
+        ]
+    };
+
+    // 2. Thymeleaf로부터 pre-processed 데이터를 가져옵니다.
     const processedData = /*[[${data}]]*/ null;
 
+    // 3. 검색 실행 시 호출될 콜백 함수를 정의합니다.
     function performSearch(selectedValues) {
-        console.log("Performing search with the following values:", selectedValues);
-        // TODO: Add API request logic here.
+        console.log("다음 값으로 검색을 수행합니다:", selectedValues);
+        // TODO: selectedValues 객체를 사용하여 API 요청 로직을 추가하세요.
     }
 
-    initializeFilters(processedData, performSearch);
+    // 4. 필터를 초기화합니다.
+    initializeFilters(pageFilterConfig, processedData, performSearch);
+
     /*]]>*/
 </script>
 </body>

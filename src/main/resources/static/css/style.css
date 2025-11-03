@@ -551,6 +551,7 @@ caption,
     background: url(../images/ico_box.png) no-repeat;
 }
 
+/*
 #mainContent .search-wrap {
     margin-top: 40px;
     padding: 25px;
@@ -606,6 +607,166 @@ caption,
     height: 48px;
     right: 0px;
     bottom: 0px;
+}
+*/
+
+#mainContent .filter-container {
+    margin-top: 40px;
+    padding: 25px;
+    border-radius: 10px;
+    background: #fff;
+    gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#mainContent .filter-group {
+    width: calc(33.333% - 16px);
+    display: flex;
+    flex-direction: column;
+}
+
+#mainContent .filter-group label,
+#mainContent .form-item-label {
+    font-weight: 700;
+}
+
+#mainContent .filter-group select {
+    width: 100%;
+    height: 48px;
+    padding: 0 15px;
+    font-size: 16px;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #fff url(../images/ico_select.png) no-repeat right 15px center / 14px 7px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#mainContent .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    width: 100%;
+}
+
+#mainContent .category-group {
+    width: 100%;
+}
+
+#mainContent .category-group > label {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+#mainContent .category-selects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+#mainContent .category-selects .filter-group {
+    width: calc(20% - 20px);
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+#mainContent .category-selects .filter-group label {
+    font-weight: 500;
+    white-space: nowrap;
+    min-width: 50px;
+}
+
+#mainContent .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+#mainContent .checkbox-group input[type="checkbox"] {
+    /* Remove default appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Style the checkbox */
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#mainContent .checkbox-group input[type="checkbox"]:checked {
+    background-color: #315fe1; /* Blue background when checked */
+    border-color: #315fe1;
+}
+
+#mainContent .checkbox-group input[type="checkbox"]:checked::after {
+    content: '✔'; /* Checkmark character */
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#mainContent .checkbox-group label {
+    font-weight: 500;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+#mainContent .filter-group .checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#mainContent .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#mainContent .btn-container .btn-reset,
+#mainContent .btn-container .btn-search {
+    width: 120px;
+    height: 48px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#mainContent .btn-container .btn-reset {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#mainContent .btn-container .btn-search {
+    background-color: #315fe1;
+    color: #fff;
+}
+
+#mainContent select:disabled {
+    background-color: #f2f2f2;
 }
 
 .result-wrap {
@@ -921,6 +1082,10 @@ footer p {
     .modal {
         width: 95%
     }
+
+    #mainContent .category-selects .filter-group {
+        width: calc(50% - 12px);
+    }
 }
 
 @media (max-width: 960px) {
@@ -1051,4 +1216,22 @@ footer p {
     footer {
         text-align: center;
     }
+}
+
+.filter-header {
+    width: 100%;
+}
+
+.filter-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    height: 2px;
+    background-color: #222;
+    margin: 0;
 }

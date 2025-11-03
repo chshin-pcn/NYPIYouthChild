@@ -2,7 +2,7 @@
 <html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>한국아동&middot;청소년패널조사</title>
+    <title>아동청소년인권실태정보</title>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 
@@ -28,7 +28,7 @@
         </header>
 
         <div id="mainContent">
-            <h1>한국아동&middot;청소년패널조사</h1>
+            <h1>아동청소년인권실태조사</h1>
             <div class="filter-container">
                 <div class="filter-header">
                     <h2>검색 필터</h2>
@@ -177,18 +177,8 @@
     <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
 </div>
 -->
-<script th:src="@{/js/filter.js}"></script>
+<!--<script th:src="@{/js/filter.js}"></script>-->
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    const processedData = /*[[${data}]]*/ null;
-
-    function performSearch(selectedValues) {
-        console.log("Performing search with the following values:", selectedValues);
-        // TODO: Add API request logic here.
-    }
-
-    initializeFilters(processedData, performSearch);
-    /*]]>*/
 </script>
 </body>
 
