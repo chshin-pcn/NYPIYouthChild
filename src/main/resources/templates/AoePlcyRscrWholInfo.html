@@ -3,183 +3,395 @@
 
 <head>
     <title>청소년정책연구원전체정보</title>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Regular.woff2}"
-          type="font/woff2"/>
-    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Medium.woff2}"
-          type="font/woff2"/>
-    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Bold.woff2}" type="font/woff2"/>
-    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Light.woff2}" type="font/woff2"/>
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Regular.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Medium.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Bold.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Light.woff2}" type="font/woff2" />
 
-    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
 </head>
 
 <body>
-<!-- wrap -->
-<div id="wrap">
-    <!-- <div class="wrap-inner"> -->
-    <div th:replace="~{fragments/sidenav :: sideNav}"></div>
-    <div class="content-wrap">
-        <!-- 모바일 헤더 -->
-        <header class="m-header mo">
-            <button class="btn-menu">메뉴</button>
-        </header>
+    <div id="wrap">
+        <div th:replace="~{fragments/sidenav :: sideNav}"></div>
+        <div class="content-wrap">
+            <!-- 모바일 헤더 -->
+            <header class="m-header mo">
+                <button class="btn-menu">메뉴</button>
+            </header>
 
-        <div id="mainContent">
-            <h1>아동&middot;청소년&middot;청년 데이터 통합검색</h1>
-            <div class="filter-container">
-                <div class="filter-header">
-                    <h2>검색 필터</h2>
-                    <hr>
-                </div>
-                <div class="filter-row">
-                    <div class="filter-group">
-                        <label for="year">연도/차수</label>
-                        <select id="year">
-                            <option value="">선택</option>
-                        </select>
+            <div id="mainContent">
+                <h1>아동&middot;청소년&middot;청년 데이터 통합검색</h1>
+                <div class="filter-container">
+                    <div class="filter-header">
+                        <h2>검색 필터</h2>
+                        <hr />
                     </div>
+                    <div class="filter-row">
+                        <div class="filter-group2">
+                            <label for="keyword">검색어</label>
+                            <input id="keyword" type="text" placeholder="검색어를 입력해주세요." />
+                            <button type="button">
+                                <img th:src="@{/images/ico_search.png}" alt="검색" />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="survey">조사 종류</label>
+                            <select id="survey">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
 
-                    <div class="filter-group">
-                        <label for="respondent">응답주체</label>
-                        <select disabled id="respondent">
-                            <option value="">선택</option>
-                        </select>
+                        <div class="filter-group">
+                            <label for="order">기수명</label>
+                            <select id="order">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="filter-row">
-                    <div class="filter-group category-group">
-                        <span class="form-item-label">카테고리</span>
-                        <div class="category-selects">
-                            <div class="filter-group">
-                                <label for="category-major">대분류</label>
-                                <select disabled id="category-major">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="year1">설문연도</label>
+                            <label for="year2" style="display: none"></label>
+                            <div class="year-group">
+                                <select id="year1">
                                     <option value="">선택</option>
                                 </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="category-medium">중분류</label>
-                                <select disabled id="category-medium">
-                                    <option value="">선택</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="category-minor">소분류</label>
-                                <select disabled id="category-minor">
-                                    <option value="">선택</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="category-detailed">세분류</label>
-                                <select disabled id="category-detailed">
-                                    <option value="">선택</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="question">문항</label>
-                                <select disabled id="question">
+                                <span>~</span>
+                                <select id="year2">
                                     <option value="">선택</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="filter-row">
-                    <div class="filter-group">
-                        <span class="form-item-label">배너변수</span>
-                        <div class="checkbox-group">
-                            <label for="gender">성별</label>
-                            <input id="gender" name="banner-variable" type="checkbox">
-                            <label for="age">연령</label>
-                            <input id="age" name="banner-variable" type="checkbox">
-                            <label for="region">지역</label>
-                            <input id="region" name="banner-variable" type="checkbox">
+
+                        <div class="filter-group">
+                            <label for="respondent">응답주체</label>
+                            <select id="respondent">
+                                <option value="">선택</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-                <div class="btn-container">
-                    <button class="btn-reset">초기화</button>
-                    <button class="btn-search">조회</button>
-                </div>
-            </div>
-            <div class="result-wrap">
-                <div class="filter">
-                    <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
-                    <div>
-                        <label for="page-size-select" style="display: none">페이지사이즈선택</label>
-                        <select id="page-size-select" name="page-size">
-                            <option value="5">5개씩 보기</option>
-                            <option selected value="10">10개씩 보기</option>
-                            <option value="15">15개씩 보기</option>
-                        </select>
+                    <div class="btn-container">
+                        <button class="btn-reset">초기화</button>
+                        <button class="btn-search">조회</button>
                     </div>
                 </div>
-                <div class="table-wrap">
-                    <table class="tbl-sty01" id="results-table">
-                        <caption></caption>
-                        <colgroup>
-                            <col/>
-                            <col/>
-                            <col/>
-                            <col/>
-                            <col/>
-                            <col/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">설문문항아이디</th>
-                            <th scope="col">코드북문항내용</th>
-                            <th scope="col">응답값</th>
-                            <th scope="col">응답명</th>
-                            <th scope="col">사례수</th>
-                            <th scope="col">빈도비율</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <!-- pc 페이지네이션 -->
-                <div class="pagination-wrap pc">
-                    <div class="pagination"></div>
-                </div>
-                <!-- 모바일 페이지네이션 -->
-                <div class="pagination-wrap mo">
-                    <div class="pagination"></div>
+                <div class="result-wrap">
+                    <div class="filter">
+                        <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
+                        <div>
+                            <label for="page-size-select" style="display: none"></label>
+                            <select id="page-size-select" name="page-size">
+                                <option value="5">5개씩 보기</option>
+                                <option selected value="10">10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="tbl-sty01" id="results-table">
+                            <caption></caption>
+                            <colgroup>
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">개방일련번호</th>
+                                    <th scope="col">개방자료코드</th>
+                                    <th scope="col">출력자료구분명</th>
+                                    <th scope="col">코호트명</th>
+                                    <th scope="col">기수명</th>
+                                    <th scope="col">설문연도</th>
+                                    <th scope="col">설문조사차수</th>
+                                    <th scope="col">응답주체명</th>
+                                    <th scope="col">출력범주명</th>
+                                    <th scope="col">설문문항아이디</th>
+                                    <th scope="col">코드북문항내용</th>
+                                    <th scope="col">다운로드</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- pc 페이지네이션 -->
+                    <div class="pagination-wrap pc">
+                        <div class="pagination"></div>
+                    </div>
+                    <!-- 모바일 페이지네이션 -->
+                    <div class="pagination-wrap mo">
+                        <div class="pagination"></div>
+                    </div>
                 </div>
             </div>
+            <footer>
+                <p>
+                    세종특별자치시 시청대로370 세종국책연구단지 사회정책동(D동)
+                    한국청소년정책연구원 6/7층
+                </p>
+            </footer>
         </div>
-        <footer>
-            <p>세종특별자치시 시청대로370 세종국책연구단지 사회정책동(D동) 한국청소년정책연구원 6/7층</p>
-        </footer>
     </div>
+    <div class="dim"></div>
 
-    <!-- </div> -->
-</div>
-<!-- //wrap -->
-<div class="dim"></div>
+    <!-- 로딩 스피너 -->
+    <!-- <div id="loading" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px" />
+        <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
+    </div> -->
 
-<!-- 로딩 스피너 -->
-<!--
-<div id="loading" style="
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-">
-    <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px" />
-    <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
-</div>
--->
-<!--<script th:src="@{/js/filter.js}"></script>-->
-<script th:inline="javascript">
-</script>
+    <script th:src="@{/js/sidenav.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const data = /*[[${data}]]*/ [];
+        const filterIds = ['survey', 'order', 'year1', 'year2', 'respondent'];
+
+        // --- Helper Functions ---
+        /**
+         * 데이터 배열에서 특정 키에 해당하는 고유한 값들을 추출하고 정렬하여 반환합니다.
+         */
+        function getUniqueValues(dataArray, key) {
+            const uniqueSet = new Set();
+            if (dataArray) {
+                dataArray.forEach(item => {
+                    if (item && item[key]) {
+                        uniqueSet.add(item[key]);
+                    }
+                });
+            }
+            return Array.from(uniqueSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        }
+
+        /**
+         * 데이터 배열에서 고유한 조사(이름과 ID) 목록을 추출하여 반환합니다.
+         */
+        function getUniqueSurveys(dataArray) {
+            const uniqueMap = new Map();
+            if (dataArray) {
+                dataArray.forEach(item => {
+                    if (item && item.com_cd_nm && !uniqueMap.has(item.com_cd_nm)) {
+                        uniqueMap.set(item.com_cd_nm, {
+                            name: item.com_cd_nm,
+                            id: item.opn_data_cd
+                        });
+                    }
+                });
+            }
+            return Array.from(uniqueMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        // 페이지 로드 시 각 필터에 대한 모든 가능한 옵션을 미리 계산합니다.
+        const allPossibleOptions = {
+            survey: getUniqueSurveys(data),
+            order: getUniqueValues(data, 'ornu_nm'),
+            respondent: getUniqueValues(data, 'rspns_mnbd_nm'),
+            year: getUniqueValues(data, 'srvy_yr')
+        };
+
+        /**
+         * select 요소를 새로운 옵션으로 채웁니다. 전체 옵션 중 유효한 옵션은 활성화, 나머지는 비활성화 처리합니다.
+         */
+        function populateSelectWithOptions(selectElementId, allValues, validValuesSet) {
+            const select = document.getElementById(selectElementId);
+            if (!select) return;
+
+            const currentValue = select.value;
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+
+            allValues.forEach(valueOrObject => {
+                const option = document.createElement('option');
+                let value, text, isValid;
+
+                if (selectElementId === 'survey') {
+                    value = valueOrObject.name;
+                    text = valueOrObject.name;
+                    option.dataset.id = valueOrObject.id; // data-id 속성 추가
+                    isValid = validValuesSet.has(valueOrObject.name);
+                } else {
+                    value = valueOrObject;
+                    text = valueOrObject;
+                    isValid = validValuesSet.has(valueOrObject);
+                }
+
+                option.value = value;
+                option.textContent = text;
+                if (!isValid) {
+                    option.disabled = true;
+                }
+                select.appendChild(option);
+            });
+
+            if (currentValue && !validValuesSet.has(currentValue)) {
+                select.value = "";
+            } else {
+                select.value = currentValue;
+            }
+        }
+
+        // --- Event Listener Management ---
+        /**
+         * 모든 필터(select)에 change 이벤트 리스너를 추가합니다.
+         */
+        function addFilterEventListeners() {
+            filterIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.addEventListener('change', updateDependentFilters);
+                }
+            });
+        }
+
+        /**
+         * 모든 필터(select)에서 change 이벤트 리스너를 제거합니다. (옵션 업데이트 시 무한 루프 방지용)
+         */
+        function removeFilterEventListeners() {
+            filterIds.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.removeEventListener('change', updateDependentFilters);
+                }
+            });
+        }
+
+        // --- Main Logic ---
+        /**
+         * 필터의 선택값이 변경될 때마다 호출되어, 모든 필터의 옵션을 연쇄적으로 업데이트합니다.
+         */
+        function updateDependentFilters() {
+            removeFilterEventListeners();
+
+            const selections = {
+                survey: document.getElementById('survey').value,
+                order: document.getElementById('order').value,
+                year1: document.getElementById('year1').value,
+                year2: document.getElementById('year2').value,
+                respondent: document.getElementById('respondent').value
+            };
+
+            const keyMap = {
+                survey: 'com_cd_nm',
+                order: 'ornu_nm',
+                respondent: 'rspns_mnbd_nm'
+            };
+
+            ['survey', 'order', 'respondent'].forEach(filterIdToUpdate => {
+                let filteredData = [...data];
+                for (const selectionKey in selections) {
+                    if (selectionKey === filterIdToUpdate || !selections[selectionKey] || selectionKey === 'year1' || selectionKey === 'year2') {
+                        continue;
+                    }
+                    const dataKey = keyMap[selectionKey];
+                    filteredData = filteredData.filter(item => item[dataKey] === selections[selectionKey]);
+                }
+
+                const startYear = selections.year1 ? parseInt(selections.year1, 10) : -Infinity;
+                const endYear = selections.year2 ? parseInt(selections.year2, 10) : Infinity;
+                if (startYear !== -Infinity || endYear !== Infinity) {
+                    filteredData = filteredData.filter(item => {
+                        const itemYear = parseInt(item.srvy_yr, 10);
+                        return itemYear >= startYear && itemYear <= endYear;
+                    });
+                }
+
+                const validOptions = new Set(getUniqueValues(filteredData, keyMap[filterIdToUpdate]));
+                populateSelectWithOptions(filterIdToUpdate, allPossibleOptions[filterIdToUpdate], validOptions);
+            });
+
+            let baseYearFilteredData = [...data];
+            if (selections.survey) baseYearFilteredData = baseYearFilteredData.filter(item => item.com_cd_nm === selections.survey);
+            if (selections.order) baseYearFilteredData = baseYearFilteredData.filter(item => item.ornu_nm === selections.order);
+            if (selections.respondent) baseYearFilteredData = baseYearFilteredData.filter(item => item.rspns_mnbd_nm === selections.respondent);
+            
+            const baseValidYears = getUniqueValues(baseYearFilteredData, 'srvy_yr');
+
+            const selectedYear2 = selections.year2 ? parseInt(selections.year2, 10) : Infinity;
+            const validOptionsForYear1 = baseValidYears.filter(year => parseInt(year, 10) <= selectedYear2);
+            populateSelectWithOptions('year1', allPossibleOptions.year, new Set(validOptionsForYear1));
+
+            const selectedYear1 = selections.year1 ? parseInt(selections.year1, 10) : -Infinity;
+            const validOptionsForYear2 = baseValidYears.filter(year => parseInt(year, 10) >= selectedYear1);
+            populateSelectWithOptions('year2', allPossibleOptions.year, new Set(validOptionsForYear2));
+
+            for (const id in selections) {
+                document.getElementById(id).value = selections[id];
+            }
+
+            addFilterEventListeners();
+        }
+
+        /**
+         * 페이지 로드 시 필터 기능을 초기화하고 필요한 이벤트 리스너를 설정합니다.
+         */
+        function initializeFilters() {
+            if (!data || !Array.isArray(data)) {
+                console.warn("Data is not an array or is null/undefined. Cannot initialize filters.");
+                return;
+            }
+            addFilterEventListeners();
+
+            const resetButton = document.querySelector('.btn-reset');
+            if (resetButton) {
+                resetButton.addEventListener('click', () => {
+                    filterIds.forEach(id => {
+                        const select = document.getElementById(id);
+                        if (select) {
+                            select.value = "";
+                        }
+                    });
+                    updateDependentFilters();
+                });
+            }
+
+            const searchButton = document.querySelector('.btn-search');
+            if (searchButton) {
+                searchButton.addEventListener('click', () => {
+                    const keyword = document.getElementById('keyword').value;
+                    const surveySelect = document.getElementById('survey');
+                    const selectedSurveyName = surveySelect.value;
+                    const selectedSurveyId = surveySelect.options[surveySelect.selectedIndex].dataset.id || '';
+
+                    const order = document.getElementById('order').value;
+                    const year1 = document.getElementById('year1').value;
+                    const year2 = document.getElementById('year2').value;
+                    const respondent = document.getElementById('respondent').value;
+
+                    const searchParams = {
+                        keyword: keyword,
+                        surveyName: selectedSurveyName,
+                        surveyId: selectedSurveyId,
+                        orderName: order,
+                        startYear: year1,
+                        endYear: year2,
+                        respondent: respondent
+                    };
+
+                    console.log(searchParams);
+                });
+            }
+
+            updateDependentFilters();
+        }
+
+        initializeFilters();
+        /*]]>*/
+    </script>
 </body>
 
 </html>

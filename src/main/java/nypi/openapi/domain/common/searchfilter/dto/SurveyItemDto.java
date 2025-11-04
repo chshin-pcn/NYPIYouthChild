@@ -13,7 +13,7 @@ public class SurveyItemDto {
     private String cohortName;
 
     @JsonProperty("기수명")
-    private String waveName;
+    private String wave;
 
     @JsonProperty("응답주체")
     private String respondent;
