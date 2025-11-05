@@ -6,18 +6,18 @@ import lombok.Getter;
 @Getter
 public class SurveyItemDto {
 
-    @JsonProperty("opn_data_cd")
+    @JsonProperty("opnDataCd")
     private String surveyCode;
 
-    @JsonProperty("com_cd_nm")
+    @JsonProperty("otptDataSeNm")
     private String surveyName;
 
-    @JsonProperty("ornu_nm")
+    @JsonProperty("ornuNm")
     private String wave;
 
-    @JsonProperty("srvy_yr")
+    @JsonProperty("srvyYr")
     private String year;
 
-    @JsonProperty("rspns_mnbd_nm")
+    @JsonProperty("rspnsMnbdNm")
     private String respondent;
 }

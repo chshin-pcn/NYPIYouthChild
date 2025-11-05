@@ -5,30 +5,38 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nypi.openapi.domain.common.searchfilter.dto.FilterDataDto;
 import nypi.openapi.domain.common.searchfilter.dto.SurveyItemDto;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
 
 @Service
 public class SearchFilterService {
 
-    public FilterDataDto getProcessedFilterData() throws IOException {
+    public FilterDataDto getProcessedFilterData(URI uri, String opnDataCd) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        File jsonFile = new ClassPathResource("static/dummy.json").getFile();
+        RestTemplate restTemplate = new RestTemplate();
 
-        JsonNode rootNode = objectMapper.readTree(jsonFile);
-        JsonNode surveyItemsNode = rootNode.path("response").path("body").path("items").path("item");
+        JsonNode rootNode = restTemplate.getForObject(uri, JsonNode.class);
+        JsonNode surveyItemsNode = Objects.requireNonNull(rootNode)
+                .path("response")
+                .path("body")
+                .path("items")
+                .path("item");
+
         List<SurveyItemDto> surveyItems = objectMapper.convertValue(surveyItemsNode, new TypeReference<List<SurveyItemDto>>() {
         });
 
-        return processSurveyItems(surveyItems);
+        return processSurveyItems(surveyItems, opnDataCd);
     }
 
-    private FilterDataDto processSurveyItems(List<SurveyItemDto> surveyItems) {
-        // yearData,respondentData,categoryMajorData,categoryMediumData,categoryMinorData,categoryDetailedData,questionData 중복 제거 및 조회 속도를 위해 해시셋으로 생성(나중에 리스트로 변환)
+    private FilterDataDto processSurveyItems(List<SurveyItemDto> surveyItems, String opnDataCd) {
+        boolean isWave = opnDataCd.equals("SRVY010102");
+        boolean isRespondent = !opnDataCd.equals("SRVY010104") && !opnDataCd.equals("SRVY010302");
+
+        // 각 데이터 중복 제거 및 조회 속도를 위해 해시셋으로 생성(나중에 리스트로 변환)
         Set<Map<String, String>> yearData = new HashSet<>();
         Set<Map<String, String>> respondentData = new HashSet<>();
         Set<Map<String, String>> categoryMajorData = new HashSet<>();
@@ -37,9 +45,11 @@ public class SearchFilterService {
         Set<Map<String, String>> categoryDetailedData = new HashSet<>();
         Set<Map<String, String>> questionData = new HashSet<>();
 
+
         // for문 시작 surveyItems를 돌려 surveyItem 하나씩
         for (SurveyItemDto surveyItem : surveyItems) {
-            // surveyItem에서 연도/차수, 응답주체, 카테고리 id, 출력 카테고리명, 문항 ID, 문항 내용을 각각 변수로 저장(for문이 돌때마다 재할당)
+            // surveyItem에서 기수/연도, 응답주체, 카테고리 id, 출력 카테고리명, 문항 ID, 문항 내용을 각각 변수로 저장(for문이 돌때마다 재할당)
+            String wave = surveyItem.getWave();
             String year = surveyItem.getYear();
             String respondent = surveyItem.getRespondent();
             String categoryId = surveyItem.getCategoryId();
@@ -53,11 +63,17 @@ public class SearchFilterService {
             // id라는 스트링빌더 생성(이후 문자열을 지속적으로 추가해서 사용할 예정)
             StringBuilder id = new StringBuilder();
 
-            // yearData 연도/차수 처리(별도 함수 분리)
-            processYear(yearData, year, id);
+            // yearData 기수/연도 처리(별도 함수 분리)
+            if (isWave) {
+                processWaveAndYear(yearData, wave, year, id);
+            } else {
+                processYear(yearData, year, id);
+            }
 
             // respondentData 응답주체 처리(별도 함수 분리)
-            processRespondent(respondentData, respondent, id);
+            if (isRespondent) {
+                processRespondent(respondentData, respondent, id);
+            }
 
             // category 카테고리(대/중/소/세) 처리 (별도 함수 분리)
             processMajorCategory(categoryMajorData, majorCategory, categoryId, id);
@@ -69,21 +85,37 @@ public class SearchFilterService {
             processQuestion(questionData, questionId, questionContent, id);
         }
 
-        return FilterDataDto.builder()
+        FilterDataDto.FilterDataDtoBuilder builder = FilterDataDto.builder()
                 .yearData(getSortedList(yearData))
-                .respondentData(getSortedList(respondentData))
                 .categoryMajorData(getSortedList(categoryMajorData))
                 .categoryMediumData(getSortedList(categoryMediumData))
                 .categoryMinorData(getSortedList(categoryMinorData))
                 .categoryDetailedData(getSortedList(categoryDetailedData))
-                .questionData(getSortedList(questionData))
-                .build();
+                .questionData(getSortedList(questionData));
+
+        if (isRespondent) {
+            builder.respondentData(getSortedList(respondentData));
+        }
+
+        return builder.build();
     }
 
     private List<Map<String, String>> getSortedList(Set<Map<String, String>> dataSet) {
         List<Map<String, String>> list = new ArrayList<>(dataSet);
         list.sort(Comparator.comparing(m -> m.get("id")));
         return list;
+    }
+
+    private void processWaveAndYear(Set<Map<String, String>> yearData, String wave, String year, StringBuilder id) {
+        String waveYear = wave + " / " + year;
+
+        Map<String, String> tmpMap = new HashMap<>();
+        tmpMap.put("parentId", null);
+        id.append(waveYear);
+        tmpMap.put("id", waveYear);
+        tmpMap.put("name", waveYear);
+        tmpMap.put("value", waveYear);
+        yearData.add(tmpMap);
     }
 
     private void processYear(Set<Map<String, String>> yearData, String year, StringBuilder id) {
@@ -124,7 +156,6 @@ public class SearchFilterService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMajorCategory);
-        tmpMap.put("value", tmpCategoryId);
         categoryMajorData.add(tmpMap);
     }
 
@@ -146,7 +177,6 @@ public class SearchFilterService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMediumCategory);
-        tmpMap.put("value", tmpCategoryId);
         categoryMediumData.add(tmpMap);
     }
 
@@ -168,7 +198,6 @@ public class SearchFilterService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpMinorCategory);
-        tmpMap.put("value", tmpCategoryId);
         categoryMinorData.add(tmpMap);
     }
 
@@ -190,7 +219,6 @@ public class SearchFilterService {
         id.append("-").append(tmpCategoryId);
         tmpMap.put("id", id.toString());
         tmpMap.put("name", tmpDetailedCategory);
-        tmpMap.put("value", tmpCategoryId);
         categoryDetailedData.add(tmpMap);
     }
 

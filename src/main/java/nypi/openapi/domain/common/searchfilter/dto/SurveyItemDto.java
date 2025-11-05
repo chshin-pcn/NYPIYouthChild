@@ -6,42 +6,49 @@ import lombok.Getter;
 @Getter
 public class SurveyItemDto {
 
-    @JsonProperty("연도/차수")
-    private String year;
+    @JsonProperty("opnDataCd")
+    private String surveyCode;
 
-    @JsonProperty("코호트명")
+    @JsonProperty("cohortNm")
     private String cohortName;
 
-    @JsonProperty("기수명")
+    @JsonProperty("ornuNm")
     private String wave;
 
-    @JsonProperty("응답주체")
+    @JsonProperty("srvyYr")
+    private String year;
+
+    @JsonProperty("srvyCycl")
+    private String cycle;
+
+    @JsonProperty("rspnsMnbdNm")
     private String respondent;
 
-    @JsonProperty("카테고리단계")
-    private int categoryStep;
-
-    @JsonProperty("카테고리 id")
+    @JsonProperty("ctgryId")
     private String categoryId;
 
-    @JsonProperty("상위 카테고리 id")
-    private String parentCategoryId;
-
-    @JsonProperty("대분류")
+    @JsonProperty("large")
     private String majorCategory;
 
-    @JsonProperty("중분류")
+    @JsonProperty("mid")
     private String mediumCategory;
 
-    @JsonProperty("소분류")
+    @JsonProperty("small")
     private String minorCategory;
 
-    @JsonProperty("세분류")
+    @JsonProperty("detail")
     private String detailedCategory;
 
-    @JsonProperty("문항 ID")
+    @JsonProperty("otptCtgryNm")
+    private String fullCategory;
+
+    @JsonProperty("srvyQitemId")
     private String questionId;
 
-    @JsonProperty("문항 내용")
+    @JsonProperty("cbookQitemCn")
     private String questionContent;
+
+    // ???
+    @JsonProperty("srvySn")
+    private String srvySn;
 }

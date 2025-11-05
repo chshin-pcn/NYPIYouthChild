@@ -168,20 +168,20 @@
         <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
     </div> -->
 
-    <script th:src="@{/js/sidenav.js}"></script>
-    <script th:src="@{/js/filter.js}"></script>
+    <script th:src="@{/js/common/sidenav.js}"></script>
+    <script th:src="@{/js/common/filter.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
 
         // 1. 이 페이지의 필터 구성을 정의합니다.
         const pageFilterConfig = {
             selects: [
-                { key: "year", elementId: "year", data: "yearData" },
+                { key: "year", elementId: "year", data: "yearData", paramName: "srvyYr" },
                 { key: "categoryMajor", elementId: "category-major", data: "categoryMajorData", excludeFromParams: true },
                 { key: "categoryMedium", elementId: "category-medium", data: "categoryMediumData", excludeFromParams: true },
                 { key: "categoryMinor", elementId: "category-minor", data: "categoryMinorData", excludeFromParams: true },
                 { key: "categoryDetailed", elementId: "category-detailed", data: "categoryDetailedData", excludeFromParams: true },
-                { key: "questionId", elementId: "question", data: "questionData" }
+                { key: "questionId", elementId: "question", data: "questionData", paramName: "srvyQitemId" }
             ],
             bannerVariables: [
                 { elementId: 'gender', paramName: 'svbnClsfCd01', paramValue: 'BANN020200' },
