@@ -21,6 +21,11 @@ public class AoePlcyRscrWholInfoController {
     @Autowired
     private UriBuilderUtil uriBuilderUtil;
 
+    @GetMapping("/")
+    public String redirectToAoePlcyRscrWholInfo() {
+        return "redirect:/aoePlcyRscrWholInfo";
+    }
+
     @GetMapping("/aoePlcyRscrWholInfo")
     public String aoePlcyRscrWholInfo(Model model) throws IOException {
         URI uri = uriBuilderUtil.buildWholeSearchUri();

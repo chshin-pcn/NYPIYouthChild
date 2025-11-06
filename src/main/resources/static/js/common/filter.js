@@ -6,7 +6,6 @@
  * @param {string} config.selects[].key - The key used to identify the select.
  * @param {string} config.selects[].elementId - The DOM ID of the select element.
  * @param {string} config.selects[].data - The key used to identify data.
- * @param {boolean} [config.selects[].excludeFromParams=false] - If true, this select's value will not be included in the final search parameters.
  * @param {Array<object>} [config.bannerVariables] - Configuration for banner variable checkboxes.
  * @param {string} config.bannerVariables[].elementId - The DOM ID of the checkbox element.
  * @param {string} config.bannerVariables[].paramName - The parameter name to use in the search request.
