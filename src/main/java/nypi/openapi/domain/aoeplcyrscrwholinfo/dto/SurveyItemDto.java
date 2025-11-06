@@ -1,0 +1,23 @@
+package nypi.openapi.domain.aoeplcyrscrwholinfo.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+
+@Getter
+public class SurveyItemDto {
+
+    @JsonProperty("opnDataCd")
+    private String surveyCode;
+
+    @JsonProperty("otptDataSeNm")
+    private String surveyName;
+
+    @JsonProperty("ornuNm")
+    private String wave;
+
+    @JsonProperty("srvyYr")
+    private String year;
+
+    @JsonProperty("rspnsMnbdNm")
+    private String respondent;
+}

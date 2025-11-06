@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>청소년정책연구원전체정보</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Regular.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Medium.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Bold.woff2}" type="font/woff2" />
+    <link as="font" crossorigin="anonymous" rel="preload" th:href="@{/fonts/NotoSansKR-Light.woff2}" type="font/woff2" />
+
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
+</head>
+
+<body>
+    <div id="wrap">
+        <div th:replace="~{fragments/sidenav :: sideNav}"></div>
+        <div class="content-wrap">
+            <!-- 모바일 헤더 -->
+            <header class="m-header mo">
+                <button class="btn-menu">메뉴</button>
+            </header>
+
+            <div id="mainContent">
+                <h1>아동&middot;청소년&middot;청년 데이터 통합검색</h1>
+                <div class="filter-container">
+                    <div class="filter-header">
+                        <h2>검색 필터</h2>
+                        <hr />
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group2">
+                            <label for="keyword">검색어</label>
+                            <input id="keyword" type="text" placeholder="검색어를 입력해주세요." />
+                            <button type="button">
+                                <img th:src="@{/images/ico_search.png}" alt="검색" />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="survey">조사 종류</label>
+                            <select id="survey">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="order">기수명</label>
+                            <select id="order">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="year1">설문연도</label>
+                            <label for="year2" style="display: none"></label>
+                            <div class="year-group">
+                                <select id="year1">
+                                    <option value="">선택</option>
+                                </select>
+                                <span>~</span>
+                                <select id="year2">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="respondent">응답주체</label>
+                            <select id="respondent">
+                                <option value="">선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="btn-reset">초기화</button>
+                        <button class="btn-search">조회</button>
+                    </div>
+                </div>
+                <div class="result-wrap">
+                    <div class="filter">
+                        <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
+                        <div>
+                            <label for="page-size-select" style="display: none"></label>
+                            <select id="page-size-select" name="page-size">
+                                <option value="5">5개씩 보기</option>
+                                <option selected value="10">10개씩 보기</option>
+                                <option value="15">15개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="tbl-sty01" id="results-table">
+                            <caption></caption>
+                            <colgroup>
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                                <col />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">개방일련번호</th>
+                                    <th scope="col">개방자료코드</th>
+                                    <th scope="col">출력자료구분명</th>
+                                    <th scope="col">코호트명</th>
+                                    <th scope="col">기수명</th>
+                                    <th scope="col">설문연도</th>
+                                    <th scope="col">설문조사차수</th>
+                                    <th scope="col">응답주체명</th>
+                                    <th scope="col">출력범주명</th>
+                                    <th scope="col">설문문항아이디</th>
+                                    <th scope="col">코드북문항내용</th>
+                                    <th scope="col">다운로드</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!-- pc 페이지네이션 -->
+                    <div class="pagination-wrap pc">
+                        <div class="pagination"></div>
+                    </div>
+                    <!-- 모바일 페이지네이션 -->
+                    <div class="pagination-wrap mo">
+                        <div class="pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <p>
+                    세종특별자치시 시청대로370 세종국책연구단지 사회정책동(D동)
+                    한국청소년정책연구원 6/7층
+                </p>
+            </footer>
+        </div>
+    </div>
+    <div class="dim"></div>
+
+    <!-- 로딩 스피너 -->
+    <!-- <div id="loading" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <img th:src="@{/images/loading.gif}" alt="로딩 중" style="width: 50px; height: 50px" />
+        <span style="margin-top: 10px; font-size: 14px; font-weight: light">Loading</span>
+    </div> -->
+
+    <script th:src="@{/js/common/sidenav.js}"></script>
+    <script type="text/javascript" th:src="@{/js/AoePlcyRscrWholInfo.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        const data = /*[[${data}]]*/ [];
+
+        initializeFilters(data);
+
+        /*]]>*/
+    </script>
+</body>
+
+</html>
