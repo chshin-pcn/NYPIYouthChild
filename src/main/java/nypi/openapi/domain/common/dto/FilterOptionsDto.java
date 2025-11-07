@@ -1,4 +1,4 @@
-package nypi.openapi.domain.common.searchfilter.dto;
+package nypi.openapi.domain.common.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class FilterDataDto {
+public class FilterOptionsDto {
     private List<Map<String, String>> yearData;
     private List<Map<String, String>> respondentData;
     private List<Map<String, String>> categoryMajorData;

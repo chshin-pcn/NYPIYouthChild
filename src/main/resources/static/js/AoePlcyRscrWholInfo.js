@@ -213,8 +213,7 @@ function initializeFilters(data) {
 
             const searchParams = {
                 searchKeyword: keyword,
-                otptDataSeNm: selectedSurveyName,
-                surveyId: selectedSurveyId,
+                otptDataCd: selectedSurveyId,
                 srvyYr01: year1,
                 srvyYr02: year2,
                 rspnsMnbdNm: respondent

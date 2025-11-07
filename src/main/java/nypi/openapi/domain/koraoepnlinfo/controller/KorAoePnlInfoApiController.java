@@ -1,9 +1,9 @@
-package nypi.openapi.domain.korkidaoepnlinfo.controller;
+package nypi.openapi.domain.koraoepnlinfo.controller;
 
 import lombok.RequiredArgsConstructor;
 import nypi.openapi.domain.common.dto.PagedResultDto;
 import nypi.openapi.domain.common.service.ApiService;
-import nypi.openapi.domain.korkidaoepnlinfo.dto.SurveyItemDto;
+import nypi.openapi.domain.koraoepnlinfo.dto.SurveyItemDto;
 import nypi.openapi.util.UriBuilderUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,12 +17,12 @@ import java.net.URI;
 @Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class KorKidAoePnlInfoApiController {
+public class KorAoePnlInfoApiController {
     private final ApiService apiService;
     private final UriBuilderUtil uriBuilderUtil;
 
-    @GetMapping("/korKidAoePnlInfo")
-    public ResponseEntity<PagedResultDto<SurveyItemDto>> korKidAoePnlInfo(
+    @GetMapping("/korAoePnlInfo")
+    public ResponseEntity<PagedResultDto<SurveyItemDto>> korAoePnlInfo(
             @RequestParam String srvyYr,
             @RequestParam String rspnsMnbdNm,
             @RequestParam String srvyQitemId,
@@ -31,7 +31,7 @@ public class KorKidAoePnlInfoApiController {
             @RequestParam(required = false) String svbnClsfCd03,
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
-        URI uri = uriBuilderUtil.buildKorKidAoePnlInfoUri(
+        URI uri = uriBuilderUtil.buildKorAoePnlInfoUri(
                 srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 

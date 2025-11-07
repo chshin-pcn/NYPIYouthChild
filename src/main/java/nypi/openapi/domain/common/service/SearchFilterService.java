@@ -1,10 +1,11 @@
-package nypi.openapi.domain.common.searchfilter.service;
+package nypi.openapi.domain.common.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nypi.openapi.domain.common.searchfilter.dto.FilterDataDto;
-import nypi.openapi.domain.common.searchfilter.dto.SurveyItemDto;
+import lombok.RequiredArgsConstructor;
+import nypi.openapi.domain.common.dto.FilterItemDto;
+import nypi.openapi.domain.common.dto.FilterOptionsDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,26 +14,39 @@ import java.net.URI;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class SearchFilterService {
 
-    public FilterDataDto getProcessedFilterData(URI uri, String opnDataCd) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
+    public FilterOptionsDto getProcessedFilterData(URI uri, String opnDataCd) throws IOException {
         JsonNode rootNode = restTemplate.getForObject(uri, JsonNode.class);
-        JsonNode surveyItemsNode = Objects.requireNonNull(rootNode)
-                .path("response")
-                .path("body")
-                .path("items")
-                .path("item");
+        FilterOptionsDto emptyFilterOptions = FilterOptionsDto.builder()
+                .yearData(Collections.emptyList())
+                .respondentData(Collections.emptyList())
+                .categoryMajorData(Collections.emptyList())
+                .categoryMediumData(Collections.emptyList())
+                .categoryMinorData(Collections.emptyList())
+                .categoryDetailedData(Collections.emptyList())
+                .questionData(Collections.emptyList())
+                .build();
 
-        List<SurveyItemDto> surveyItems = objectMapper.convertValue(surveyItemsNode, new TypeReference<List<SurveyItemDto>>() {
+        if (rootNode == null || rootNode.isMissingNode()) {
+            return emptyFilterOptions;
+        }
+
+        JsonNode surveyItemsNode = rootNode.at("/response/body/items/item");
+        if (surveyItemsNode.isMissingNode() || !surveyItemsNode.isArray()) {
+            return emptyFilterOptions;
+        }
+
+        List<FilterItemDto> surveyItems = objectMapper.convertValue(surveyItemsNode, new TypeReference<List<FilterItemDto>>() {
         });
-
         return processSurveyItems(surveyItems, opnDataCd);
     }
 
-    private FilterDataDto processSurveyItems(List<SurveyItemDto> surveyItems, String opnDataCd) {
+    private FilterOptionsDto processSurveyItems(List<FilterItemDto> surveyItems, String opnDataCd) {
         boolean isWave = opnDataCd.equals("SRVY010102");
         boolean isRespondent = !opnDataCd.equals("SRVY010104") && !opnDataCd.equals("SRVY010302");
 
@@ -47,7 +61,7 @@ public class SearchFilterService {
 
 
         // for문 시작 surveyItems를 돌려 surveyItem 하나씩
-        for (SurveyItemDto surveyItem : surveyItems) {
+        for (FilterItemDto surveyItem : surveyItems) {
             // surveyItem에서 기수/연도, 응답주체, 카테고리 id, 출력 카테고리명, 문항 ID, 문항 내용을 각각 변수로 저장(for문이 돌때마다 재할당)
             String wave = surveyItem.getWave();
             String year = surveyItem.getYear();
@@ -85,7 +99,7 @@ public class SearchFilterService {
             processQuestion(questionData, questionId, questionContent, id);
         }
 
-        FilterDataDto.FilterDataDtoBuilder builder = FilterDataDto.builder()
+        FilterOptionsDto.FilterOptionsDtoBuilder builder = FilterOptionsDto.builder()
                 .yearData(getSortedList(yearData))
                 .categoryMajorData(getSortedList(categoryMajorData))
                 .categoryMediumData(getSortedList(categoryMediumData))
