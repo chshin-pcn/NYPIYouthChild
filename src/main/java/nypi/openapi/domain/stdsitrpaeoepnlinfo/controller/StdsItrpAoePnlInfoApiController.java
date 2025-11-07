@@ -1,4 +1,4 @@
-package nypi.openapi.domain.korkidaoepnlinfo.controller;
+package nypi.openapi.domain.stdsitrpaeoepnlinfo.controller;
 
 import lombok.RequiredArgsConstructor;
 import nypi.openapi.domain.common.dto.PagedResultDto;
@@ -17,24 +17,23 @@ import java.net.URI;
 @Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class KorKidAoePnlInfoApiController {
+public class StdsItrpAoePnlInfoApiController {
     private final ApiService apiService;
     private final UriBuilderUtil uriBuilderUtil;
 
-    @GetMapping("/korKidAoePnlInfo")
-    public ResponseEntity<PagedResultDto<SurveyItemDto>> korKidAoePnlInfo(
+    @GetMapping("/stdsItrpAoePnlInfo")
+    public ResponseEntity<PagedResultDto<SurveyItemDto>> stdsItrpAoePnlInfo(
             @RequestParam(defaultValue = "1") String pageNo,
             @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String srvyYr,
-            @RequestParam String rspnsMnbdNm,
             @RequestParam String srvyQitemId,
             @RequestParam(required = false) String svbnClsfCd01,
             @RequestParam(required = false) String svbnClsfCd02,
             @RequestParam(required = false) String svbnClsfCd03,
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
-        URI uri = uriBuilderUtil.buildKorKidAoePnlInfoUri(
-                pageNo, numOfRows, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+        URI uri = uriBuilderUtil.buildStdsItrpAoePnlInfoUri(
+                pageNo, numOfRows, srvyYr, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

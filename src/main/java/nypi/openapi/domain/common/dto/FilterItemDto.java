@@ -1,16 +1,16 @@
-package nypi.openapi.domain.common.searchfilter.dto;
+package nypi.openapi.domain.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class SurveyItemDto {
+public class FilterItemDto {
 
     @JsonProperty("opnDataCd")
     private String surveyCode;
 
     @JsonProperty("cohortNm")
-    private String cohortName;
+    private String cohort;
 
     @JsonProperty("ornuNm")
     private String wave;
@@ -48,7 +48,6 @@ public class SurveyItemDto {
     @JsonProperty("cbookQitemCn")
     private String questionContent;
 
-    // ???
     @JsonProperty("srvySn")
     private String srvySn;
 }

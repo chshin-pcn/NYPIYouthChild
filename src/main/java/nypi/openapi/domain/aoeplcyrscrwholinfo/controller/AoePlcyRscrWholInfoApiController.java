@@ -1,9 +1,9 @@
-package nypi.openapi.domain.korkidaoepnlinfo.controller;
+package nypi.openapi.domain.aoeplcyrscrwholinfo.controller;
 
 import lombok.RequiredArgsConstructor;
+import nypi.openapi.domain.aoeplcyrscrwholinfo.dto.SurveyItemDto;
 import nypi.openapi.domain.common.dto.PagedResultDto;
 import nypi.openapi.domain.common.service.ApiService;
-import nypi.openapi.domain.korkidaoepnlinfo.dto.SurveyItemDto;
 import nypi.openapi.util.UriBuilderUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,24 +17,24 @@ import java.net.URI;
 @Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class KorKidAoePnlInfoApiController {
+public class AoePlcyRscrWholInfoApiController {
+
     private final ApiService apiService;
     private final UriBuilderUtil uriBuilderUtil;
 
-    @GetMapping("/korKidAoePnlInfo")
-    public ResponseEntity<PagedResultDto<SurveyItemDto>> korKidAoePnlInfo(
+    @GetMapping("/aoePlcyRscrWholInfo")
+    public ResponseEntity<PagedResultDto<SurveyItemDto>> aoePlcyRscrWholInfo(
             @RequestParam(defaultValue = "1") String pageNo,
             @RequestParam(defaultValue = "10") String numOfRows,
-            @RequestParam String srvyYr,
-            @RequestParam String rspnsMnbdNm,
-            @RequestParam String srvyQitemId,
-            @RequestParam(required = false) String svbnClsfCd01,
-            @RequestParam(required = false) String svbnClsfCd02,
-            @RequestParam(required = false) String svbnClsfCd03,
-            @RequestParam(required = false, defaultValue = "N") String aiCrtYn
+            @RequestParam(required = false, defaultValue = "") String searchKeyword,
+            @RequestParam(required = false) String opnDataCd,
+            @RequestParam(required = false) String ornuNm,
+            @RequestParam(required = false) String srvyYr01,
+            @RequestParam(required = false) String srvyYr02,
+            @RequestParam(required = false) String rspnsMnbdNm
     ) throws IOException {
-        URI uri = uriBuilderUtil.buildKorKidAoePnlInfoUri(
-                pageNo, numOfRows, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+        URI uri = uriBuilderUtil.buildAoePlcyRscrWholInfoUri(
+                pageNo, numOfRows, ornuNm, opnDataCd, rspnsMnbdNm, searchKeyword, srvyYr01, srvyYr02
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

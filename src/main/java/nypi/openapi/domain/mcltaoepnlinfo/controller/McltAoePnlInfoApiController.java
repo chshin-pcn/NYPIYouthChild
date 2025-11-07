@@ -1,9 +1,9 @@
-package nypi.openapi.domain.korkidaoepnlinfo.controller;
+package nypi.openapi.domain.mcltaoepnlinfo.controller;
 
 import lombok.RequiredArgsConstructor;
 import nypi.openapi.domain.common.dto.PagedResultDto;
 import nypi.openapi.domain.common.service.ApiService;
-import nypi.openapi.domain.korkidaoepnlinfo.dto.SurveyItemDto;
+import nypi.openapi.domain.mcltaoepnlinfo.dto.SurveyItemDto;
 import nypi.openapi.util.UriBuilderUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,14 +17,16 @@ import java.net.URI;
 @Controller
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class KorKidAoePnlInfoApiController {
+public class McltAoePnlInfoApiController {
+
     private final ApiService apiService;
     private final UriBuilderUtil uriBuilderUtil;
 
-    @GetMapping("/korKidAoePnlInfo")
-    public ResponseEntity<PagedResultDto<SurveyItemDto>> korKidAoePnlInfo(
+    @GetMapping("/mcltAoePnlInfo")
+    public ResponseEntity<PagedResultDto<SurveyItemDto>> mcltAoePnlInfo(
             @RequestParam(defaultValue = "1") String pageNo,
             @RequestParam(defaultValue = "10") String numOfRows,
+            @RequestParam String ornuNm,
             @RequestParam String srvyYr,
             @RequestParam String rspnsMnbdNm,
             @RequestParam String srvyQitemId,
@@ -33,8 +35,8 @@ public class KorKidAoePnlInfoApiController {
             @RequestParam(required = false) String svbnClsfCd03,
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
-        URI uri = uriBuilderUtil.buildKorKidAoePnlInfoUri(
-                pageNo, numOfRows, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+        URI uri = uriBuilderUtil.buildMcltAoePnlInfoUri(
+                pageNo, numOfRows, ornuNm, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);
