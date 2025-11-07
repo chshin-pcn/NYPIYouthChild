@@ -35,6 +35,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildAoePlcyRscrWholInfoUri(
+            String pageNo,
+            String numOfRows,
             String ornuNm,
             String opnDataCd,
             String rspnsMnbdNm,
@@ -45,20 +47,28 @@ public class UriBuilderUtil {
         String path = "/openapi/service/openapi/AoePlcyRscrWholInfo";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
-                .queryParam("_type", "json");
+                .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows);
 
         if (Objects.nonNull(searchKeyword)) {
             uriBuilder.queryParam("searchKeyword", URLEncoder.encode(searchKeyword, "UTF-8"));
         }
         addQueryParamIfPresent(uriBuilder, "opnDataCd", opnDataCd);
-        addQueryParamIfPresent(uriBuilder, "ornuNm", ornuNm);
+        if (Objects.nonNull(ornuNm) && !ornuNm.isEmpty()) {
+            uriBuilder.queryParam("ornuNm", URLEncoder.encode(ornuNm, "UTF-8"));
+        }
         addQueryParamIfPresent(uriBuilder, "srvyYr01", srvyYr01);
         addQueryParamIfPresent(uriBuilder, "srvyYr02", srvyYr02);
-        addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"));
+        if (Objects.nonNull(rspnsMnbdNm) && !rspnsMnbdNm.isEmpty()) {
+            addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"));
+        }
         return uriBuilder.build(true).toUri();
     }
 
     public URI buildKorKidAoePnlInfoUri(
+            String pageNo,
+            String numOfRows,
             String srvyYr,
             String rspnsMnbdNm,
             String srvyQitemId,
@@ -71,6 +81,8 @@ public class UriBuilderUtil {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"))
                 .queryParam("srvyQitemId", srvyQitemId)
@@ -84,6 +96,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildMcltAoePnlInfoUri(
+            String pageNo,
+            String numOfRows,
             String ornuNm,
             String srvyYr,
             String rspnsMnbdNm,
@@ -93,10 +107,12 @@ public class UriBuilderUtil {
             String svbnClsfCd03,
             String aiCrtYn
     ) throws UnsupportedEncodingException {
-        String path = "/openapi/service/openapi/McltAoePnIinfo"; // TODO: 오아시스랑 같이 수정(대문자 i임...)
+        String path = "/openapi/service/openapi/McltAoePnlInfo";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("ornuNm", URLEncoder.encode(ornuNm, "UTF-8"))
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"))
@@ -111,6 +127,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildKorAoePnlInfoUri(
+            String pageNo,
+            String numOfRows,
             String srvyYr,
             String rspnsMnbdNm,
             String srvyQitemId,
@@ -123,6 +141,8 @@ public class UriBuilderUtil {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"))
                 .queryParam("srvyQitemId", srvyQitemId)
@@ -136,6 +156,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildStdsItrpAoePnlInfoUri(
+            String pageNo,
+            String numOfRows,
             String srvyYr,
             String srvyQitemId,
             String svbnClsfCd01,
@@ -147,6 +169,8 @@ public class UriBuilderUtil {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
@@ -159,6 +183,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildKidAoeHrthAccndInfoUri(
+            String pageNo,
+            String numOfRows,
             String srvyYr,
             String rspnsMnbdNm,
             String srvyQitemId,
@@ -171,6 +197,8 @@ public class UriBuilderUtil {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("rspnsMnbdNm", URLEncoder.encode(rspnsMnbdNm, "UTF-8"))
                 .queryParam("srvyQitemId", srvyQitemId)
@@ -184,6 +212,8 @@ public class UriBuilderUtil {
     }
 
     public URI buildYtScitEcnmAccndInfoUri(
+            String pageNo,
+            String numOfRows,
             String srvyYr,
             String srvyQitemId,
             String svbnClsfCd01,
@@ -195,6 +225,8 @@ public class UriBuilderUtil {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .path(path)
                 .queryParam("_type", "json")
+                .queryParam("pageNo", pageNo)
+                .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
                 .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);

@@ -23,6 +23,8 @@ public class StdsItrpAoePnlInfoApiController {
 
     @GetMapping("/stdsItrpAoePnlInfo")
     public ResponseEntity<PagedResultDto<SurveyItemDto>> stdsItrpAoePnlInfo(
+            @RequestParam(defaultValue = "1") String pageNo,
+            @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String srvyYr,
             @RequestParam String srvyQitemId,
             @RequestParam(required = false) String svbnClsfCd01,
@@ -31,7 +33,7 @@ public class StdsItrpAoePnlInfoApiController {
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
         URI uri = uriBuilderUtil.buildStdsItrpAoePnlInfoUri(
-                srvyYr, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+                pageNo, numOfRows, srvyYr, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

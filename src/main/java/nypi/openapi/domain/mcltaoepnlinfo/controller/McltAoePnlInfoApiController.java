@@ -24,6 +24,8 @@ public class McltAoePnlInfoApiController {
 
     @GetMapping("/mcltAoePnlInfo")
     public ResponseEntity<PagedResultDto<SurveyItemDto>> mcltAoePnlInfo(
+            @RequestParam(defaultValue = "1") String pageNo,
+            @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String ornuNm,
             @RequestParam String srvyYr,
             @RequestParam String rspnsMnbdNm,
@@ -34,7 +36,7 @@ public class McltAoePnlInfoApiController {
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
         URI uri = uriBuilderUtil.buildMcltAoePnlInfoUri(
-                ornuNm, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+                pageNo, numOfRows, ornuNm, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

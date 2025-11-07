@@ -871,6 +871,7 @@ table {
     padding: 0 10px;
     height: 58px;
     text-align: center;
+    white-space: nowrap;
 }
 
 .tbl-sty01 thead th {

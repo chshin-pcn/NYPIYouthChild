@@ -23,6 +23,8 @@ public class KorAoePnlInfoApiController {
 
     @GetMapping("/korAoePnlInfo")
     public ResponseEntity<PagedResultDto<SurveyItemDto>> korAoePnlInfo(
+            @RequestParam(defaultValue = "1") String pageNo,
+            @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String srvyYr,
             @RequestParam String rspnsMnbdNm,
             @RequestParam String srvyQitemId,
@@ -32,7 +34,7 @@ public class KorAoePnlInfoApiController {
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
         URI uri = uriBuilderUtil.buildKorAoePnlInfoUri(
-                srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+                pageNo, numOfRows, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

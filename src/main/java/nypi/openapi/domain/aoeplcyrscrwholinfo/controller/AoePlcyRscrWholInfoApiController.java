@@ -24,6 +24,8 @@ public class AoePlcyRscrWholInfoApiController {
 
     @GetMapping("/aoePlcyRscrWholInfo")
     public ResponseEntity<PagedResultDto<SurveyItemDto>> aoePlcyRscrWholInfo(
+            @RequestParam(defaultValue = "1") String pageNo,
+            @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam(required = false, defaultValue = "") String searchKeyword,
             @RequestParam(required = false) String opnDataCd,
             @RequestParam(required = false) String ornuNm,
@@ -32,7 +34,7 @@ public class AoePlcyRscrWholInfoApiController {
             @RequestParam(required = false) String rspnsMnbdNm
     ) throws IOException {
         URI uri = uriBuilderUtil.buildAoePlcyRscrWholInfoUri(
-                ornuNm, opnDataCd, rspnsMnbdNm, searchKeyword, srvyYr01, srvyYr02
+                pageNo, numOfRows, ornuNm, opnDataCd, rspnsMnbdNm, searchKeyword, srvyYr01, srvyYr02
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);

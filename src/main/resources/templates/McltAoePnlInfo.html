@@ -181,6 +181,8 @@
     <script th:src="@{/js/common/filter.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
+        const processedData = /*[[${data}]]*/ null;
+        const path = "/api/mcltAoePnlInfo";
 
         const pageFilterConfig = {
             selects: [
@@ -199,15 +201,190 @@
             ]
         };
 
-        const processedData = /*[[${data}]]*/ null;
+        let selectedParams = {};
 
-        function performSearch(selectedValues) {
-            console.log("다음 값으로 검색을 수행합니다:", selectedValues);
-            // TODO: selectedValues 객체를 사용하여 API 요청 로직 추가
+        function updateTable(items) {
+            const tableBody = document.querySelector("#results-table tbody");
+            if (!tableBody) return;
+
+            // Clear existing rows
+            while (tableBody.firstChild) {
+                tableBody.removeChild(tableBody.firstChild);
+            }
+
+            if (!items || items.length === 0) {
+                const noResultsRow = document.createElement('tr');
+                const noResultsCell = document.createElement('td');
+                noResultsCell.colSpan = 15; // Adjusted colspan to 15 based on HTML header
+                noResultsCell.style.textAlign = 'center';
+                noResultsCell.textContent = '검색 결과가 없습니다.';
+                noResultsRow.appendChild(noResultsCell);
+                tableBody.appendChild(noResultsRow);
+                return;
+            }
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+
+                const createCell = (text) => {
+                    const cell = document.createElement('td');
+                    cell.textContent = text || '';
+                    return cell;
+                };
+                row.appendChild(createCell(item.opnSn));
+                row.appendChild(createCell(item.ornuNm));
+                row.appendChild(createCell(item.srvyYr));
+                row.appendChild(createCell(item.srvyExmnCycl));
+                row.appendChild(createCell(item.rspnsMnbdNm));
+                row.appendChild(createCell(item.otptCtgryNm));
+                row.appendChild(createCell(item.svbnVrblCn));
+                row.appendChild(createCell(item.svbnClsfCd));
+                row.appendChild(createCell(item.srvyQitemId));
+                row.appendChild(createCell(item.cbookQitemCn));
+                row.appendChild(createCell(item.rspvl));
+                row.appendChild(createCell(item.rspnsNm));
+                row.appendChild(createCell(item.aiCrtYn));
+                row.appendChild(createCell(item.caseCnt));
+                row.appendChild(createCell(item.freqRt));
+
+                tableBody.appendChild(row);
+            });
+        };
+
+        function updateTotalCount(totalCount) {
+            const countElement = document.getElementById('total-count');
+            if (countElement) {
+                countElement.textContent = totalCount || 0;
+            }
+        }
+
+        function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
+            if (!searchParams.srvyYr) {
+                alert("기수명 / 설문연도가 선택되지 않았습니다.");
+                return;
+            }
+            if (!searchParams.rspnsMnbdNm) {
+                alert("응답주체가 선택되지 않았습니다.");
+                return;
+            }
+            if (!searchParams.srvyQitemId) {
+                alert("문항이 선택되지 않았습니다.");
+                return;
+            }
+
+            const queryString = new URLSearchParams({
+                ...searchParams,
+                pageNo,
+                numOfRows
+            }).toString();
+
+            fetch(`${path}?${queryString}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("검색 결과 데이터:", data);
+                    selectedParams = { ...searchParams };
+                    updateTable(data.items);
+                    updateTotalCount(data.totalCount);
+                    displayPagination(data.totalCount, data.numOfRows, data.pageNo);
+                })
+                .catch(error => {
+                    console.error("검색 중 오류 발생:", error);
+                    updateTable(null);
+                    updateTotalCount(0);
+                });
+        }
+
+        function displayPagination(totalCount, numOfRows, pageNo) {
+            const totalPages = Math.ceil(totalCount / numOfRows);
+            const paginationContainer = document.querySelector(".pagination");
+            paginationContainer.textContent = "";
+
+            if (totalPages > 0) {
+                const startPage = Math.floor((pageNo - 1) / 10) * 10 + 1;
+                const endPage = Math.min(startPage + 9, totalPages);
+
+                const createButton = (text, classNames = [], disabled = false, dataPage = null) => {
+                    const button = document.createElement("button");
+                    button.classList.add("page-btn", ...classNames);
+                    if (disabled) button.disabled = true;
+
+                    const anchor = document.createElement("a");
+                    anchor.textContent = text;
+                    button.appendChild(anchor);
+
+                    if (dataPage) button.dataset.page = dataPage;
+
+                    return button;
+                };
+
+                // 처음 버튼
+                const firstButton = createButton("처음", ["arrow", "first"], pageNo === 1);
+                paginationContainer.appendChild(firstButton);
+
+                // 이전 버튼
+                const prevButton = createButton("이전", ["arrow", "prev"], pageNo === 1);
+                paginationContainer.appendChild(prevButton);
+
+                // 페이지 번호 버튼
+                for (let i = startPage; i <= endPage; i++) {
+                    const pageButton = createButton(i, [], false, i);
+                    if (i === pageNo) pageButton.classList.add("active");
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                // 다음 버튼
+                const nextButton = createButton("다음", ["arrow", "next"], pageNo === totalPages);
+                paginationContainer.appendChild(nextButton);
+
+                // 마지막 버튼
+                const lastButton = createButton("마지막", ["arrow", "last"], pageNo === totalPages);
+                paginationContainer.appendChild(lastButton);
+
+                // 페이지 버튼 클릭 이벤트
+                const buttons = paginationContainer.querySelectorAll(".page-btn");
+                buttons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        let clickedPage = parseInt(button.dataset.page, 10);
+                        if (!isNaN(clickedPage)) {
+                            pageNo = clickedPage;
+                        } else if (button.classList.contains("first")) {
+                            pageNo = 1;
+                        } else if (button.classList.contains("prev")) {
+                            pageNo = Math.max(1, pageNo - 10);
+                        } else if (button.classList.contains("next")) {
+                            pageNo = Math.min(totalPages, pageNo + 10);
+                        } else if (button.classList.contains("last")) {
+                            pageNo = totalPages;
+                        }
+                        numOfRows = document.getElementById('page-size-select').value;
+                        performSearch(selectedParams, pageNo, numOfRows);
+                    });
+                });
+
+                paginationContainer.style.display = "block";
+            }
+        };
+
+        function addPageSizeChangeEventListener() {
+            const pageSizeSelect = document.getElementById('page-size-select');
+            if (!pageSizeSelect) return;
+
+            pageSizeSelect.addEventListener('change', () => {
+                if (Object.keys(selectedParams).length > 0) {
+                    const numOfRows = pageSizeSelect.value
+                    performSearch(selectedParams, 1, numOfRows);
+                }
+            });
         }
 
         initializeFilters(pageFilterConfig, processedData, performSearch);
 
+        addPageSizeChangeEventListener();
         /*]]>*/
     </script>
 </body>

@@ -23,6 +23,8 @@ public class YtScitEcnmAccndInfoApiController {
 
     @GetMapping("/ytScitEcnmAccndInfo")
     public ResponseEntity<PagedResultDto<SurveyItemDto>> ytScitEcnmAccndInfo(
+            @RequestParam(defaultValue = "1") String pageNo,
+            @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String srvyYr,
             @RequestParam String srvyQitemId,
             @RequestParam(required = false) String svbnClsfCd01,
@@ -31,7 +33,7 @@ public class YtScitEcnmAccndInfoApiController {
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) throws IOException {
         URI uri = uriBuilderUtil.buildYtScitEcnmAccndInfoUri(
-                srvyYr, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+                pageNo, numOfRows, srvyYr, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri);
