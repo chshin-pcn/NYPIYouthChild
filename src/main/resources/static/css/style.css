@@ -1024,6 +1024,7 @@ table {
     width: 14px;
     margin-left: -7px;
     background: url(../images/btn_last.png) no-repeat 0 0;
+    transform: rotate(180deg);
 }
 
 .pagination-pop button.active a {
@@ -1213,16 +1214,6 @@ footer p {
         background-size: 22px;
     }
 
-    #mainContent .search-wrap .txt-blue,
-    .result-wrap .filter select {
-        font-size: 14px;
-    }
-
-    .result-wrap .filter select {
-        padding: 0 10px;
-        background-size: 11px 6px;
-    }
-
     #mainContent .search-wrap .search-form .form-item .btn01 {
         margin-top: 15px;
     }
@@ -1297,4 +1288,48 @@ hr {
     height: 2px;
     background-color: #222;
     margin: 0;
+}
+
+.download-cell {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 15px; /* Space between codebook and response value */
+}
+
+.download-item {
+    display: flex;
+    flex-direction: column; /* Icon above text */
+    align-items: center; /* Center icon and text horizontally */
+    text-align: center;
+}
+
+.download-link {
+    display: flex; /* Make the anchor a flex container */
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center; /* Center horizontally */
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit color from parent */
+}
+
+.csv-icon {
+    width: 32px; /* Size of the icon */
+    height: 32px;
+    color: #28a745; /* A green color for CSV, or choose another */
+    margin-bottom: 5px; /* Space between icon and text */
+}
+
+.download-text {
+    font-size: 0.8em; /* Smaller text */
+    color: #6c757d; /* Muted text color */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Optional: Hover effect for the download link */
+.download-link:hover .csv-icon {
+    color: #218838; /* Darker green on hover */
+}
+
+.download-link:hover .download-text {
+    color: #495057; /* Darker text on hover */
 }
