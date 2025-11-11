@@ -9,10 +9,7 @@ import nypi.openapi.util.UriBuilderUtil;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
 import java.io.File;
@@ -55,16 +52,16 @@ public class AoePlcyRscrWholInfoApiController {
         return ResponseEntity.ok(data);
     }
 
-    @GetMapping("/files/download/codebook")
+    @GetMapping("/files/download/codebook/{filename}")
     public ResponseEntity<Resource> downloadCodebookFile(
-            @RequestParam("filename") String filename
+            @PathVariable("filename") String filename
     ) throws IOException {
         return serveFile(CODEBOOK_DIR, filename);
     }
 
-    @GetMapping("/files/download/response")
+    @GetMapping("/files/download/response/{filename}")
     public ResponseEntity<Resource> downloadResponseFile(
-            @RequestParam("filename") String filename
+            @PathVariable("filename") String filename
     ) throws IOException {
         return serveFile(RESPONSE_DIR, filename);
     }
