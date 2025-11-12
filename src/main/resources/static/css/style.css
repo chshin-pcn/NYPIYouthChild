@@ -1333,3 +1333,8 @@ hr {
 .download-link:hover .download-text {
     color: #495057; /* Darker text on hover */
 }
+
+.asterisk {
+    color: red;
+    margin-left: 2px;
+}

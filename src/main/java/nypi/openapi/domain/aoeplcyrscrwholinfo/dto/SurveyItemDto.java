@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 public class SurveyItemDto {
 
-    @JsonProperty("opnSn")
     private String id;
+
+    @JsonProperty("opnSn")
+    private String opnSn;
 
     @JsonProperty("opnDataCd")
     private String surveyCode;

@@ -2,43 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-    <div class="side-nav-wrap" th:fragment="sideNav">
-        <nav class="side-nav">
-            <div class="side-nav-header1">한국 아동&middot;청소년&middot;청년 데이터</div>
-            <div class="side-nav-header">오픈API 목록</div>
-            <div class="side-nav-menu">
-                <ul>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('aoePlcyRscrWholInfo')} ? 'active' : ''">
-                        <a href="./aoePlcyRscrWholInfo">아동&middot;청소년&middot;청년 데이터 통합검색</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('korKidAoePnlInfo')} ? 'active' : ''">
-                        <a href="./korKidAoePnlInfo">한국아동&middot;청소년패널조사</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('mcltAoePnlInfo')} ? 'active' : ''">
-                        <a href="./mcltAoePnlInfo">다문화청소년패널조사</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('korAoePnlInfo')} ? 'active' : ''">
-                        <a href="./korAoePnlInfo">한국청소년패널조사</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('stdsItrpAoePnlInfo')} ? 'active' : ''">
-                        <a href="./stdsItrpAoePnlInfo">학업중단청소년패널조사</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('kidAoeHrthAccndInfo')} ? 'active' : ''">
-                        <a href="./kidAoeHrthAccndInfo">아동&middot;청소년인권실태조사</a>
-                    </li>
-                    <li th:classappend="${#httpServletRequest.requestURI.contains('ytScitEcnmAccndInfo')} ? 'active' : ''">
-                        <a href="./ytScitEcnmAccndInfo">청년사회경제실태조사</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="side-nav-footer">
-                <img alt="" th:src="@{/images/logo.jpg}" />
-            </div>
-        </nav>
-        <!-- 모바일 메뉴닫기 버튼 -->
-        <button class="btn-menu-close mo">닫기</button>
-        <!-- // 모바일 메뉴닫기 버튼 -->
-    </div>
+<div class="side-nav-wrap" th:fragment="sideNav">
+    <nav class="side-nav">
+        <div class="side-nav-header1">한국 아동&middot;청소년&middot;청년 데이터</div>
+        <div class="side-nav-header">오픈API 목록</div>
+        <div class="side-nav-menu">
+            <ul>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('aoePlcyRscrWholInfo')} ? 'active' : ''">
+                    <a href="./aoePlcyRscrWholInfo">아동&middot;청소년&middot;청년 데이터 통합검색</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('korKidAoePnlInfo')} ? 'active' : ''">
+                    <a href="./korKidAoePnlInfo">한국아동&middot;청소년패널조사</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('mcltAoePnlInfo')} ? 'active' : ''">
+                    <a href="./mcltAoePnlInfo">다문화청소년패널조사</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('korAoePnlInfo')} ? 'active' : ''">
+                    <a href="./korAoePnlInfo">한국청소년패널조사</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('stdsItrpAoePnlInfo')} ? 'active' : ''">
+                    <a href="./stdsItrpAoePnlInfo">학업중단청소년패널조사</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('kidAoeHrthAccndInfo')} ? 'active' : ''">
+                    <a href="./kidAoeHrthAccndInfo">아동&middot;청소년인권실태조사</a>
+                </li>
+                <li th:classappend="${#httpServletRequest.requestURI.contains('ytScitEcnmAccndInfo')} ? 'active' : ''">
+                    <a href="./ytScitEcnmAccndInfo">청년사회경제실태조사</a>
+                </li>
+            </ul>
+        </div>
+        <div class="side-nav-footer">
+            <img alt="" th:src="@{/images/logo.jpg}"/>
+        </div>
+    </nav>
+    <!-- 모바일 메뉴닫기 버튼 -->
+    <button class="btn-menu-close mo">닫기</button>
+    <!-- // 모바일 메뉴닫기 버튼 -->
+</div>
 </body>
 
 </html>
