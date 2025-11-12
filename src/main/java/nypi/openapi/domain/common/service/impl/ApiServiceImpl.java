@@ -2,6 +2,7 @@ package nypi.openapi.domain.common.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nypi.openapi.domain.common.dto.PagedResultDto;
@@ -40,10 +41,20 @@ public class ApiServiceImpl extends EgovAbstractServiceImpl implements ApiServic
                 throw new IOException("외부 API 응답의 items 노드가 없거나 배열이 아닙니다.");
             }
 
-            List<T> items = objectMapper.convertValue(itemsNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
-            int totalCount = bodyNode.path("totalCount").asInt();
-            int numOfRows = bodyNode.path("numOfRows").asInt();
             int pageNo = bodyNode.path("pageNo").asInt();
+            int numOfRows = bodyNode.path("numOfRows").asInt();
+            int totalCount = bodyNode.path("totalCount").asInt();
+
+            // 각 항목에 ID 추가
+            long currentId = ((long) pageNo - 1) * numOfRows + 1;
+            for (JsonNode itemNode : itemsNode) {
+                if (itemNode.isObject()) {
+                    currentId++;
+                    ((ObjectNode) itemNode).put("id", String.valueOf(currentId));
+                }
+            }
+
+            List<T> items = objectMapper.convertValue(itemsNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
 
             return PagedResultDto.<T>builder()
                     .items(items)

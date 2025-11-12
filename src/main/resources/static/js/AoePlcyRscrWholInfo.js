@@ -294,7 +294,7 @@ function initializeFilters(data) {
                 return cell;
             };
 
-            row.appendChild(createCell(item.opnSn));
+            row.appendChild(createCell(item.id));
             row.appendChild(createCell(item.opnDataCd));
             row.appendChild(createCell(item.otptDataSeNm));
             row.appendChild(createCell(item.cohortNm));
@@ -317,16 +317,10 @@ function initializeFilters(data) {
                 downloadLink.href = href;
                 downloadLink.classList.add('download-link');
 
-                // TODO: SVG for CSV icon (아이콘 변경)
-                const svgIconString = `
-                    <svg class="csv-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 9H11V15H13V9ZM16 9H14V15H16V9ZM19 9H17V15H19V9ZM5 3H19C20.103 3 21 3.897 21 5V19C21 20.103 20.103 21 19 21H5C3.897 21 3 20.103 3 19V5C3 3.897 3.897 3 5 3ZM5 5V19H19V5H5Z"/>
-                    </svg>
-                `;
-                const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svgIconString, "image/svg+xml");
-                const svgElement = svgDoc.documentElement;
-                downloadLink.appendChild(svgElement); // Append the actual SVG element
+                const csvIcon = document.createElement('i');
+                csvIcon.classList.add('fa-solid', 'fa-file-csv');
+                csvIcon.style.fontSize = '24px';
+                downloadLink.appendChild(csvIcon);
 
                 const downloadText = document.createElement('span');
                 downloadText.classList.add('download-text');
