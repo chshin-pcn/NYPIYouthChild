@@ -49,8 +49,7 @@ public class ApiServiceImpl extends EgovAbstractServiceImpl implements ApiServic
             long currentId = ((long) pageNo - 1) * numOfRows + 1;
             for (JsonNode itemNode : itemsNode) {
                 if (itemNode.isObject()) {
-                    currentId++;
-                    ((ObjectNode) itemNode).put("id", String.valueOf(currentId));
+                    ((ObjectNode) itemNode).put("id", String.valueOf(currentId++));
                 }
             }
 
