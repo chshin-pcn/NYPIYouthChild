@@ -553,10 +553,10 @@ caption,
 #mainContent h1::before {
     content: '';
     margin-right: 13px;
-    vertical-align: middle;
-    width: 28px;
-    height: 28px;
-    background: url(../images/ico_box.png) no-repeat;
+    vertical-align: sub;
+    width: 32px;
+    height: 32px;
+    background: url(../images/ico_survey.png) no-repeat center / contain;
 }
 
 /*

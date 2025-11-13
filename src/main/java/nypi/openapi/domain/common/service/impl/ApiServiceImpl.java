@@ -2,6 +2,7 @@ package nypi.openapi.domain.common.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,17 +47,21 @@ public class ApiServiceImpl extends EgovAbstractServiceImpl implements ApiServic
             int totalCount = bodyNode.path("totalCount").asInt();
 
             List<T> items;
-            if (!itemsNode.isArray()) {
-                items = Collections.emptyList();
-            } else {
+            long currentId = ((long) pageNo - 1) * numOfRows + 1;
+            if (itemsNode.isArray()) {
                 // 각 항목에 ID 추가
-                long currentId = ((long) pageNo - 1) * numOfRows + 1;
                 for (JsonNode itemNode : itemsNode) {
                     if (itemNode.isObject()) {
                         ((ObjectNode) itemNode).put("id", String.valueOf(currentId++));
                     }
                 }
                 items = objectMapper.convertValue(itemsNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
+            } else if (itemsNode.isObject()) {
+                ((ObjectNode) itemsNode).put("id", String.valueOf(currentId));
+                ArrayNode arrayNode = objectMapper.createArrayNode().add(itemsNode);
+                items = objectMapper.convertValue(arrayNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
+            } else {
+                items = Collections.emptyList();
             }
 
             return PagedResultDto.<T>builder()
