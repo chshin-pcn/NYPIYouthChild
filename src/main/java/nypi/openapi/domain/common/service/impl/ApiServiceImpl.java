@@ -37,23 +37,27 @@ public class ApiServiceImpl extends EgovAbstractServiceImpl implements ApiServic
             JsonNode bodyNode = rootNode.at("/response/body");
             JsonNode itemsNode = bodyNode.path("items").path("item");
 
-            if (itemsNode.isMissingNode() || !itemsNode.isArray()) {
-                throw new IOException("외부 API 응답의 items 노드가 없거나 배열이 아닙니다.");
+            if (itemsNode.isMissingNode()) {
+                throw new IOException("외부 API 응답의 items 노드가 없습니다.");
             }
 
             int pageNo = bodyNode.path("pageNo").asInt();
             int numOfRows = bodyNode.path("numOfRows").asInt();
             int totalCount = bodyNode.path("totalCount").asInt();
 
-            // 각 항목에 ID 추가
-            long currentId = ((long) pageNo - 1) * numOfRows + 1;
-            for (JsonNode itemNode : itemsNode) {
-                if (itemNode.isObject()) {
-                    ((ObjectNode) itemNode).put("id", String.valueOf(currentId++));
+            List<T> items;
+            if (!itemsNode.isArray()) {
+                items = Collections.emptyList();
+            } else {
+                // 각 항목에 ID 추가
+                long currentId = ((long) pageNo - 1) * numOfRows + 1;
+                for (JsonNode itemNode : itemsNode) {
+                    if (itemNode.isObject()) {
+                        ((ObjectNode) itemNode).put("id", String.valueOf(currentId++));
+                    }
                 }
+                items = objectMapper.convertValue(itemsNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
             }
-
-            List<T> items = objectMapper.convertValue(itemsNode, objectMapper.getTypeFactory().constructCollectionType(List.class, itemType));
 
             return PagedResultDto.<T>builder()
                     .items(items)
