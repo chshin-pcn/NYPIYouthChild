@@ -411,7 +411,7 @@ caption,
     flex-wrap: nowrap;
     width: 360px;
     height: 100%;
-    background: #315fe1;
+    background: #29559c;
 }
 
 .side-nav .side-nav-header1 {
@@ -492,7 +492,7 @@ caption,
 .side-nav-menu ul li.active,
 .side-nav-menu ul li:hover {
     border-radius: 10px;
-    background: #1742bb;
+    background: #0c2b5e;
 }
 
 .side-nav-footer {
@@ -559,64 +559,23 @@ caption,
     background: url(../images/ico_survey.png) no-repeat center / contain;
 }
 
-/*
-#mainContent .search-wrap {
-    margin-top: 40px;
-    padding: 25px;
-    border-radius: 10px;
-    background: #fff;
-}
-
-#mainContent .search-wrap .txt-blue {
-    margin-top: 10px;
-    font-size: 16px;
-}
-
-#mainContent .search-wrap .search-form {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-#mainContent .search-wrap .search-form .form-item {
-    position: relative;
-    width: calc(50% - 12px);
-}
-
-#mainContent .search-wrap .search-form .form-item:nth-child(n+3) {
-    margin-top: 15px;
-}
-
-#mainContent .search-wrap .search-form .form-item:nth-child(even) {
-    margin-left: 24px;
-}
-
-#mainContent .search-wrap .search-form .form-item label {
-    font-weight: 700;
-}
-
-#mainContent .search-wrap .search-form .form-item select {
+.filter-header {
     width: 100%;
-    height: 48px;
-    padding: 0 15px;
-    font-size: 16px;
-    color: #666;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fff url(../images/ico_select.png) no-repeat right 15px center / 14px 7px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    margin-top: 10px;
 }
 
-#mainContent .search-wrap .search-form .form-item .btn01 {
-    position: absolute;
-    width: 100px;
-    height: 48px;
-    right: 0px;
-    bottom: 0px;
+.filter-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0;
 }
-*/
+
+hr {
+    width: 100%;
+    border: 0;
+    height: 2px;
+    background-color: #222;
+    margin: 0;
+}
 
 #mainContent .filter-container {
     margin-top: 40px;
@@ -627,6 +586,11 @@ caption,
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+}
+
+#mainContent .filter-container .asterisk {
+    color: red;
+    margin-left: 2px;
 }
 
 #mainContent .filter-group {
@@ -819,7 +783,7 @@ caption,
 }
 
 #mainContent .btn-container .btn-search {
-    background-color: #315fe1;
+    background-color: #29559c;
     color: #fff;
 }
 
@@ -879,6 +843,14 @@ table {
     font-weight: 500;
 }
 
+.tbl-sty01 thead th.aiCrtYn {
+    display: none;
+}
+
+.tbl-sty01 thead th span {
+    font-size: 16px;
+}
+
 .tbl-sty01 tbody tr:last-child td {
     border-bottom: none;
 }
@@ -887,6 +859,13 @@ table {
     border-bottom: 1px solid #ddd;
     font-weight: 300;
     color: #444;
+}
+
+.download-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 
 #mainContent .table-wrap {
@@ -966,7 +945,7 @@ table {
 .pagination button.active a {
     border-radius: 3px;
     color: #fff;
-    background: #315fe1;
+    background: #29559c;
 }
 
 .pagination-pop {
@@ -1043,78 +1022,6 @@ footer p {
     color: #777;
 }
 
-/* popup */
-.modal {
-    display: none;
-    position: absolute;
-    top: 50vh;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 101;
-}
-
-.modal .modal-body {
-    position: relative;
-    padding: 50px 25px;
-    height: 100%;
-    overflow-y: auto;
-}
-
-.modal .btn-close {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    width: 20px;
-    height: 21px;
-    font-size: 0;
-    text-indent: -9999em;
-    background: url(../images/btn_close.png) no-repeat;
-}
-
-.post-search-pop {
-    overflow: hidden;
-    border-radius: 10px;
-    width: 71.83%;
-    height: 88vh;
-    background: #fff;
-}
-
-.post-search-pop .modal-body>p {
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.post-search-pop .search-wrap {
-    margin-top: 30px;
-}
-
-.post-search-pop .search-wrap .inner {
-    display: flex;
-    align-items: end;
-    gap: 25px;
-}
-
-.post-search-pop .search-wrap .form-item:not(.post-search-pop .search-wrap .form-item:last-child) {
-    width: 100%;
-}
-
-.post-search-pop .table-wrap {
-    margin-top: 25px;
-    padding: 0 30px;
-    border-radius: 10px;
-    background: #f4f7fa;
-}
-
-.post-search-pop table td button {
-    padding: 8px 33px;
-    border-radius: 5px;
-    word-break: keep-all;
-    font-size: 18px;
-    font-weight: 500;
-    color: #fff;
-    background: #6d94ec;
-}
-
 /* media query */
 @media (max-width: 1280px) {
     #mainContent {
@@ -1143,10 +1050,6 @@ footer p {
         text-align: center;
     }
 
-    .modal {
-        width: 95%
-    }
-
     #mainContent .category-selects .filter-group {
         width: calc(50% - 12px);
     }
@@ -1171,14 +1074,6 @@ footer p {
 
     .side-nav .side-nav-header {
         font-size: 22px;
-    }
-
-    .post-search-pop .search-wrap .inner {
-        display: block;
-    }
-
-    .post-search-pop .form-item:nth-child(n+1) {
-        margin-top: 25px;
     }
 
     .btn01 {
@@ -1225,23 +1120,6 @@ footer p {
     footer p {
         font-size: 14px;
     }
-
-    .modal .modal-body {
-        padding: 35px 20px;
-    }
-
-    .post-search-pop .modal-body>p {
-        font-size: 20px;
-    }
-
-    .post-search-pop .table-wrap {
-        padding: 0 20px;
-    }
-
-    .post-search-pop table td button {
-        padding: 5px 15px;
-        font-size: 16px;
-    }
 }
 
 @media (max-width: 860px) {
@@ -1270,71 +1148,4 @@ footer p {
     footer {
         text-align: center;
     }
-}
-
-.filter-header {
-    width: 100%;
-}
-
-.filter-header h2 {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 0;
-}
-
-hr {
-    width: 100%;
-    border: 0;
-    height: 2px;
-    background-color: #222;
-    margin: 0;
-}
-
-.download-cell {
-    display: flex;
-    justify-content: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-    gap: 15px; /* Space between codebook and response value */
-}
-
-.download-item {
-    display: flex;
-    flex-direction: column; /* Icon above text */
-    align-items: center; /* Center icon and text horizontally */
-    text-align: center;
-}
-
-.download-link {
-    display: flex; /* Make the anchor a flex container */
-    flex-direction: column; /* Stack icon and text vertically */
-    align-items: center; /* Center horizontally */
-    text-decoration: none; /* Remove underline from link */
-    color: inherit; /* Inherit color from parent */
-}
-
-.csv-icon {
-    width: 32px; /* Size of the icon */
-    height: 32px;
-    color: #28a745; /* A green color for CSV, or choose another */
-    margin-bottom: 5px; /* Space between icon and text */
-}
-
-.download-text {
-    font-size: 0.8em; /* Smaller text */
-    color: #6c757d; /* Muted text color */
-    white-space: nowrap; /* Prevent text from wrapping */
-}
-
-/* Optional: Hover effect for the download link */
-.download-link:hover .csv-icon {
-    color: #218838; /* Darker green on hover */
-}
-
-.download-link:hover .download-text {
-    color: #495057; /* Darker text on hover */
-}
-
-.asterisk {
-    color: red;
-    margin-left: 2px;
 }

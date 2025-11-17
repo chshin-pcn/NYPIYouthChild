@@ -138,7 +138,7 @@
                             <th scope="col">코드북문항내용</th>
                             <th scope="col">응답값</th>
                             <th scope="col">응답명</th>
-                            <th scope="col">인공지능생성여부</th>
+                            <th class="aiCrtYn" scope="col">인공지능생성여부</th>
                             <th scope="col">사례수</th>
                             <th scope="col">빈도비율</th>
                         </tr>
@@ -215,6 +215,12 @@
             return;
         }
 
+        const showAiCol = items.some(item => item["aiCrtYn"] === 'Y');
+        if (showAiCol) {
+            const aiCrtTh = document.querySelector(".aiCrtYn");
+            aiCrtTh.style.display = "table-cell";
+        }
+
         items.forEach(item => {
             const row = document.createElement('tr');
 
@@ -234,7 +240,9 @@
             row.appendChild(createCell(item.cbookQitemCn));
             row.appendChild(createCell(item.rspvl));
             row.appendChild(createCell(item.rspnsNm));
-            row.appendChild(createCell(item.aiCrtYn));
+            if (showAiCol) {
+                row.appendChild(createCell(item.aiCrtYn));
+            }
             row.appendChild(createCell(item.caseCnt));
             row.appendChild(createCell(item.freqRt));
 
