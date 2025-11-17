@@ -81,7 +81,8 @@ function initializeFilters(data) {
             option.value = value;
             option.textContent = text;
             if (!isValid) {
-                option.disabled = true;
+//                option.disabled = true;
+                option.style.display = "none";
             }
             select.appendChild(option);
         });
@@ -316,18 +317,14 @@ function initializeFilters(data) {
                 const downloadLink = document.createElement('a');
                 downloadLink.href = href;
                 downloadLink.classList.add('download-link');
+                downloadItem.appendChild(downloadLink);
 
-                const csvIcon = document.createElement('i');
-                csvIcon.classList.add('fa-solid', 'fa-file-csv');
-                csvIcon.style.fontSize = '24px';
+                const csvIcon = document.createElement('img');
+                csvIcon.classList.add('csv-icon');
+                csvIcon.src = './images/icon_excel.png';
+                csvIcon.alt = text + ' csv 다운로드';
                 downloadLink.appendChild(csvIcon);
 
-                const downloadText = document.createElement('span');
-                downloadText.classList.add('download-text');
-                downloadText.textContent = text;
-                downloadLink.appendChild(downloadText);
-
-                downloadItem.appendChild(downloadLink);
                 return downloadItem;
             };
 

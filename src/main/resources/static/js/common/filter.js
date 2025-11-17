@@ -69,11 +69,29 @@ function initializeFilters(config, processedData, performSearch) {
                     .map((item) => selects[item.key]);
                     resetAndDisable(...selectsToReset);
 
-                    // Populate the next select in the order
-                    const nextSelectInfo = selectOrder[index + 1];
-                    if (selectedId && nextSelectInfo) {
-                        const children = getChildren(selectedId, nextSelectInfo.data);
-                        populateSelect(selects[nextSelectInfo.key], children);
+                    // Start of new logic for auto-select
+                    let currentParentId = selectedId;
+                    let currentIndex = index;
+
+                    while (currentParentId && selectOrder[currentIndex + 1]) {
+                        const nextSelectInfo = selectOrder[currentIndex + 1];
+                        const nextSelect = selects[nextSelectInfo.key];
+                        const children = getChildren(currentParentId, nextSelectInfo.data);
+
+                        if (children.length === 1) {
+                            // If there's only one option, auto-select it, disable the dropdown, and move to the next.
+                            populateSelect(nextSelect, children);
+                            nextSelect.value = children[0].id;
+                            if (children[0].name === "없음") nextSelect.disabled = true;
+
+                            // Prepare for the next iteration
+                            currentParentId = children[0].id;
+                            currentIndex++;
+                        } else {
+                            // If there are multiple options or no options, populate normally and stop.
+                            populateSelect(nextSelect, children);
+                            break;
+                        };
                     }
                 });
             }
