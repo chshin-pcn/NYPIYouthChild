@@ -13,7 +13,6 @@
 
     <link rel="icon" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
-    <link rel="stylesheet" th:href="@{/lib/fontawesome/css/all.min.css}" type="text/css"/>
 </head>
 
 <body>
@@ -59,7 +58,7 @@
                 <div class="filter-row">
                     <div class="filter-group">
                         <label for="year1">설문연도</label>
-                        <label for="year2" style="display: none"></label>
+                        <label for="year2" style="display: none">설문종료연도</label>
                         <div class="year-group">
                             <select id="year1">
                                 <option value="">전체</option>
@@ -87,7 +86,7 @@
                 <div class="filter">
                     <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
                     <div>
-                        <label for="page-size-select" style="display: none"></label>
+                        <label for="page-size-select" style="display: none">페이지당 표시 수</label>
                         <select id="page-size-select" name="page-size">
                             <option value="5">5개씩 보기</option>
                             <option selected value="10">10개씩 보기</option>

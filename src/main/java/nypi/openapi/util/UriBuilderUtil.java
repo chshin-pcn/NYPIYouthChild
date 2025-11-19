@@ -42,14 +42,14 @@ public class UriBuilderUtil {
     }
 
     public URI buildSearchUri(String opnDataCd) {
-        return createBaseUriBuilder("/openapi/service/openapi/Search")
+        return createBaseUriBuilder("/openapi/service/api/Search")
                 .queryParam("opnDataCd", opnDataCd)
                 .build(true)
                 .toUri();
     }
 
     public URI buildWholeSearchUri() {
-        return createBaseUriBuilder("/openapi/service/openapi/WholSearchFilter")
+        return createBaseUriBuilder("/openapi/service/api/WholSearchFilter")
                 .build(true)
                 .toUri();
     }
@@ -58,7 +58,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String ornuNm, String opnDataCd,
             String rspnsMnbdNm, String searchKeyword, String srvyYr01, String srvyYr02) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/AoePlcyRscrWholInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/AoePlcyRscrWholInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows);
 
@@ -76,7 +76,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/KorKidAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KorKidAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -95,7 +95,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String ornuNm, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/McltAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/McltAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("ornuNm", encode(ornuNm))
@@ -115,7 +115,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/KorAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KorAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -134,7 +134,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
             String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/StdsItrpAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/StdsItrpAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -152,7 +152,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/KidAoeHrthAccndInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KidAoeHrthAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -171,7 +171,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
             String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/openapi/YtScitEcnmAccndInfo")
+        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/YtScitEcnmAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
