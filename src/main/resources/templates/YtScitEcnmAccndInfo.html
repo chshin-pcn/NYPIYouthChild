@@ -98,7 +98,7 @@
                 <div class="filter">
                     <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
                     <div>
-                        <label for="page-size-select" style="display: none">페이지사이즈선택</label>
+                        <label for="page-size-select" style="display: none">페이지당 표시 수</label>
                         <select id="page-size-select" name="page-size">
                             <option value="5">5개씩 보기</option>
                             <option selected value="10">10개씩 보기</option>
@@ -281,7 +281,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log("검색 결과 데이터:", data);
                 selectedParams = { ...searchParams };
                 updateTable(data.items);
                 updateTotalCount(data.totalCount);

@@ -253,7 +253,6 @@ function initializeFilters(data) {
                 return response.json();
             })
             .then(data => {
-                console.log("검색 결과 데이터:", data);
                 selectedParams = {...searchParams};
                 updateTable(data.items);
                 updateTotalCount(data.totalCount);
