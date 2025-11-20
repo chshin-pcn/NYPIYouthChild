@@ -25,7 +25,7 @@ public class UriBuilderUtil {
             return URLEncoder.encode(value, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             log.error("URI 인코딩 실패: {}", e.getMessage());
-            throw new RuntimeException("URI 인코딩 실패", e);
+            throw new IllegalStateException("URI 인코딩 실패", e);
         }
     }
 
