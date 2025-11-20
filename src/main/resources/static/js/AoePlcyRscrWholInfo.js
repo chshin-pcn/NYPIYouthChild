@@ -227,7 +227,7 @@ function initializeFilters(data) {
             const searchParams = {};
 
             searchParams.searchKeyword = keyword || "";
-            if (selectedSurveyId) searchParams.otptDataCd = selectedSurveyId;
+            if (selectedSurveyId) searchParams.opnDataCd = selectedSurveyId;
             if (year1) searchParams.srvyYr01 = year1;
             if (year2) searchParams.srvyYr02 = year2;
             if (respondent) searchParams.rspnsMnbdNm = respondent;
