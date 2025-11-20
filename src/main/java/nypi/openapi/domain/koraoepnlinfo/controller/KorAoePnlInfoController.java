@@ -3,7 +3,7 @@ package nypi.openapi.domain.koraoepnlinfo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nypi.openapi.domain.common.dto.FilterOptionsDto;
-import nypi.openapi.domain.common.service.impl.SearchFilterServiceImpl;
+import nypi.openapi.domain.common.service.SearchFilterService;
 import nypi.openapi.util.UriBuilderUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class KorAoePnlInfoController {
 
-    private final SearchFilterServiceImpl searchService;
+    private final SearchFilterService searchService;
     private final UriBuilderUtil uriBuilderUtil;
 
     @GetMapping("/korAoePnlInfo")
