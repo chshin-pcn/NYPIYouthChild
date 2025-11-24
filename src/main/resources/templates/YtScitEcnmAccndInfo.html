@@ -172,9 +172,10 @@
 <script th:src="@{/js/common/filter.js}"></script>
 <script th:src="@{/js/common/sidenav.js}"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    const processedData = /*[[${data}]]*/ null;
-    const path = "/api/ytScitEcnmAccndInfo";
+    const url = {
+        filter: "/api/filter?surveyName=청년사회경제실태조사",
+        table: "/api/ytScitEcnmAccndInfo",
+    }
 
     // 1. 이 페이지의 필터 구성을 정의합니다.
     const pageFilterConfig = {
@@ -219,6 +220,9 @@
         if (showAiCol) {
             const aiCrtTh = document.querySelector(".aiCrtYn");
             aiCrtTh.style.display = "table-cell";
+        } else {
+            const aiCrtTh = document.querySelector(".aiCrtYn");
+            aiCrtTh.style.display = "none";
         }
 
         items.forEach(item => {
@@ -273,7 +277,7 @@
             numOfRows
         }).toString();
 
-        fetch(`${path}?${queryString}`)
+        fetch(`${url.table}?${queryString}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
@@ -374,10 +378,21 @@
         });
     }
 
-    initializeFilters(pageFilterConfig, processedData, performSearch);
+    fetch(`${url.filter}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            initializeFilters(pageFilterConfig, data, performSearch);
+        })
+        .catch(error => {
+            console.error("검색 중 오류 발생:", error);
+        });
 
     addPageSizeChangeEventListener();
-    /*]]>*/
 </script>
 </body>
 

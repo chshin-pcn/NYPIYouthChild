@@ -336,42 +336,6 @@ caption,
     background: #1742bb;
 }
 
-.ip-txt01 {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    height: 56px;
-    overflow: hidden;
-}
-
-.ip-txt01 input[type="text"] {
-    padding-left: 20px;
-    padding-right: 64px;
-    height: 100%;
-    width: 100%;
-    font-size: 18px;
-    font-weight: 300;
-}
-
-.ip-txt02 {
-    border: 1px;
-    border-radius: 5px;
-    height: 56px;
-    overflow: hidden;
-}
-
-.ui-datepicker-trigger {
-    position: absolute;
-    right: 10px;
-    /* 오른쪽 여백 */
-    top: 50%;
-    /* input의 중앙 정렬 */
-    transform: translateY(-50%);
-    width: 28px;
-    /* 아이콘 크기 */
-    height: 28px;
-    cursor: pointer;
-}
-
 /* ::-webkit-scrollbar {
     width: 10px;
     height: 10px;

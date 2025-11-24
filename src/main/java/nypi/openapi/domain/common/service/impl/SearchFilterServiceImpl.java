@@ -89,15 +89,16 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             String detailedCategory = surveyItem.getDetailedCategory();
             String questionId = surveyItem.getQuestionId();
             String questionContent = surveyItem.getQuestionContent();
+            String aiCrtYn = surveyItem.getAiCrtYn();
 
             // id라는 스트링빌더 생성(이후 문자열을 지속적으로 추가해서 사용할 예정)
             StringBuilder id = new StringBuilder();
 
             // yearData 기수/연도 처리(별도 함수 분리)
             if (isWave) {
-                processWaveAndYear(yearData, wave, year, id);
+                processWaveAndYear(yearData, wave, year, aiCrtYn, id);
             } else {
-                processYear(yearData, year, id);
+                processYear(yearData, year, aiCrtYn, id);
             }
 
             // respondentData 응답주체 처리(별도 함수 분리)
@@ -136,25 +137,36 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
         return list;
     }
 
-    private void processWaveAndYear(Set<Map<String, String>> yearData, String wave, String year, StringBuilder id) {
+    private void processWaveAndYear(Set<Map<String, String>> yearData, String wave, String year, String aiCrtYn, StringBuilder id) {
         String waveYear = wave + " / " + year;
+        String tmpWaveYear = waveYear + "-" + aiCrtYn;
 
         Map<String, String> tmpMap = new HashMap<>();
         tmpMap.put("parentId", null);
-        id.append(waveYear);
-        tmpMap.put("id", waveYear);
-        tmpMap.put("name", waveYear);
-        tmpMap.put("value", waveYear);
+        id.append(tmpWaveYear);
+        tmpMap.put("id", tmpWaveYear);
+        if (aiCrtYn.equals("Y")) {
+            tmpMap.put("name", waveYear + " (AI 생성)");
+        } else {
+            tmpMap.put("name", waveYear);
+        }
+        tmpMap.put("value", tmpWaveYear);
         yearData.add(tmpMap);
     }
 
-    private void processYear(Set<Map<String, String>> yearData, String year, StringBuilder id) {
+    private void processYear(Set<Map<String, String>> yearData, String year, String aiCrtYn, StringBuilder id) {
         Map<String, String> tmpMap = new HashMap<>();
+        String tmpYear = year + "-" + aiCrtYn;
+
         tmpMap.put("parentId", null);
-        id.append(year);
-        tmpMap.put("id", year);
-        tmpMap.put("name", year);
-        tmpMap.put("value", year);
+        id.append(tmpYear);
+        tmpMap.put("id", tmpYear);
+        if (aiCrtYn.equals("Y")) {
+            tmpMap.put("name", year + " (AI 생성)");
+        } else {
+            tmpMap.put("name", year);
+        }
+        tmpMap.put("value", tmpYear);
         yearData.add(tmpMap);
     }
 

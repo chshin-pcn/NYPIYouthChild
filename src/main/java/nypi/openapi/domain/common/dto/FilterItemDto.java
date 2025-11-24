@@ -50,4 +50,7 @@ public class FilterItemDto {
 
     @JsonProperty("srvySn")
     private String srvySn;
+
+    @JsonProperty("aiCrtYn")
+    private String aiCrtYn;
 }
