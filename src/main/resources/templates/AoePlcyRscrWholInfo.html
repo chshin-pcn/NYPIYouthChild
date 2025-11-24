@@ -163,10 +163,19 @@
 <script th:src="@{/js/common/sidenav.js}"></script>
 <script th:src="@{/js/AoePlcyRscrWholInfo.js}" type="text/javascript"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    const data = /*[[${data}]]*/[];
-    initializeFilters(data);
-    /*]]>*/
+    fetch("/api/filter")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            initializeFilters(data);
+        })
+        .catch(error => {
+            console.error("검색 중 오류 발생:", error);
+        });
 </script>
 </body>
 

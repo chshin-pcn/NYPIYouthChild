@@ -181,9 +181,10 @@
 <script th:src="@{/js/common/sidenav.js}"></script>
 <script th:src="@{/js/common/filter.js}"></script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    const processedData = /*[[${data}]]*/ null;
-    const path = "/api/mcltAoePnlInfo";
+    const url = {
+        filter: "/api/filter?surveyName=다문화청소년패널조사",
+        table: "/api/mcltAoePnlInfo",
+    }
 
     const pageFilterConfig = {
         selects: [
@@ -228,6 +229,9 @@
         if (showAiCol) {
             const aiCrtTh = document.querySelector(".aiCrtYn");
             aiCrtTh.style.display = "table-cell";
+        } else {
+            const aiCrtTh = document.querySelector(".aiCrtYn");
+            aiCrtTh.style.display = "none";
         }
 
         items.forEach(item => {
@@ -287,7 +291,7 @@
             numOfRows
         }).toString();
 
-        fetch(`${path}?${queryString}`)
+        fetch(`${url.table}?${queryString}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
@@ -388,10 +392,21 @@
         });
     }
 
-    initializeFilters(pageFilterConfig, processedData, performSearch);
+    fetch(`${url.filter}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            initializeFilters(pageFilterConfig, data, performSearch);
+        })
+        .catch(error => {
+            console.error("검색 중 오류 발생:", error);
+        });
 
     addPageSizeChangeEventListener();
-    /*]]>*/
 </script>
 </body>
 

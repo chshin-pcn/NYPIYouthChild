@@ -131,12 +131,18 @@ function initializeFilters(config, processedData, performSearch) {
 
                     const selectedOption = select.options[select.selectedIndex];
 
-                    const valueToUse = selectedOption.dataset.value !== undefined ? selectedOption.dataset.value : select.value;
+                    const valueToUse = !!selectedOption.dataset.value ? selectedOption.dataset.value : select.value;
 
-                    if (selectInfo.key === "year" && valueToUse.includes(' / ')) {
-                        const parts = valueToUse.split(' / ');
-                        searchParams["ornuNm"] = parts[0];
-                        searchParams["srvyYr"] = parts[1];
+                    if (selectInfo.key === "year") {
+                        let parts = valueToUse.split('-');
+                        searchParams["aiCrtYn"] = parts[1];
+                        if (valueToUse.includes(' / ')) {
+                            parts = parts[0].split(' / ');
+                            searchParams["ornuNm"] = parts[0];
+                            searchParams["srvyYr"] = parts[1];
+                        } else {
+                            searchParams["srvyYr"] = parts[0];
+                        }
                     } else {
                         searchParams[selectInfo.paramName] = valueToUse;
                     }
