@@ -53,10 +53,10 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             return processSurveyItems(surveyItems, opnDataCd);
 
         } catch (RestClientException e) {
-            log.error("외부 API 호출 실패. URI: {}, 에러: {}", uri, e.getMessage());
+            log.error("외부 API 호출 실패. URI: {}", uri);
             return emptyFilterOptions;
         } catch (IOException e) {
-            log.error("API 응답 데이터 처리 실패. URI: {}, 에러: {}", uri, e.getMessage());
+            log.error("API 응답 데이터 처리 실패. URI: {}", uri);
             return emptyFilterOptions;
         }
     }
