@@ -237,6 +237,18 @@ function initializeFilters(data) {
         });
     }
 
+    function displayPublicApiUrl(publicApiBaseUrl, queryString) {
+        const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`;
+
+        const apiUrlContainer = document.getElementById('api-url-container');
+        const apiUrlDisplay = document.getElementById('api-url-display');
+
+        if (apiUrlDisplay && apiUrlContainer) {
+            apiUrlDisplay.value = publicApiUrl;
+            apiUrlContainer.style.display = 'block';
+        }
+    }
+
     function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
         const queryString = new URLSearchParams({
             ...searchParams,
@@ -244,7 +256,8 @@ function initializeFilters(data) {
             numOfRows
         }).toString();
         const url = `/api/aoePlcyRscrWholInfo?${queryString}`;
-            
+        const publicApiBaseUrl = 'https://data.nypi.re.kr/openapi/service/api/AoePlcyRscrWholInfo';
+
         fetch(url)
             .then(response => {
                 if (!response.ok) {
@@ -257,6 +270,7 @@ function initializeFilters(data) {
                 updateTable(data.items);
                 updateTotalCount(data.totalCount);
                 displayPagination(data.totalCount, data.numOfRows, data.pageNo);
+                displayPublicApiUrl(publicApiBaseUrl, queryString);
             })
             .catch(error => {
                 console.error("검색 중 오류 발생:", error);
@@ -415,9 +429,30 @@ function initializeFilters(data) {
         }
     }
 
+    function addCopyButtonEventListener() {
+        const copyButton = document.getElementById('copy-btn');
+        const apiUrlDisplay = document.getElementById('api-url-display');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        if (copyButton && apiUrlDisplay && copyFeedback) {
+            copyButton.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(apiUrlDisplay.value);
+                    copyFeedback.classList.add('show');
+                    setTimeout(() => {
+                        copyFeedback.classList.remove('show');
+                    }, 2000);
+                } catch (err) {
+                    console.error('복사 실패: ', err);
+                }
+            })
+        }
+    }
+
     addFilterEventListeners();
     addResetButtonEventListener();
     addSearchButtonEventListener();
     addPageSizeChangeEventListener();
+    addCopyButtonEventListener();
     updateDependentFilters();
 }
