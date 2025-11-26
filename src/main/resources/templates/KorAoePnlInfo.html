@@ -101,6 +101,18 @@
                     <button class="btn-search">조회</button>
                 </div>
             </div>
+            <div id="api-url-container" class="api-url-wrap" style="display: none;">
+                <label for="api-url-display">API 호출 예시 (공공데이터포털 URL)</label>
+                <div class="api-url-content">
+                    <input id="api-url-display" type="text" disabled readonly>
+                    <button id="copy-btn" type="button" class="copy-btn" aria-label="Copy to clipboard">
+                        <svg class="w-4 h-4 text-blue-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
+                        </svg>
+                        <span id="copy-feedback" class="copy-feedback-message">복사완료!</span>
+                    </button>
+                </div>
+            </div>
             <div class="result-wrap">
                 <div class="filter">
                     <div class="count">총&nbsp;<span id="total-count">0</span>건</div>
@@ -182,6 +194,7 @@
     const url = {
         filter: "/api/filter?surveyName=한국청소년패널조사",
         table: "/api/korAoePnlInfo",
+        publicApiBaseUrl: "https://data.nypi.re.kr/openapi/service/api/KorAoePnlInfo",
     }
 
     const pageFilterConfig = {
@@ -268,6 +281,18 @@
         }
     }
 
+    function displayPublicApiUrl(publicApiBaseUrl, queryString) {
+        const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`;
+
+        const apiUrlContainer = document.getElementById('api-url-container');
+        const apiUrlDisplay = document.getElementById('api-url-display');
+
+        if (apiUrlDisplay && apiUrlContainer) {
+            apiUrlDisplay.value = publicApiUrl;
+            apiUrlContainer.style.display = 'block';
+        }
+    }
+
     function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
         if (!searchParams.srvyYr) {
             alert("연도가 선택되지 않았습니다.");
@@ -300,6 +325,7 @@
                 updateTable(data.items);
                 updateTotalCount(data.totalCount);
                 displayPagination(data.totalCount, data.numOfRows, data.pageNo);
+                displayPublicApiUrl(url.publicApiBaseUrl, queryString);
             })
             .catch(error => {
                 console.error("검색 중 오류 발생:", error);
@@ -389,6 +415,26 @@
         });
     }
 
+    function addCopyButtonEventListener() {
+        const copyButton = document.getElementById('copy-btn');
+        const apiUrlDisplay = document.getElementById('api-url-display');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        if (copyButton && apiUrlDisplay && copyFeedback) {
+            copyButton.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(apiUrlDisplay.value);
+                    copyFeedback.classList.add('show');
+                    setTimeout(() => {
+                        copyFeedback.classList.remove('show');
+                    }, 2000);
+                } catch (err) {
+                    console.error('복사 실패: ', err);
+                }
+            })
+        }
+    }
+
     fetch(`${url.filter}`)
         .then(response => {
             if (!response.ok) {
@@ -404,6 +450,7 @@
         });
 
     addPageSizeChangeEventListener();
+    addCopyButtonEventListener();
 </script>
 </body>
 

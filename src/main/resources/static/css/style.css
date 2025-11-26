@@ -803,6 +803,82 @@ hr {
     color: #315fe1;
 }
 
+.api-url-wrap {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 25px;
+}
+
+.api-url-wrap label {
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+    color: #343a40;
+}
+
+.api-url-content {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.api-url-content input#api-url-display {
+    flex-grow: 1;
+    padding: 10px 40px 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f7fa;
+    color: #495057;
+    font-size: 14px;
+    cursor: default;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.api-url-content .copy-btn {
+    background-color: #f4f7fa;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    inset-inline-end: 6px;
+}
+
+.api-url-content .copy-btn:hover {
+    background-color: #29559c;
+}
+
+.api-url-content .copy-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.copy-feedback-message {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.copy-feedback-message.show {
+    opacity: 1;
+    visibility: visible;
+}
+
 table {
     width: 100%;
 }
