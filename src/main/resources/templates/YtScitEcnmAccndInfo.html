@@ -209,6 +209,10 @@
 
     let selectedParams = {};
 
+    function addCommas(numStr) {
+        return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
     function updateTable(items) {
         const tableBody = document.querySelector("#results-table tbody");
         if (!tableBody) return;
@@ -260,7 +264,7 @@
             if (showAiCol) {
                 row.appendChild(createCell(item.aiCrtYn));
             }
-            row.appendChild(createCell(item.caseCnt));
+            row.appendChild(createCell(addCommas(item.caseCnt)));
             row.appendChild(createCell(item.freqRt));
 
             tableBody.appendChild(row);
