@@ -298,17 +298,37 @@
     }
 
     function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
+        const year = document.getElementById('year');
+        const respondent = document.getElementById('respondent');
+        const categoryMajor = document.getElementById('category-major');
+        const categoryMedium = document.getElementById('category-medium');
+        const categoryMinor = document.getElementById('category-minor');
+        const categoryDetailed = document.getElementById('category-detailed');
+        const question = document.getElementById('question');
+
         if (!searchParams.srvyYr) {
             alert("연도가 선택되지 않았습니다.");
+            year.focus();
             return;
         }
         if (!searchParams.rspnsMnbdNm) {
             alert("응답주체가 선택되지 않았습니다.");
+            respondent.focus();
             return;
         }
         if (!searchParams.srvyQitemId) {
-            alert("문항이 선택되지 않았습니다.");
-            return;
+            if (!question.disabled && question.selectedIndex === 0) {
+                alert("문항이 선택되지 않았습니다.");
+                question.focus();
+                return;
+            }
+            [categoryMajor, categoryMedium, categoryMinor, categoryDetailed].forEach(category => {
+                if (!category.disabled && category.selectedIndex === 0) {
+                    alert("카테고리가 선택되지 않았습니다.");
+                    category.focus();
+                    return;
+                }
+            });
         }
 
         const queryString = new URLSearchParams({
