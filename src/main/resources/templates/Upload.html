@@ -1,114 +1,259 @@
 <!DOCTYPE html>
 <html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>CSV 파일 업로드</title>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
     <link rel="icon" th:href="@{/images/favicon.ico}">
-    <link rel="stylesheet" th:href="@{/css/upload.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/upload.css}" type="text/css" />
 </head>
+
 <body>
-<h1>CSV 파일 업로드</h1>
+    <h1>CSV 파일 업로드</h1>
 
-<form id="uploadForm" enctype="multipart/form-data">
-    <div>
-        <label for="srvyBscFile">기본 정보 CSV:</label>
-        <input type="file" id="srvyBscFile" name="srvyBscFile" accept=".csv" required>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <div class="upload-block" data-field="srvyBscFile">
+            <label for="srvyBscFile">기본 정보 CSV:</label>
+            <input type="file" id="srvyBscFile" name="srvyBscFile" accept=".csv" multiple hidden>
+            <div class="dropzone">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="chakra-icon css-17wb16c" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" x2="12" y1="3" y2="15"></line>
+                </svg>
+                <div>여기에 CSV 파일을 드롭하거나 클릭하세요</div>
+            </div>
+            <ul class="file-list" style="display:none;"></ul>
+        </div>
+
+        <div class="upload-block" data-field="srvyCbookFile">
+            <label for="srvyCbookFile">코드북 CSV:</label>
+            <input type="file" id="srvyCbookFile" name="srvyCbookFile" accept=".csv" multiple hidden>
+            <div class="dropzone">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="chakra-icon css-17wb16c" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" x2="12" y1="3" y2="15"></line>
+                </svg>
+                <div>여기에 CSV 파일을 드롭하거나 클릭하세요</div>
+            </div>
+            <ul class="file-list" style="display:none;"></ul>
+        </div>
+
+        <div class="upload-block" data-field="srvyCtgryFile">
+            <label for="srvyCtgryFile">카테고리 CSV:</label>
+            <input type="file" id="srvyCtgryFile" name="srvyCtgryFile" accept=".csv" multiple hidden>
+            <div class="dropzone">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="chakra-icon css-17wb16c" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" x2="12" y1="3" y2="15"></line>
+                </svg>
+                <div>여기에 CSV 파일을 드롭하거나 클릭하세요</div>
+            </div>
+            <ul class="file-list" style="display:none;"></ul>
+        </div>
+
+        <div class="upload-block" data-field="srvyRspnsFile">
+            <label for="srvyRspnsFile">응답값 CSV:</label>
+            <input type="file" id="srvyRspnsFile" name="srvyRspnsFile" accept=".csv" multiple hidden>
+            <div class="dropzone">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="chakra-icon css-17wb16c" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" x2="12" y1="3" y2="15"></line>
+                </svg>
+                <div>여기에 CSV 파일을 드롭하거나 클릭하세요</div>
+            </div>
+            <ul class="file-list" style="display:none;"></ul>
+        </div>
+
+    </form>
+
+    <div class="button-container">
+        <button type="submit" form="uploadForm" id="uploadBtn" disabled>업로드</button>
+        <button id="ETLProcessButton" disabled>ETL 처리</button>
     </div>
 
-    <div>
-        <label for="srvyCbookFile">코드북 CSV:</label>
-        <input type="file" id="srvyCbookFile" name="srvyCbookFile" accept=".csv" required>
-    </div>
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const blocks = uploadForm.querySelectorAll('.upload-block');
+        const uploadBtn = document.getElementById("uploadBtn");
 
-    <div>
-        <label for="srvyCtgryFile">카테고리 CSV:</label>
-        <input type="file" id="srvyCtgryFile" name="srvyCtgryFile" accept=".csv" required>
-    </div>
+        // 각 블록별 files 배열 저장
+        const fileMap = {
+            srvyBscFile: [],
+            srvyCbookFile: [],
+            srvyCtgryFile: [],
+            srvyRspnsFile: [],
+        };
 
-    <div>
-        <label for="srvyRspnsFile">응답값 CSV:</label>
-        <input type="file" id="srvyRspnsFile" name="srvyRspnsFile" accept=".csv" required>
-    </div>
+        function updateUploadBtnState() {
+            uploadBtn.disabled = Object.values(fileMap).some(arr => arr.length === 0);
+        }
 
-</form>
+        blocks.forEach((block) => {
+            const fieldName = block.getAttribute('data-field');
+            const fileInput = block.querySelector('input[type="file"]');
+            const dropzone = block.querySelector('.dropzone');
+            const fileList = block.querySelector('.file-list');
 
-<div class="button-container">
-    <button type="submit" form="uploadForm" id="uploadButton">업로드</button>
-    <button id="ETLProcessButton" disabled>ETL 처리</button>
-</div>
+            // 파일명 표시 함수
+            function renderFileList() {
+                if (fileMap[fieldName].length === 0) {
+                    fileList.style.display = "none";
+                    return;
+                }
 
-<script>
-    document.getElementById('uploadForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+                fileList.style.display = "block";
+                fileList.innerHTML = "";
 
-        const form = event.target;
-        const formData = new FormData(form);
-        const submitButton = document.getElementById('uploadButton');
-
-        submitButton.disabled = true;
-        submitButton.textContent = '업로드 중...';
-
-        fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text || response.statusText);
+                fileMap[fieldName].forEach((file, index) => {
+                    const fileItem = document.createElement('li');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <svg viewBox="0 0 24 24" class="file-icon">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                        </svg>
+                        <span>${file.name}</span>
+                        <button class="clear-btn" data-idx="${index}">
+                            <svg viewBox="0 0 24 24" class="clear-icon">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7071 6.70711C19.0976 6.31658 19.0976 5.68342 18.7071 5.29289C18.3166 4.90237 17.6834 4.90237 17.2929 5.29289L12 10.5858L6.70711 5.29289C6.31658 4.90237 5.68342 4.90237 5.29289 5.29289C4.90237 5.68342 4.90237 6.31658 5.29289 6.70711L10.5858 12L5.29289 17.2929C4.90237 17.6834 4.90237 18.3166 5.29289 18.7071C5.68342 19.0976 6.31658 19.0976 6.70711 18.7071L12 13.4142L17.2929 18.7071C17.6834 19.0976 18.3166 19.0976 18.7071 18.7071C19.0976 18.3166 19.0976 17.6834 18.7071 17.2929L13.4142 12L18.7071 6.70711Z"></path>
+                            </svg>
+                        </button>
+                    `;
+                    fileList.appendChild(fileItem);
                 });
             }
-            return response.text();
-        })
-        .then(data => {
-            alert(data);
-            form.reset();
-        })
-        .catch(error => {
-            console.error(error);
-            alert(error.message);
-        })
-        .finally(() => {
-            submitButton.disabled = false;
-            submitButton.textContent = '업로드';
-        });
-    });
 
-    document.getElementById('ETLProcessButton').addEventListener('click', function() {
-        const etlButton = this;
-        alert('ETL 처리 기능은 현재 비활성화되어 있습니다. 필요 시 활성화할 수 있습니다.');
-        
-        /*
-        etlButton.disabled = true;
-        etlButton.textContent = 'ETL 처리 중...';
-
-        fetch('https://data.nypi.re.kr/hop/asyncRun/?service=trigger', {
-            method: 'GET'
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text || response.statusText);
+            // 파일 추가
+            function addFiles(files) {
+                [...files].forEach((file) => {
+                    if (!file.name.toLowerCase().endsWith(".csv")) {
+                        alert(`'${file.name}' 은 CSV 파일이 아닙니다.`);
+                        return;
+                    }
+                    fileMap[fieldName].push(file);
                 });
+                renderFileList();
+                updateUploadBtnState();
             }
-            return response.text();
+
+            // 삭제
+            fileList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('clear-btn')) {
+                    const idx = e.target.dataset.idx;
+                    fileMap[fieldName].splice(idx, 1);
+                    renderFileList();
+                    updateUploadBtnState();
+                }
+            });
+
+            // 드래그 앤 드롭 클릭시 파일 선택 창 열기
+            dropzone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // 파일 선택 시 파일 추가
+            fileInput.addEventListener('change', (e) => {
+                addFiles(e.target.files);
+            });
+
+            // 드래그 앤 드롭
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            });
+
+            dropzone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+
+                const files = e.dataTransfer.files;
+                addFiles(files);
+            });
         })
-        .then(data => {
-            alert(data);
-        })
-        .catch(error => {
-            console.error(error);
-            alert(error.message);
-        })
-        .finally(() => {
-            etlButton.disabled = false;
-            etlButton.textContent = 'ETL 처리';
+
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            Object.entries(fileMap).forEach(([key, files]) => {
+                files.forEach((file, index) => {
+                    formData.append(key, file);
+                });
+            });
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = '업로드 중...';
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('업로드에 실패했습니다.');
+                alert('업로드가 완료되었습니다.');
+
+                Object.keys(fileMap).forEach(key => fileMap[key] = []);
+                Array.from(blocks).forEach((block) => {
+                    const fileList = block.querySelector('.file-list');
+                    fileList.style.display = "none";
+                    fileList.innerHTML = "";
+                    block.querySelector('input[type="file"]').value = '';
+                });
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = '업로드';
+            };
         });
-        */
-    });
-</script>
+
+        document.getElementById('ETLProcessButton').addEventListener('click', function () {
+            const etlButton = this;
+            alert('ETL 처리 기능은 현재 비활성화되어 있습니다. 필요 시 활성화할 수 있습니다.');
+
+            /*
+            etlButton.disabled = true;
+            etlButton.textContent = 'ETL 처리 중...';
+    
+            fetch('https://data.nypi.re.kr/hop/asyncRun/?service=trigger', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || response.statusText);
+                    });
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error(error);
+                alert(error.message);
+            })
+            .finally(() => {
+                etlButton.disabled = false;
+                etlButton.textContent = 'ETL 처리';
+            });
+            */
+        });
+    </script>
 
 </body>
+
 </html>
