@@ -1,0 +1,17 @@
+package kr.re.nypi.data.domain.openapi.koraoepnlinfo.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+public class KorAoePnlInfoController {
+
+    @GetMapping("/korAoePnlInfo")
+    public String korAoePnlInfo() {
+        return "openapi/KorAoePnlInfo";
+    }
+}
