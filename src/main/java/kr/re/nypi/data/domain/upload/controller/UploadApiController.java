@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -21,10 +22,10 @@ public class UploadApiController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(
-            @RequestParam("srvyBscFile") MultipartFile srvyBscFile,
-            @RequestParam("srvyCbookFile") MultipartFile srvyCbookFile,
-            @RequestParam("srvyCtgryFile") MultipartFile srvyCtgryFile,
-            @RequestParam("srvyRspnsFile") MultipartFile srvyRspnsFile
+            @RequestParam("srvyBscFile") List<MultipartFile> srvyBscFile,
+            @RequestParam("srvyCbookFile") List<MultipartFile> srvyCbookFile,
+            @RequestParam("srvyCtgryFile") List<MultipartFile> srvyCtgryFile,
+            @RequestParam("srvyRspnsFile") List<MultipartFile> srvyRspnsFile
     ) {
         try {
             uploadService.uploadCsvFiles(srvyBscFile, srvyCbookFile, srvyCtgryFile, srvyRspnsFile);
