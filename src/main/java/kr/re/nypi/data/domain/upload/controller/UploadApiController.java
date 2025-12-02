@@ -1,13 +1,10 @@
 package kr.re.nypi.data.domain.upload.controller;
 
-import lombok.RequiredArgsConstructor;
 import kr.re.nypi.data.domain.upload.service.UploadService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,6 +16,7 @@ import java.util.List;
 public class UploadApiController {
 
     private final UploadService uploadService;
+    private final RestTemplate restTemplate;
 
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(
@@ -32,6 +30,23 @@ public class UploadApiController {
             return ResponseEntity.ok("파일이 성공적으로 업로드되었습니다.");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패");
+        }
+    }
+
+    @GetMapping("/trigger-hop")
+    public ResponseEntity<String> triggerHop(@RequestParam("USER_MAIL") String userMail) {
+        String url = "http://211.205.54.19:8092/hop/asyncRun/?service=trigger&USER_MAIL=" + userMail;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth("pcn", "Pcn2025!@");
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("HOP API 호출 실패");
         }
     }
 }
