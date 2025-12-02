@@ -37,10 +37,10 @@ const tableConfig = {
         { key: 'srvyQitemId' },
         { key: 'cbookQitemCn' },
         { key: 'rspvl' },
-        { key: 'rspnsNm' },
+        { key: 'rspnsNm', className: 'text-left' },
         { key: 'aiCrtYn' },
-        { key: 'caseCnt' },
-        { key: 'freqRt' }
+        { key: 'caseCnt', className: 'text-right' },
+        { key: 'freqRt', className: 'text-right' }
     ]
 };
 

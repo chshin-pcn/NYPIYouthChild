@@ -21,22 +21,26 @@ export async function fetchTable(url, queryString) {
 
 /**
  * 숫자에 1,000 단위 콤마를 추가합니다.
- * @param {string|number|null|undefined} numStr - 콤마를 추가할 숫자 또는 숫자 문자열.
+ * @param {string|number} numStr - 콤마를 추가할 숫자 또는 숫자 문자열.
  * @returns {string} - 콤마가 추가된 문자열 또는 빈 문자열.
  */
 function addCommas(numStr) {
-    if (numStr === null || numStr === undefined) return '';
+    if (!numStr) return '';
     return numStr.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 /**
  * 간단한 <td> 엘리먼트를 생성합니다.
  * @param {string} text - 셀에 들어갈 텍스트
+ * @param {string} [className] - 셀에 추가할 CSS 클래스 이름 (선택 사항).
  * @returns {HTMLTableCellElement} - 생성된 <td> 엘리먼트.
  */
-function createCell(text) {
+function createCell(text, className) {
     const cell = document.createElement('td');
     cell.textContent = text || ''; // 텍스트가 없으면 빈 문자열 할당
+    if (className) {
+        cell.classList.add(className);
+    }
     return cell;
 }
 
@@ -55,9 +59,9 @@ function buildRow(item, config, showAiCol) {
 
         // 'caseCnt' 컬럼인 경우 콤마를 추가하여 표시합니다.
         if (column.key === 'caseCnt') {
-            row.appendChild(createCell(addCommas(item[column.key])));
+            row.appendChild(createCell(addCommas(item[column.key]), column.className));
         } else {
-            row.appendChild(createCell(item[column.key]));
+            row.appendChild(createCell(item[column.key], column.className));
         }
     });
     return row;
@@ -111,10 +115,10 @@ function renderTable(items, config) {
  * 검색 결과 총 건수를 화면에 업데이트합니다.
  * @param {number} totalCount - 전체 결과 수.
  */
-function updateTotalCount(totalCount) {
+export function updateTotalCount(totalCount) {
     const countElement = document.getElementById('total-count');
     if (countElement) {
-        countElement.textContent = totalCount || 0; // 총 건수 업데이트
+        countElement.textContent = addCommas(totalCount) || 0; // 총 건수 업데이트
     }
 }
 
