@@ -1,5 +1,5 @@
 import { fetchFilter } from './filter.js';
-import { addCopyButtonEventListener, fetchTable } from './table.js';
+import { addCopyButtonEventListener, updateTotalCount, fetchTable } from './table.js';
 
 const url = {
     filter: "/api/filter",
@@ -286,9 +286,12 @@ function updateTable(items) {
     items.forEach(item => {
         const row = document.createElement('tr');
 
-        const createCell = (text) => {
+        const createCell = (text, className) => {
             const cell = document.createElement('td');
             cell.textContent = text || '';
+            if (className) {
+                cell.classList.add(className);
+            }
             return cell;
         };
 
@@ -300,9 +303,9 @@ function updateTable(items) {
         row.appendChild(createCell(item.srvyYr));
         row.appendChild(createCell(item.srvyExmnCycl));
         row.appendChild(createCell(item.rspnsMnbdNm));
-        row.appendChild(createCell(item.otptCtgryNm));
-        row.appendChild(createCell(item.srvyQitemId));
-        row.appendChild(createCell(item.cbookQitemCn));
+        row.appendChild(createCell(item.srvyQitemId, "text-left"));
+        row.appendChild(createCell(item.cbookQitemCn, "text-left"));
+        row.appendChild(createCell(item.otptCtgryNm, "text-left"));
 
         const downloadCell = document.createElement('td');
         downloadCell.classList.add('download-cell'); // Add class for styling
@@ -335,13 +338,6 @@ function updateTable(items) {
 
         tableBody.appendChild(row);
     });
-}
-
-function updateTotalCount(totalCount) {
-    const countElement = document.getElementById('total-count');
-    if (countElement) {
-        countElement.textContent = totalCount || 0;
-    }
 }
 
 function displayPagination(totalCount, numOfRows, pageNo) {
