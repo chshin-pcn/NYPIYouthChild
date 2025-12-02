@@ -13,6 +13,11 @@
 <body>
     <h1>CSV 파일 업로드</h1>
 
+    <div class="email-block">
+        <label for="email">이메일:</label>
+        <input type="email" id="email" name="email" placeholder="이메일을 입력하세요">
+    </div>
+
     <form id="uploadForm" enctype="multipart/form-data">
         <div class="upload-block" data-field="srvyBscFile">
             <label for="srvyBscFile">기본 정보 CSV:</label>
@@ -78,9 +83,10 @@
     </div>
 
     <script>
-        const uploadForm = document.getElementById('uploadForm');
-        const blocks = uploadForm.querySelectorAll('.upload-block');
+        const blocks = document.querySelectorAll('.upload-block');
         const uploadBtn = document.getElementById("uploadBtn");
+        const emailInput = document.getElementById('email');
+        const etlButton = document.getElementById('ETLProcessButton');
 
         // 각 블록별 files 배열 저장
         const fileMap = {
@@ -144,6 +150,7 @@
 
             // 삭제
             fileList.addEventListener('click', (e) => {
+                e.preventDefault();
                 if (e.target.classList.contains('clear-btn')) {
                     const idx = e.target.dataset.idx;
                     fileMap[fieldName].splice(idx, 1);
@@ -160,6 +167,7 @@
             // 파일 선택 시 파일 추가
             fileInput.addEventListener('change', (e) => {
                 addFiles(e.target.files);
+                e.target.value = null;
             });
 
             // 드래그 앤 드롭
@@ -183,7 +191,7 @@
         })
 
 
-        uploadForm.addEventListener('submit', async (event) => {
+        uploadBtn.addEventListener('click', async (event) => {
             event.preventDefault();
 
             const formData = new FormData();
@@ -220,37 +228,46 @@
             };
         });
 
-        document.getElementById('ETLProcessButton').addEventListener('click', function () {
-            const etlButton = this;
-            alert('ETL 처리 기능은 현재 비활성화되어 있습니다. 필요 시 활성화할 수 있습니다.');
+        function isEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
 
-            /*
-            etlButton.disabled = true;
-            etlButton.textContent = 'ETL 처리 중...';
-    
-            fetch('https://data.nypi.re.kr/hop/asyncRun/?service=trigger', {
-                method: 'GET'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => {
-                        throw new Error(text || response.statusText);
-                    });
-                }
-                return response.text();
-            })
-            .then(data => {
-                alert(data);
-            })
-            .catch(error => {
-                console.error(error);
-                alert(error.message);
-            })
-            .finally(() => {
+        emailInput.addEventListener('input', function () {
+            const email = emailInput.value.trim();
+            if (isEmail(email)) {
                 etlButton.disabled = false;
-                etlButton.textContent = 'ETL 처리';
-            });
-            */
+            } else {
+                etlButton.disabled = true;
+            }
+        });
+
+        etlButton.addEventListener('click', function () {
+            alert('ETL 처리 기능은 현재 비활성화되어 있습니다. 필요 시 활성화할 수 있습니다.');
+            const email = emailInput.value.trim();
+            
+            // etlButton.disabled = true;
+            // etlButton.textContent = 'ETL 처리 중...';
+    
+            // fetch(`http://211.205.54.19:8092/hop/asyncRun/?service=trigger&email=${encodeURIComponent(email)}`, {
+            //     method: 'GET'
+            // })
+            // .then(response => {
+            //     if (!response.ok) {
+            //         return response.text().then(text => {
+            //             throw new Error(text || response.statusText);
+            //         });
+            //     }
+            //     return response.text();
+            // })
+            // .catch(error => {
+            //     console.error(error);
+            //     alert(error.message);
+            // })
+            // .finally(() => {
+            //     etlButton.disabled = false;
+            //     etlButton.textContent = 'ETL 처리';
+            // });
         });
     </script>
 
