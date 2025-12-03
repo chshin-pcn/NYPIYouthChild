@@ -14,8 +14,11 @@ import java.util.Objects;
 @Component
 public class UriBuilderUtil {
 
-    @Value("${api.base.url}")
-    private String baseUrl;
+    @Value("${api.oasis.url}")
+    private String oasisUrl;
+
+    @Value("${api.hop.url}")
+    private String hopUrl;
 
     private String encode(String value) {
         if (value == null) {
@@ -29,8 +32,8 @@ public class UriBuilderUtil {
         }
     }
 
-    private UriComponentsBuilder createBaseUriBuilder(String path) {
-        return UriComponentsBuilder.fromUriString(baseUrl)
+    private UriComponentsBuilder createOasisBaseUriBuilder(String path) {
+        return UriComponentsBuilder.fromUriString(oasisUrl)
                 .path(path)
                 .queryParam("_type", "json");
     }
@@ -42,14 +45,14 @@ public class UriBuilderUtil {
     }
 
     public URI buildSearchUri(String opnDataCd) {
-        return createBaseUriBuilder("/openapi/service/api/Search")
+        return createOasisBaseUriBuilder("/openapi/service/api/Search")
                 .queryParam("opnDataCd", opnDataCd)
                 .build(true)
                 .toUri();
     }
 
     public URI buildWholeSearchUri() {
-        return createBaseUriBuilder("/openapi/service/api/WholSearchFilter")
+        return createOasisBaseUriBuilder("/openapi/service/api/WholSearchFilter")
                 .build(true)
                 .toUri();
     }
@@ -58,7 +61,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String ornuNm, String opnDataCd,
             String rspnsMnbdNm, String searchKeyword, String srvyYr01, String srvyYr02) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/AoePlcyRscrWholInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/AoePlcyRscrWholInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows);
 
@@ -76,7 +79,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KorKidAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KorKidAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -95,7 +98,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String ornuNm, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/McltAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/McltAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("ornuNm", encode(ornuNm))
@@ -115,7 +118,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KorAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KorAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -134,7 +137,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
             String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/StdsItrpAoePnlInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/StdsItrpAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -152,7 +155,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/KidAoeHrthAccndInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KidAoeHrthAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -171,7 +174,7 @@ public class UriBuilderUtil {
             String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
             String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
-        UriComponentsBuilder uriBuilder = createBaseUriBuilder("/openapi/service/api/YtScitEcnmAccndInfo")
+        UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/YtScitEcnmAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
@@ -183,5 +186,14 @@ public class UriBuilderUtil {
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
 
         return uriBuilder.build(true).toUri();
+    }
+
+    public URI buildTriggerHopUri(String userMail) {
+        return UriComponentsBuilder.fromUriString(hopUrl)
+                .path("/hop/asyncRun/")
+                .queryParam("service", "trigger")
+                .queryParam("USER_MAIL", userMail)
+                .build(true)
+                .toUri();
     }
 }

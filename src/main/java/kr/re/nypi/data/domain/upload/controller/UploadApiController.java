@@ -1,6 +1,7 @@
 package kr.re.nypi.data.domain.upload.controller;
 
 import kr.re.nypi.data.domain.upload.service.UploadService;
+import kr.re.nypi.data.util.UriBuilderUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class UploadApiController {
 
     private final UploadService uploadService;
     private final RestTemplate restTemplate;
+    private final UriBuilderUtil uriBuilderUtil;
 
     @PostMapping("/upload")
     public ResponseEntity<String> handleFileUpload(
@@ -35,7 +37,7 @@ public class UploadApiController {
 
     @GetMapping("/trigger-hop")
     public ResponseEntity<String> triggerHop(@RequestParam("USER_MAIL") String userMail) {
-        String url = "http://211.205.54.19:8092/hop/asyncRun/?service=trigger&USER_MAIL=" + userMail;
+        String url = uriBuilderUtil.buildTriggerHopUri(userMail).toString();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth("pcn", "Pcn2025!@");
