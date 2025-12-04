@@ -1,19 +1,21 @@
 package kr.re.nypi.data.domain.openapi.common.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import kr.re.nypi.data.domain.openapi.common.dto.FilterItemDto;
 import kr.re.nypi.data.domain.openapi.common.dto.FilterOptionsDto;
 import kr.re.nypi.data.domain.openapi.common.service.SearchFilterService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -24,10 +26,77 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final StringRedisTemplate redisTemplate;
+
+    private static final String REDIS_KEY_PREFIX = "filter:";
 
     @Override
     public FilterOptionsDto getProcessedFilterData(URI uri, String opnDataCd) {
-        FilterOptionsDto emptyFilterOptions = FilterOptionsDto.builder()
+        String redisKey = REDIS_KEY_PREFIX + opnDataCd;
+        JsonNode surveyItemsNode;
+
+        // 1) Redis에서 캐시 조회
+        try {
+            String jsonString = redisTemplate.opsForValue().get(redisKey);
+            if (jsonString != null) {
+                surveyItemsNode = objectMapper.readTree(jsonString);
+                return convertToDto(surveyItemsNode, opnDataCd);
+            }
+        } catch (DataAccessException e) {
+            log.error("Redis 조회 실패. key={}", redisKey);
+        } catch (JsonProcessingException e) {
+            log.error("JSON 파싱 실패. key={}", redisKey);
+        }
+
+        surveyItemsNode = refreshFilterCache(uri, opnDataCd);
+        if (surveyItemsNode == null) {
+            return emptyFilterOptions();
+        }
+
+        // 5) JSON → FilterOptionsDto 변환
+        return convertToDto(surveyItemsNode, opnDataCd);
+    }
+
+    @Override
+    public JsonNode refreshFilterCache(URI uri, String opnDataCd) {
+        String redisKey = REDIS_KEY_PREFIX + opnDataCd;
+        JsonNode rootNode;
+        JsonNode surveyItemsNode;
+
+        // 2) 캐시가 없으면 외부 API 호출
+        try {
+            rootNode = restTemplate.getForObject(uri, JsonNode.class);
+        } catch (RestClientException e) {
+            log.error("외부 API 호출 실패. URI: {}", uri);
+            return null;
+        }
+
+        // 3) 응답 내 item 노드 검증
+        if (rootNode == null || rootNode.isMissingNode()) {
+            log.error("외부 API 응답에 rootNode가 없거나 비어있습니다. URI: {}", uri);
+            return null;
+        }
+        surveyItemsNode = rootNode.at("/response/body/items/item");
+        if (surveyItemsNode.isMissingNode() || !surveyItemsNode.isArray()) {
+            log.error("외부 API 응답의 item 노드가 없거나 배열이 아닙니다. URI: {}", uri);
+            return null;
+        }
+
+        // 4) Redis에 JSON 문자열 저장
+        try {
+            String jsonString = objectMapper.writeValueAsString(surveyItemsNode);
+            redisTemplate.opsForValue().set(redisKey, jsonString);
+        } catch (DataAccessException e) {
+            log.error("Redis 저장 실패. key={}", redisKey);
+        } catch (JsonProcessingException e) {
+            log.error("JSON 직렬화 실패. key={}", redisKey);
+        }
+
+        return surveyItemsNode;
+    }
+
+    private FilterOptionsDto emptyFilterOptions() {
+        return FilterOptionsDto.builder()
                 .yearData(Collections.emptyList())
                 .respondentData(Collections.emptyList())
                 .categoryMajorData(Collections.emptyList())
@@ -36,31 +105,14 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
                 .categoryDetailedData(Collections.emptyList())
                 .questionData(Collections.emptyList())
                 .build();
-        try {
-            JsonNode rootNode = restTemplate.getForObject(uri, JsonNode.class);
-
-            if (rootNode == null || rootNode.isMissingNode()) {
-                throw new IOException("외부 API 응답에 rootNode가 없거나 비어있습니다.");
-            }
-
-            JsonNode surveyItemsNode = rootNode.at("/response/body/items/item");
-            if (surveyItemsNode.isMissingNode() || !surveyItemsNode.isArray()) {
-                throw new IOException("외부 API 응답의 surveyItems 노드가 없거나 배열이 아닙니다.");
-            }
-
-            List<FilterItemDto> surveyItems = objectMapper.convertValue(surveyItemsNode, new TypeReference<List<FilterItemDto>>() {
-            });
-            return processSurveyItems(surveyItems, opnDataCd);
-
-        } catch (RestClientException e) {
-            log.error("외부 API 호출 실패. URI: {}", uri);
-            return emptyFilterOptions;
-        } catch (IOException e) {
-            log.error("API 응답 데이터 처리 실패. URI: {}", uri);
-            return emptyFilterOptions;
-        }
     }
 
+    private FilterOptionsDto convertToDto(JsonNode surveyItemsNode, String opnDataCd) {
+        List<FilterItemDto> surveyItems =
+                objectMapper.convertValue(surveyItemsNode, new TypeReference<List<FilterItemDto>>() {
+                });
+        return processSurveyItems(surveyItems, opnDataCd);
+    }
 
     private FilterOptionsDto processSurveyItems(List<FilterItemDto> surveyItems, String opnDataCd) {
         boolean isWave = opnDataCd.equals("SRVY010102");
