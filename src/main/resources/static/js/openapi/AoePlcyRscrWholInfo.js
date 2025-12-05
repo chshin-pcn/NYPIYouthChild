@@ -1,3 +1,4 @@
+import { showLoadingSpinner, hideLoadingSpinner } from "../common/loading-spinner.js";
 import { fetchFilter } from './filter.js';
 import { addCopyButtonEventListener, updateTotalCount, fetchTable } from './table.js';
 
@@ -425,11 +426,13 @@ async function initializeFilters() {
     };
 }
 
+showLoadingSpinner();
 initializeFilters().then(() => {
     addFilterEventListeners();
     addResetButtonEventListener();
     addSearchButtonEventListener();
     updateDependentFilters();
+    hideLoadingSpinner();
 });
 addPageSizeChangeEventListener();
 addCopyButtonEventListener();
