@@ -1,3 +1,4 @@
+import { showLoadingSpinner, hideLoadingSpinner } from "../common/loading-spinner.js";
 import { initializeFilters, addFilterEventListeners, addResetButtonEventListener, addSearchButtonEventListener } from './filter.js';
 import { addPageSizeChangeEventListener, addCopyButtonEventListener, performSearch } from './table.js';
 
@@ -43,10 +44,12 @@ const tableConfig = {
     ]
 };
 
+showLoadingSpinner();
 initializeFilters(pageFilterConfig, url).then(() => {
     addFilterEventListeners();
     addResetButtonEventListener();
     addSearchButtonEventListener(performSearch, pageFilterConfig, tableConfig, url);
+    hideLoadingSpinner();
 });
 
 addPageSizeChangeEventListener(performSearch, tableConfig, url);

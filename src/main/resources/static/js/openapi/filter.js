@@ -1,5 +1,3 @@
-import { showLoadingSpinner, hideLoadingSpinner } from "../common/loading-spinner.js";
-
 /**
  * 필터 선택 상자를 저장하는 객체입니다. 각 선택 상자는 고유한 키로 식별됩니다.
  * @type {Object.<string, HTMLSelectElement>}
@@ -25,13 +23,10 @@ let processedData = null;
  * @throws {Error} - 데이터 조회 실패 시 오류를 발생시킵니다.
  */
 export async function fetchFilter(url) {
-    showLoadingSpinner();
     const response = await fetch(url);
     if (!response.ok) {
-        hideLoadingSpinner();
         throw new Error("필터 데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
     }
-    hideLoadingSpinner();
     return response.json();
 }
 
