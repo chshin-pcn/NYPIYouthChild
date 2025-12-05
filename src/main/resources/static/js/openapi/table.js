@@ -1,3 +1,5 @@
+import { showLoadingSpinner, hideLoadingSpinner } from "../common/loading-spinner.js";
+
 /**
  * 현재 선택된 검색 파라미터를 저장하는 객체입니다.
  * @type {object}
@@ -12,10 +14,13 @@ let selectedParams = {};
  * @throws {Error} - 데이터 조회 실패 시 오류를 발생시킵니다.
  */
 export async function fetchTable(url, queryString) {
+    showLoadingSpinner();
     const response = await fetch(`${url}?${queryString}`);
     if (!response.ok) {
+        hideLoadingSpinner();
         throw new Error("테이블 데이터 조회에 실패했습니다.\n잠시 후 다시 시도해주세요.");
     }
+    hideLoadingSpinner();
     return response.json();
 }
 
@@ -123,6 +128,28 @@ export function updateTotalCount(totalCount) {
 }
 
 /**
+ * 페이지네이션 버튼을 생성하는 헬퍼 함수.
+ * @param {string|number} text - 버튼에 표시될 텍스트.
+ * @param {Array<string>} classNames - 버튼에 추가할 CSS 클래스 배열.
+ * @param {boolean} disabled - 버튼 비활성화 여부.
+ * @param {number|null} dataPage - 버튼 클릭 시 이동할 페이지 번호 (data-page 속성).
+ * @returns {HTMLButtonElement} - 생성된 버튼 엘리먼트.
+ */
+function createButton(text, classNames = [], disabled = false, dataPage = null) {
+    const button = document.createElement("button");
+    button.classList.add("page-btn", ...classNames); // 기본 클래스 및 추가 클래스 적용
+    if (disabled) button.disabled = true; // 비활성화 설정
+
+    const anchor = document.createElement("a");
+    anchor.textContent = text; // 텍스트 설정
+    button.appendChild(anchor); // 앵커 태그를 버튼에 추가
+
+    if (dataPage) button.dataset.page = dataPage; // data-page 속성 설정
+
+    return button;
+};
+
+/**
  * 페이지네이션 UI를 생성하고 페이지 버튼에 이벤트 리스너를 추가합니다.
  * @param {number} totalCount - 전체 데이터 항목 수.
  * @param {number} numOfRows - 페이지 당 표시할 행 수.
@@ -146,28 +173,6 @@ function displayPagination(totalCount, numOfRows, pageNo, performSearch, tableCo
     const startPage = Math.floor((pageNo - 1) / pageGroupSize) * pageGroupSize + 1;
     // 현재 페이지 그룹의 끝 페이지 번호 계산
     const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
-
-    /**
-     * 페이지네이션 버튼을 생성하는 헬퍼 함수.
-     * @param {string|number} text - 버튼에 표시될 텍스트.
-     * @param {Array<string>} classNames - 버튼에 추가할 CSS 클래스 배열.
-     * @param {boolean} disabled - 버튼 비활성화 여부.
-     * @param {number|null} dataPage - 버튼 클릭 시 이동할 페이지 번호 (data-page 속성).
-     * @returns {HTMLButtonElement} - 생성된 버튼 엘리먼트.
-     */
-    const createButton = (text, classNames = [], disabled = false, dataPage = null) => {
-        const button = document.createElement("button");
-        button.classList.add("page-btn", ...classNames); // 기본 클래스 및 추가 클래스 적용
-        if (disabled) button.disabled = true; // 비활성화 설정
-
-        const anchor = document.createElement("a");
-        anchor.textContent = text; // 텍스트 설정
-        button.appendChild(anchor); // 앵커 태그를 버튼에 추가
-
-        if (dataPage) button.dataset.page = dataPage; // data-page 속성 설정
-
-        return button;
-    };
 
     // "처음" 버튼 생성 및 추가
     const firstButton = createButton("처음", ["arrow", "first"], pageNo === 1);

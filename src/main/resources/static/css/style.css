@@ -309,6 +309,29 @@ caption,
     touch-action: none;
 }
 
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 200;
+}
+
+.loading img {
+    width: 50px;
+    height: 50px
+}
+
+.loading span {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: light
+}
+
 .pc {
     display: block !important;
 }
