@@ -299,37 +299,12 @@ export function addCopyButtonEventListener() {
 export async function performSearch(searchParams, pageNo = 1, numOfRows = 10, tableConfig, url) {
     // 필터 요소들을 가져옵니다.
     const year = document.getElementById('year');
-    const respondent = document.getElementById('respondent');
-    const categoryMajor = document.getElementById('category-major');
-    const categoryMedium = document.getElementById('category-medium');
-    const categoryMinor = document.getElementById('category-minor');
-    const categoryDetailed = document.getElementById('category-detailed');
-    const question = document.getElementById('question');
 
     // 필수 필드 유효성 검사
     if (year && !searchParams.srvyYr) {
         alert("연도가 선택되지 않았습니다.");
         year.focus();
         return;
-    }
-    if (respondent && !searchParams.rspnsMnbdNm) {
-        alert("응답주체가 선택되지 않았습니다.");
-        respondent.focus();
-        return;
-    }
-    if (!searchParams.srvyQitemId) {
-        if (question && !question.disabled && question.selectedIndex === 0) {
-            alert("문항이 선택되지 않았습니다.");
-            question.focus();
-            return;
-        }
-        [categoryMajor, categoryMedium, categoryMinor, categoryDetailed].forEach(category => {
-            if (category && !category.disabled && category.selectedIndex === 0) {
-                alert("카테고리가 선택되지 않았습니다.");
-                category.focus();
-                return;
-            }
-        });
     }
 
     // 쿼리 문자열 생성

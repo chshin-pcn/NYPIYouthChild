@@ -12,10 +12,10 @@ const pageFilterConfig = {
     selects: [
         { key: "year", elementId: "year", data: "yearData", paramName: "srvyYr" },
         { key: "respondent", elementId: "respondent", data: "respondentData", paramName: "rspnsMnbdNm" },
-        { key: "categoryMajor", elementId: "category-major", data: "categoryMajorData" },
-        { key: "categoryMedium", elementId: "category-medium", data: "categoryMediumData" },
-        { key: "categoryMinor", elementId: "category-minor", data: "categoryMinorData" },
-        { key: "categoryDetailed", elementId: "category-detailed", data: "categoryDetailedData" },
+        { key: "categoryMajor", elementId: "category-major", data: "categoryMajorData", paramName: "large" },
+        { key: "categoryMedium", elementId: "category-medium", data: "categoryMediumData", paramName: "mid" },
+        { key: "categoryMinor", elementId: "category-minor", data: "categoryMinorData", paramName: "small" },
+        { key: "categoryDetailed", elementId: "category-detailed", data: "categoryDetailedData", paramName: "detail" },
         { key: "questionId", elementId: "question", data: "questionData", paramName: "srvyQitemId" }
     ],
     bannerVariables: [
