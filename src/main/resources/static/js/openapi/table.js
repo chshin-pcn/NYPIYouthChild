@@ -337,9 +337,7 @@ export async function performSearch(searchParams, pageNo = 1, numOfRows = 10, ta
     try {
         // 테이블 데이터 가져오기
         const data = await fetchTable(url.table, queryString);
-        const { items, totalCount } = data; // 데이터와 총 건수 추출
-        numOfRows = data.numOfRows; // 실제 페이지 당 행 수 업데이트
-        pageNo = data.pageNo; // 실제 페이지 번호 업데이트
+        const { items, totalCount, numOfRows, pageNo } = data; // 데이터와 총 건수 추출
 
         selectedParams = { ...searchParams }; // 현재 검색 파라미터 저장
         renderTable(items, tableConfig); // 테이블 렌더링

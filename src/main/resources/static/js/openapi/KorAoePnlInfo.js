@@ -27,16 +27,16 @@ const pageFilterConfig = {
 
 const tableConfig = {
     columns: [
-        { key: 'id' },
+        { key: 'id', className: 'text-right' },
         { key: 'srvyYr' },
         { key: 'srvyExmnCycl' },
         { key: 'rspnsMnbdNm' },
         { key: 'otptCtgryNm' },
-        { key: 'svbnVrblCn' },
-        { key: 'svbnClsfCd' },
+        { key: 'svbnVrblCn', className: 'text-left' },
+        { key: 'svbnClsfCd', className: 'text-left' },
         { key: 'srvyQitemId' },
         { key: 'cbookQitemCn' },
-        { key: 'rspvl' },
+        { key: 'rspvl', className: 'text-right' },
         { key: 'rspnsNm', className: 'text-left' },
         { key: 'aiCrtYn' },
         { key: 'caseCnt', className: 'text-right' },
