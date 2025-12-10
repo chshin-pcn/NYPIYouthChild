@@ -49,7 +49,7 @@ function resetAndDisable(...selectElements) {
  * 주어진 데이터 항목들로 선택 상자를 채웁니다.
  * 데이터가 없거나 유효하지 않으면 선택 상자를 비활성화합니다.
  * @param {HTMLSelectElement} select - 옵션을 채울 HTMLSelectElement 객체.
- * @param {Array<Object>} items - 선택 상자에 추가할 { id: string, name: string, value?: string } 형태의 항목 배열.
+ * @param {Array<Object>} items - 선택 상자에 추가할 { id: string, text: string, value?: string } 형태의 항목 배열.
  */
 function populateSelect(select, items) {
     if (!select || !items || items.length === 0) {
@@ -58,10 +58,9 @@ function populateSelect(select, items) {
     }
     items.forEach((item) => {
         const opt = document.createElement("option");
-        opt.value = item.id; // 옵션의 value 속성
-        opt.textContent = item.name; // 옵션에 표시될 텍스트
-        // 요청 값으로 사용될 일관된 속성 (예: 'value')
-        if (item.value) opt.dataset.value = item.value;
+        opt.value = item.value ? item.value : item.text; // 옵션의 value 속성
+        opt.textContent = item.text; // 옵션에 표시될 텍스트
+        opt.dataset.id = item.id;
         select.appendChild(opt); // 옵션을 선택 상자에 추가
     });
     select.disabled = false; // 선택 상자 활성화
@@ -90,7 +89,7 @@ export function addFilterEventListeners() {
         if (!currentSelect) return;
 
         currentSelect.addEventListener("change", () => {
-            const selectedId = currentSelect.value;
+            const selectedId = currentSelect.options[currentSelect.selectedIndex].dataset.id;
 
             // 현재 선택 상자 이후의 모든 선택 상자를 초기화하고 비활성화합니다.
             const selectsToReset = selectOrder.slice(index + 1).map((item) => selects[item.key]);
@@ -108,8 +107,8 @@ export function addFilterEventListeners() {
                 if (children.length === 1) {
                     // 옵션이 하나뿐인 경우, 자동으로 선택하고 드롭다운을 비활성화한 다음 다음으로 이동합니다.
                     populateSelect(nextSelect, children);
-                    nextSelect.value = children[0].id;
-                    if (children[0].name === "없음") nextSelect.disabled = true;
+                    nextSelect.selectedIndex = 1; // 자동 선택
+                    if (children[0].text === "없음") nextSelect.disabled = true;
 
                     // 다음 반복을 위한 준비
                     currentParentId = children[0].id;
@@ -132,17 +131,17 @@ export function addFilterEventListeners() {
  */
 export function addResetButtonEventListener() {
     const btnReset = document.querySelector(".btn-reset"); // 리셋 버튼 요소 가져오기
-    if (btnReset) {
-        btnReset.addEventListener("click", () => {
-            const allSelects = selectOrder.map((item) => selects[item.key]);
-            resetAndDisable(...allSelects); // 모든 선택 상자 초기화 및 비활성화
-            // 첫 번째 선택 상자를 다시 채웁니다.
-            if (selectOrder.length > 0) {
-                const firstSelect = selectOrder[0];
-                populateSelect(selects[firstSelect.key], getChildren(null, firstSelect.data));
-            }
-        });
-    }
+    if (!btnReset) return;
+    
+    btnReset.addEventListener("click", () => {
+        const allSelects = selectOrder.map((item) => selects[item.key]);
+        resetAndDisable(...allSelects); // 모든 선택 상자 초기화 및 비활성화
+        // 첫 번째 선택 상자를 다시 채웁니다.
+        if (selectOrder.length > 0) {
+            const firstSelect = selectOrder[0];
+            populateSelect(selects[firstSelect.key], getChildren(null, firstSelect.data));
+        }
+    });
 }
 
 /**
@@ -157,55 +156,54 @@ export function addResetButtonEventListener() {
  */
 export function addSearchButtonEventListener(performSearch, pageFilterConfig, tableConfig, url) {
     const btnSearch = document.querySelector(".btn-search"); // 검색 버튼 요소 가져오기
-    if (btnSearch) {
-        btnSearch.addEventListener("click", () => {
-            const searchParams = {}; // 검색 파라미터를 저장할 객체
+    if (!btnSearch) return;
 
-            // 선택 드롭다운에서 값 수집
-            selectOrder.forEach(selectInfo => {
-                // paramName이 정의되지 않은 경우 건너뜀
-                if (!selectInfo.paramName) return;
+    btnSearch.addEventListener("click", () => {
+        const searchParams = {}; // 검색 파라미터를 저장할 객체
 
-                const select = selects[selectInfo.key];
-                if (!select || !select.value) return;
+        // 선택 드롭다운에서 값 수집
+        selectOrder.forEach(selectInfo => {
+            // paramName이 정의되지 않은 경우 건너뜀
+            if (!selectInfo.paramName) return;
 
-                const selectedOption = select.options[select.selectedIndex];
+            const select = selects[selectInfo.key];
+            if (!select || !select.value) return;
 
-                const valueToUse = !!selectedOption.dataset.value ? selectedOption.dataset.value : select.value;
+            const valueToUse = select.value;
+            if (valueToUse === "" || valueToUse === "없음") return;
 
-                // 'year' 키에 대한 특별 처리 로직
-                if (selectInfo.key === "year") {
-                    let parts = valueToUse.split('-');
-                    searchParams["aiCrtYn"] = parts[1]; // 'aiCrtYn' 파라미터 설정
-                    if (valueToUse.includes(' / ')) {
-                        parts = parts[0].split(' / ');
-                        searchParams["ornuNm"] = parts[0]; // 'ornuNm' 파라미터 설정
-                        searchParams["srvyYr"] = parts[1]; // 'srvyYr' 파라미터 설정
-                    } else {
-                        searchParams["srvyYr"] = parts[0]; // 'srvyYr' 파라미터 설정
-                    }
+            // 'year' 키에 대한 특별 처리 로직
+            if (selectInfo.key === "year") {
+                let parts = valueToUse.split('-');
+                if (parts[1] === "Y") searchParams["aiCrtYn"] = "Y"; // 'aiCrtYn' 파라미터 설정
+                if (valueToUse.includes(' / ')) {
+                    parts = parts[0].split(' / ');
+                    searchParams["ornuNm"] = parts[0]; // 'ornuNm' 파라미터 설정
+                    searchParams["srvyYr"] = parts[1]; // 'srvyYr' 파라미터 설정
                 } else {
-                    searchParams[selectInfo.paramName] = valueToUse; // 일반 파라미터 설정
+                    searchParams["srvyYr"] = parts[0]; // 'srvyYr' 파라미터 설정
+                }
+            } else {
+                searchParams[selectInfo.paramName] = valueToUse; // 일반 파라미터 설정
+            }
+        });
+
+        // 배너 변수 체크박스에서 값 수집
+        if (pageFilterConfig.bannerVariables) {
+            pageFilterConfig.bannerVariables.forEach(bannerConfig => {
+                const checkbox = document.getElementById(bannerConfig.elementId);
+                if (checkbox && checkbox.checked) {
+                    searchParams[bannerConfig.paramName] = bannerConfig.paramValue; // 배너 변수 파라미터 설정
                 }
             });
+        }
 
-            // 배너 변수 체크박스에서 값 수집
-            if (pageFilterConfig.bannerVariables) {
-                pageFilterConfig.bannerVariables.forEach(bannerConfig => {
-                    const checkbox = document.getElementById(bannerConfig.elementId);
-                    if (checkbox && checkbox.checked) {
-                        searchParams[bannerConfig.paramName] = bannerConfig.paramValue; // 배너 변수 파라미터 설정
-                    }
-                });
-            }
-
-            // 페이지네이션 값 가져오기
-            const numOfRows = document.getElementById('page-size-select').value;
-            
-            // 검색 수행 함수 호출
-            performSearch(searchParams, 1, numOfRows, tableConfig, url);
-        });
-    }
+        // 페이지네이션 값 가져오기
+        const numOfRows = document.getElementById('page-size-select').value;
+        
+        // 검색 수행 함수 호출
+        performSearch(searchParams, 1, numOfRows, tableConfig, url);
+    });
 }
 
 /**

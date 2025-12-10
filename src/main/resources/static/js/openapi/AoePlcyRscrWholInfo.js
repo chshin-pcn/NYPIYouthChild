@@ -296,17 +296,17 @@ function updateTable(items) {
             return cell;
         };
 
-        row.appendChild(createCell(item.id));
+        row.appendChild(createCell(item.id, 'text-right'));
         row.appendChild(createCell(item.opnDataCd));
-        row.appendChild(createCell(item.otptDataSeNm));
+        row.appendChild(createCell(item.otptDataSeNm, 'text-left'));
         row.appendChild(createCell(item.cohortNm));
-        row.appendChild(createCell(item.ornuNm));
+        row.appendChild(createCell(item.ornuNm, 'text-left'));
         row.appendChild(createCell(item.srvyYr));
         row.appendChild(createCell(item.srvyExmnCycl));
-        row.appendChild(createCell(item.rspnsMnbdNm));
-        row.appendChild(createCell(item.srvyQitemId, "text-left"));
-        row.appendChild(createCell(item.cbookQitemCn, "text-left"));
-        row.appendChild(createCell(item.otptCtgryNm, "text-left"));
+        row.appendChild(createCell(item.rspnsMnbdNm, 'text-left'));
+        row.appendChild(createCell(item.srvyQitemId, 'text-left'));
+        row.appendChild(createCell(item.cbookQitemCn, 'text-left'));
+        row.appendChild(createCell(item.otptCtgryNm, 'text-left'));
 
         const downloadCell = document.createElement('td');
         downloadCell.classList.add('download-cell'); // Add class for styling

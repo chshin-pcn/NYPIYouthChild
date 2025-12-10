@@ -76,17 +76,21 @@ public class UriBuilderUtil {
     }
 
     public URI buildKorKidAoePnlInfoUri(
-            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
+            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm, String large, String mid, String small, String detail,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KorKidAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("rspnsMnbdNm", encode(rspnsMnbdNm))
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", encode(rspnsMnbdNm));
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
@@ -95,7 +99,7 @@ public class UriBuilderUtil {
     }
 
     public URI buildMcltAoePnlInfoUri(
-            String pageNo, String numOfRows, String ornuNm, String srvyYr, String rspnsMnbdNm,
+            String pageNo, String numOfRows, String ornuNm, String srvyYr, String rspnsMnbdNm, String large, String mid, String small, String detail,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/McltAoePnlInfo")
@@ -103,10 +107,14 @@ public class UriBuilderUtil {
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("ornuNm", encode(ornuNm))
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("rspnsMnbdNm", encode(rspnsMnbdNm))
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", encode(rspnsMnbdNm));
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
@@ -115,17 +123,21 @@ public class UriBuilderUtil {
     }
 
     public URI buildKorAoePnlInfoUri(
-            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
+            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm, String large, String mid, String small, String detail,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KorAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("rspnsMnbdNm", encode(rspnsMnbdNm))
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", encode(rspnsMnbdNm));
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
@@ -134,16 +146,20 @@ public class UriBuilderUtil {
     }
 
     public URI buildStdsItrpAoePnlInfoUri(
-            String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
-            String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
+            String pageNo, String numOfRows, String srvyYr, String large, String mid, String small, String detail,
+            String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/StdsItrpAoePnlInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
@@ -152,17 +168,21 @@ public class UriBuilderUtil {
     }
 
     public URI buildKidAoeHrthAccndInfoUri(
-            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm,
+            String pageNo, String numOfRows, String srvyYr, String rspnsMnbdNm, String large, String mid, String small, String detail,
             String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/KidAoeHrthAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("rspnsMnbdNm", encode(rspnsMnbdNm))
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "rspnsMnbdNm", encode(rspnsMnbdNm));
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);
@@ -171,16 +191,20 @@ public class UriBuilderUtil {
     }
 
     public URI buildYtScitEcnmAccndInfoUri(
-            String pageNo, String numOfRows, String srvyYr, String srvyQitemId,
-            String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
+            String pageNo, String numOfRows, String srvyYr, String large, String mid, String small, String detail,
+            String srvyQitemId, String svbnClsfCd01, String svbnClsfCd02, String svbnClsfCd03, String aiCrtYn) {
 
         UriComponentsBuilder uriBuilder = createOasisBaseUriBuilder("/openapi/service/api/YtScitEcnmAccndInfo")
                 .queryParam("pageNo", pageNo)
                 .queryParam("numOfRows", numOfRows)
                 .queryParam("srvyYr", srvyYr)
-                .queryParam("srvyQitemId", srvyQitemId)
                 .queryParam("aiCrtYn", aiCrtYn);
 
+        addQueryParamIfPresent(uriBuilder, "large", encode(large));
+        addQueryParamIfPresent(uriBuilder, "mid", encode(mid));
+        addQueryParamIfPresent(uriBuilder, "small", encode(small));
+        addQueryParamIfPresent(uriBuilder, "detail", encode(detail));
+        addQueryParamIfPresent(uriBuilder, "srvyQitemId", srvyQitemId);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd01", svbnClsfCd01);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd02", svbnClsfCd02);
         addQueryParamIfPresent(uriBuilder, "svbnClsfCd03", svbnClsfCd03);

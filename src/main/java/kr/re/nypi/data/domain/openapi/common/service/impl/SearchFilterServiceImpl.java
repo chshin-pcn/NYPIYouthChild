@@ -143,29 +143,29 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             String questionContent = surveyItem.getQuestionContent();
             String aiCrtYn = surveyItem.getAiCrtYn();
 
-            // id라는 스트링빌더 생성(이후 문자열을 지속적으로 추가해서 사용할 예정)
-            StringBuilder id = new StringBuilder();
+            // sb라는 스트링빌더 생성(이후 문자열을 지속적으로 추가해서 사용할 예정)
+            StringBuilder sb = new StringBuilder();
 
             // yearData 기수/연도 처리(별도 함수 분리)
             if (isWave) {
-                processWaveAndYear(yearData, wave, year, aiCrtYn, id);
+                processWaveAndYear(yearData, wave, year, aiCrtYn, sb);
             } else {
-                processYear(yearData, year, aiCrtYn, id);
+                processYear(yearData, year, aiCrtYn, sb);
             }
 
             // respondentData 응답주체 처리(별도 함수 분리)
             if (isRespondent) {
-                processRespondent(respondentData, respondent, id);
+                processRespondent(respondentData, respondent, sb);
             }
 
             // category 카테고리(대/중/소/세) 처리 (별도 함수 분리)
-            processMajorCategory(categoryMajorData, majorCategory, categoryId, id);
-            processMediumCategory(categoryMediumData, mediumCategory, categoryId, id);
-            processMinorCategory(categoryMinorData, minorCategory, categoryId, id);
-            processDetailedCategory(categoryDetailedData, detailedCategory, categoryId, id);
+            processMajorCategory(categoryMajorData, majorCategory, categoryId, sb);
+            processMediumCategory(categoryMediumData, mediumCategory, categoryId, sb);
+            processMinorCategory(categoryMinorData, minorCategory, categoryId, sb);
+            processDetailedCategory(categoryDetailedData, detailedCategory, categoryId, sb);
 
             // questionData 문항 처리 (별도 함수 분리)
-            processQuestion(questionData, questionId, questionContent, id);
+            processQuestion(questionData, questionId, questionContent, sb);
         }
 
         FilterOptionsDto.FilterOptionsDtoBuilder builder = FilterOptionsDto.builder()
@@ -189,52 +189,51 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
         return list;
     }
 
-    private void processWaveAndYear(Set<Map<String, String>> yearData, String wave, String year, String aiCrtYn, StringBuilder id) {
+    private void processWaveAndYear(Set<Map<String, String>> yearData, String wave, String year, String aiCrtYn, StringBuilder sb) {
         String waveYear = wave + " / " + year;
         String tmpWaveYear = waveYear + "-" + aiCrtYn;
 
         Map<String, String> tmpMap = new HashMap<>();
         tmpMap.put("parentId", null);
-        id.append(tmpWaveYear);
+        sb.append(tmpWaveYear);
         tmpMap.put("id", tmpWaveYear);
         if (aiCrtYn.equals("Y")) {
-            tmpMap.put("name", waveYear + " (AI 생성)");
+            tmpMap.put("text", waveYear + " (AI 생성)");
         } else {
-            tmpMap.put("name", waveYear);
+            tmpMap.put("text", waveYear);
         }
         tmpMap.put("value", tmpWaveYear);
         yearData.add(tmpMap);
     }
 
-    private void processYear(Set<Map<String, String>> yearData, String year, String aiCrtYn, StringBuilder id) {
+    private void processYear(Set<Map<String, String>> yearData, String year, String aiCrtYn, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
         String tmpYear = year + "-" + aiCrtYn;
 
         tmpMap.put("parentId", null);
-        id.append(tmpYear);
+        sb.append(tmpYear);
         tmpMap.put("id", tmpYear);
         if (aiCrtYn.equals("Y")) {
-            tmpMap.put("name", year + " (AI 생성)");
+            tmpMap.put("text", year + " (AI 생성)");
         } else {
-            tmpMap.put("name", year);
+            tmpMap.put("text", year);
         }
         tmpMap.put("value", tmpYear);
         yearData.add(tmpMap);
     }
 
-    private void processRespondent(Set<Map<String, String>> respondentData, String respondent, StringBuilder id) {
+    private void processRespondent(Set<Map<String, String>> respondentData, String respondent, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
-        id.append("-").append(respondent);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", respondent);
-        tmpMap.put("value", respondent);
+        tmpMap.put("parentId", sb.toString());
+        sb.append("-").append(respondent);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", respondent);
         respondentData.add(tmpMap);
     }
 
-    private void processMajorCategory(Set<Map<String, String>> categoryMajorData, String majorCategory, String categoryId, StringBuilder id) {
+    private void processMajorCategory(Set<Map<String, String>> categoryMajorData, String majorCategory, String categoryId, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
+        tmpMap.put("parentId", sb.toString());
 
         String tmpCategoryId;
         String tmpMajorCategory;
@@ -247,15 +246,15 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             tmpCategoryId = categoryId.substring(startIndex, startIndex + 5);
         }
 
-        id.append("-").append(tmpCategoryId);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", tmpMajorCategory);
+        sb.append("-").append(tmpCategoryId);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", tmpMajorCategory);
         categoryMajorData.add(tmpMap);
     }
 
-    private void processMediumCategory(Set<Map<String, String>> categoryMediumData, String mediumCategory, String categoryId, StringBuilder id) {
+    private void processMediumCategory(Set<Map<String, String>> categoryMediumData, String mediumCategory, String categoryId, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
+        tmpMap.put("parentId", sb.toString());
 
         String tmpCategoryId;
         String tmpMediumCategory;
@@ -268,15 +267,15 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             tmpCategoryId = categoryId.substring(startIndex, startIndex + 5);
         }
 
-        id.append("-").append(tmpCategoryId);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", tmpMediumCategory);
+        sb.append("-").append(tmpCategoryId);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", tmpMediumCategory);
         categoryMediumData.add(tmpMap);
     }
 
-    private void processMinorCategory(Set<Map<String, String>> categoryMinorData, String minorCategory, String categoryId, StringBuilder id) {
+    private void processMinorCategory(Set<Map<String, String>> categoryMinorData, String minorCategory, String categoryId, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
+        tmpMap.put("parentId", sb.toString());
 
         String tmpCategoryId;
         String tmpMinorCategory;
@@ -289,15 +288,15 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             tmpCategoryId = categoryId.substring(startIndex, startIndex + 6);
         }
 
-        id.append("-").append(tmpCategoryId);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", tmpMinorCategory);
+        sb.append("-").append(tmpCategoryId);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", tmpMinorCategory);
         categoryMinorData.add(tmpMap);
     }
 
-    private void processDetailedCategory(Set<Map<String, String>> categoryDetailedData, String detailedCategory, String categoryId, StringBuilder id) {
+    private void processDetailedCategory(Set<Map<String, String>> categoryDetailedData, String detailedCategory, String categoryId, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
+        tmpMap.put("parentId", sb.toString());
 
         String tmpCategoryId;
         String tmpDetailedCategory;
@@ -310,18 +309,18 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
             tmpCategoryId = categoryId.substring(startIndex, startIndex + 6);
         }
 
-        id.append("-").append(tmpCategoryId);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", tmpDetailedCategory);
+        sb.append("-").append(tmpCategoryId);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", tmpDetailedCategory);
         categoryDetailedData.add(tmpMap);
     }
 
-    private void processQuestion(Set<Map<String, String>> questionData, String questionId, String questionContent, StringBuilder id) {
+    private void processQuestion(Set<Map<String, String>> questionData, String questionId, String questionContent, StringBuilder sb) {
         Map<String, String> tmpMap = new HashMap<>();
-        tmpMap.put("parentId", id.toString());
-        id.append("-").append(questionId);
-        tmpMap.put("id", id.toString());
-        tmpMap.put("name", questionContent);
+        tmpMap.put("parentId", sb.toString());
+        sb.append("-").append(questionId);
+        tmpMap.put("id", sb.toString());
+        tmpMap.put("text", questionContent);
         tmpMap.put("value", questionId);
         questionData.add(tmpMap);
     }

@@ -247,14 +247,16 @@ export function addPageSizeChangeEventListener(performSearch, tableConfig, url) 
  * @param {string} publicApiBaseUrl - 공공 API의 기본 URL.
  * @param {string} queryString - API 호출에 사용된 쿼리 문자열.
  */
-function displayPublicApiUrl(publicApiBaseUrl, queryString) {
+function displayPublicApiUrl(publicApiBaseUrl, queryString, displayQueryString) {
     const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`; // 최종 API URL 생성
+    const displayPublicApiUrl = `${publicApiBaseUrl}?_type=json&${displayQueryString}`;
 
     const apiUrlContainer = document.getElementById('api-url-container'); // URL 컨테이너
     const apiUrlDisplay = document.getElementById('api-url-display'); // URL을 표시할 input 요소
 
     if (apiUrlDisplay && apiUrlContainer) {
-        apiUrlDisplay.value = publicApiUrl; // input 필드에 URL 설정
+        apiUrlDisplay.value = displayPublicApiUrl; // input 필드에 URL 설정
+        apiUrlDisplay.dataset.publicApiUrl = publicApiUrl; // 실제 API URL을 데이터 속성에 저장
         apiUrlContainer.style.display = 'block'; // 컨테이너 표시
     }
 }
@@ -273,7 +275,7 @@ export function addCopyButtonEventListener() {
     if (copyButton && apiUrlDisplay && copyFeedback) {
         copyButton.addEventListener('click', async () => {
             try {
-                await navigator.clipboard.writeText(apiUrlDisplay.value); // 클립보드에 URL 복사
+                await navigator.clipboard.writeText(apiUrlDisplay.dataset.publicApiUrl); // 클립보드에 URL 복사
                 copyFeedback.classList.add('show'); // 피드백 메시지 표시
                 setTimeout(() => {
                     copyFeedback.classList.remove('show'); // 2초 후 피드백 메시지 숨김
@@ -299,12 +301,6 @@ export function addCopyButtonEventListener() {
 export async function performSearch(searchParams, pageNo = 1, numOfRows = 10, tableConfig, url) {
     // 필터 요소들을 가져옵니다.
     const year = document.getElementById('year');
-    const respondent = document.getElementById('respondent');
-    const categoryMajor = document.getElementById('category-major');
-    const categoryMedium = document.getElementById('category-medium');
-    const categoryMinor = document.getElementById('category-minor');
-    const categoryDetailed = document.getElementById('category-detailed');
-    const question = document.getElementById('question');
 
     // 필수 필드 유효성 검사
     if (year && !searchParams.srvyYr) {
@@ -312,40 +308,20 @@ export async function performSearch(searchParams, pageNo = 1, numOfRows = 10, ta
         year.focus();
         return;
     }
-    if (respondent && !searchParams.rspnsMnbdNm) {
-        alert("응답주체가 선택되지 않았습니다.");
-        respondent.focus();
-        return;
-    }
-    if (!searchParams.srvyQitemId) {
-        if (question && !question.disabled && question.selectedIndex === 0) {
-            alert("문항이 선택되지 않았습니다.");
-            question.focus();
-            return;
-        }
-        [categoryMajor, categoryMedium, categoryMinor, categoryDetailed].forEach(category => {
-            if (category && !category.disabled && category.selectedIndex === 0) {
-                alert("카테고리가 선택되지 않았습니다.");
-                category.focus();
-                return;
-            }
-        });
-    }
 
     // 쿼리 문자열 생성
     const queryString = new URLSearchParams({ ...searchParams, pageNo, numOfRows }).toString();
+    const displayQueryString = decodeURIComponent(queryString);
     try {
         // 테이블 데이터 가져오기
         const data = await fetchTable(url.table, queryString);
-        const { items, totalCount } = data; // 데이터와 총 건수 추출
-        numOfRows = data.numOfRows; // 실제 페이지 당 행 수 업데이트
-        pageNo = data.pageNo; // 실제 페이지 번호 업데이트
+        const { items, totalCount, numOfRows, pageNo } = data; // 데이터와 총 건수 추출
 
         selectedParams = { ...searchParams }; // 현재 검색 파라미터 저장
         renderTable(items, tableConfig); // 테이블 렌더링
         updateTotalCount(totalCount); // 총 건수 업데이트
         displayPagination(totalCount, numOfRows, pageNo, performSearch, tableConfig, url); // 페이지네이션 표시
-        displayPublicApiUrl(url.publicApiBaseUrl, queryString); // 공공 API URL 표시
+        displayPublicApiUrl(url.publicApiBaseUrl, queryString, displayQueryString); // 공공 API URL 표시
     } catch (error) {
         console.error("검색 중 오류 발생:", error); // 에러 로깅
         renderTable(null, tableConfig); // 에러 발생 시 빈 테이블 렌더링

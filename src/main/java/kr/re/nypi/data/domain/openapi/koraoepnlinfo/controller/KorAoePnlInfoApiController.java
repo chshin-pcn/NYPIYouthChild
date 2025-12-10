@@ -27,15 +27,19 @@ public class KorAoePnlInfoApiController {
             @RequestParam(defaultValue = "1") String pageNo,
             @RequestParam(defaultValue = "10") String numOfRows,
             @RequestParam String srvyYr,
-            @RequestParam String rspnsMnbdNm,
-            @RequestParam String srvyQitemId,
+            @RequestParam(required = false) String rspnsMnbdNm,
+            @RequestParam(required = false) String large,
+            @RequestParam(required = false) String mid,
+            @RequestParam(required = false) String small,
+            @RequestParam(required = false) String detail,
+            @RequestParam(required = false) String srvyQitemId,
             @RequestParam(required = false) String svbnClsfCd01,
             @RequestParam(required = false) String svbnClsfCd02,
             @RequestParam(required = false) String svbnClsfCd03,
             @RequestParam(required = false, defaultValue = "N") String aiCrtYn
     ) {
         URI uri = uriBuilderUtil.buildKorAoePnlInfoUri(
-                pageNo, numOfRows, srvyYr, rspnsMnbdNm, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
+                pageNo, numOfRows, srvyYr, rspnsMnbdNm, large, mid, small, detail, srvyQitemId, svbnClsfCd01, svbnClsfCd02, svbnClsfCd03, aiCrtYn
         );
 
         PagedResultDto<SurveyItemDto> data = apiService.getSurveyResult(uri, SurveyItemDto.class);
