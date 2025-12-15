@@ -16,7 +16,7 @@ let allPossibleOptions = {};
 /**
  * 데이터 배열에서 특정 키에 해당하는 고유한 값들을 추출하고 정렬하여 반환합니다.
  */
-function getUniqueValues(dataArray, key) {
+function getUniqueValues(dataArray, key, ascending = true) {
     const uniqueSet = new Set();
     if (dataArray) {
         dataArray.forEach(item => {
@@ -25,7 +25,8 @@ function getUniqueValues(dataArray, key) {
             }
         });
     }
-    return Array.from(uniqueSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const sortedValues = Array.from(uniqueSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    return ascending ? sortedValues : sortedValues.reverse();
 }
 
 /**
@@ -137,7 +138,7 @@ function updateDependentFilters() {
     if (selections.order) baseYearFilteredData = baseYearFilteredData.filter(item => item.ornuNm === selections.order);
     if (selections.respondent) baseYearFilteredData = baseYearFilteredData.filter(item => item.rspnsMnbdNm === selections.respondent);
 
-    const baseValidYears = getUniqueValues(baseYearFilteredData, 'srvyYr');
+    const baseValidYears = getUniqueValues(baseYearFilteredData, 'srvyYr', false);
 
     const selectedYear2 = selections.year2 ? parseInt(selections.year2, 10) : Infinity;
     const validOptionsForYear1 = baseValidYears.filter(year => parseInt(year, 10) <= selectedYear2);
@@ -425,7 +426,7 @@ async function initializeFilters() {
         survey: getUniqueSurveys(data),
         order: getUniqueValues(data, 'ornuNm'),
         respondent: getUniqueValues(data, 'rspnsMnbdNm'),
-        year: getUniqueValues(data, 'srvyYr')
+        year: getUniqueValues(data, 'srvyYr', false)
     };
 }
 

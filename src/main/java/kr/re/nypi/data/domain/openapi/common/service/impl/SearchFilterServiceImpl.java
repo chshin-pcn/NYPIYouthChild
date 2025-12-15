@@ -169,7 +169,7 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
         }
 
         FilterOptionsDto.FilterOptionsDtoBuilder builder = FilterOptionsDto.builder()
-                .yearData(getSortedList(yearData))
+                .yearData(getSortedList(yearData, false))
                 .categoryMajorData(getSortedList(categoryMajorData))
                 .categoryMediumData(getSortedList(categoryMediumData))
                 .categoryMinorData(getSortedList(categoryMinorData))
@@ -184,8 +184,16 @@ public class SearchFilterServiceImpl extends EgovAbstractServiceImpl implements 
     }
 
     private List<Map<String, String>> getSortedList(Set<Map<String, String>> dataSet) {
+        return getSortedList(dataSet, true);
+    }
+
+    private List<Map<String, String>> getSortedList(Set<Map<String, String>> dataSet, boolean ascending) {
         List<Map<String, String>> list = new ArrayList<>(dataSet);
-        list.sort(Comparator.comparing(m -> m.get("id")));
+        Comparator<Map<String, String>> comparator = Comparator.comparing(m -> m.get("id"));
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+        list.sort(comparator);
         return list;
     }
 
