@@ -246,6 +246,7 @@ export function addPageSizeChangeEventListener(performSearch, tableConfig, url) 
  * API 호출 URL을 화면에 표시합니다.
  * @param {string} publicApiBaseUrl - 공공 API의 기본 URL.
  * @param {string} queryString - API 호출에 사용된 쿼리 문자열.
+ * @param {string} displayQueryString - 사용자에게 표시할 쿼리 문자열 (디코딩된 형태).
  */
 function displayPublicApiUrl(publicApiBaseUrl, queryString, displayQueryString) {
     const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`; // 최종 API URL 생성

@@ -232,20 +232,23 @@ function addSearchButtonEventListener() {
     });
 }
 
-function displayPublicApiUrl(publicApiBaseUrl, queryString) {
+function displayPublicApiUrl(publicApiBaseUrl, queryString, displayQueryString) {
     const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`;
+    const displayPublicApiUrl = `${publicApiBaseUrl}?_type=json&${displayQueryString}`;
 
     const apiUrlContainer = document.getElementById('api-url-container');
     const apiUrlDisplay = document.getElementById('api-url-display');
 
     if (apiUrlDisplay && apiUrlContainer) {
-        apiUrlDisplay.value = publicApiUrl;
+        apiUrlDisplay.value = displayPublicApiUrl;
+        apiUrlDisplay.dataset.publicApiUrl = publicApiUrl;
         apiUrlContainer.style.display = 'block';
     }
 }
 
 async function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
     const queryString = new URLSearchParams({ ...searchParams, pageNo, numOfRows }).toString();
+    const displayQueryString = decodeURIComponent(queryString);
     try {
         const data = await fetchTable(url.table, queryString);
         const { items, totalCount } = data; // 데이터와 총 건수 추출
@@ -256,7 +259,7 @@ async function performSearch(searchParams, pageNo = 1, numOfRows = 10) {
         updateTable(items);
         updateTotalCount(totalCount);
         displayPagination(totalCount, numOfRows, pageNo);
-        displayPublicApiUrl(url.publicApiBaseUrl, queryString);
+        displayPublicApiUrl(url.publicApiBaseUrl, queryString, displayQueryString);
     } catch (error) {
         console.error("검색 중 오류 발생:", error);
         updateTable(null);
