@@ -430,13 +430,16 @@ caption,
 
 .side-nav-menu ul {
     margin-top: 40px;
-    padding: 0 15px;
+    padding: 0 12px;
 }
 
 .side-nav-menu ul li a {
     display: flex;
     align-items: center;
     gap: 15px;
+    padding: 15px 12px;
+    font-weight: 500;
+    color: #fff;
 }
 
 .side-nav-menu ul li a::before {
@@ -471,12 +474,6 @@ caption,
 
 .side-nav-menu ul li:last-child a::before {
     background: url(../images/ico_menu00.png);
-}
-
-.side-nav-menu ul li a {
-    padding: 15px;
-    font-weight: 500;
-    color: #fff;
 }
 
 .side-nav-menu ul li+li {
