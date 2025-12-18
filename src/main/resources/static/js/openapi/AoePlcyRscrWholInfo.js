@@ -5,7 +5,7 @@ import { addCopyButtonEventListener, updateTotalCount, fetchTable } from './tabl
 const url = {
     filter: "/api/filter",
     table: "/api/aoePlcyRscrWholInfo",
-    publicApiBaseUrl: "https://data.nypi.re.kr/openapi/service/api/AoePlcyRscrWholInfo",
+    publicApiBaseUrl: "https://apis.data.go.kr/B551923/apiAoePlcyRscrWholInfo/AoePlcyRscrWholInfo",
 }
 
 const filterElementIds = ['survey', 'order', 'year1', 'year2', 'respondent'];
@@ -234,8 +234,8 @@ function addSearchButtonEventListener() {
 }
 
 function displayPublicApiUrl(publicApiBaseUrl, queryString, displayQueryString) {
-    const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`;
-    const displayPublicApiUrl = `${publicApiBaseUrl}?_type=json&${displayQueryString}`;
+    const publicApiUrl = `${publicApiBaseUrl}?serviceKey={서비스키}&_type=json&${queryString}`;
+    const displayPublicApiUrl = `${publicApiBaseUrl}?serviceKey={서비스키}&_type=json&${displayQueryString}`;
 
     const apiUrlContainer = document.getElementById('api-url-container');
     const apiUrlDisplay = document.getElementById('api-url-display');

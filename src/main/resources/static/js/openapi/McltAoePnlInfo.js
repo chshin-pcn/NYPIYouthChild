@@ -5,7 +5,7 @@ import { addPageSizeChangeEventListener, addCopyButtonEventListener, performSear
 const url = {
     filter: "/api/filter?surveyName=다문화청소년패널조사",
     table: "/api/mcltAoePnlInfo",
-    publicApiBaseUrl: "https://data.nypi.re.kr/openapi/service/api/McltAoePnlInfo",
+    publicApiBaseUrl: "https://apis.data.go.kr/B551923/apiMcltAoePnlInfo/McltAoePnlInfo",
 }
 
 const pageFilterConfig = {
