@@ -249,8 +249,8 @@ export function addPageSizeChangeEventListener(performSearch, tableConfig, url) 
  * @param {string} displayQueryString - 사용자에게 표시할 쿼리 문자열 (디코딩된 형태).
  */
 function displayPublicApiUrl(publicApiBaseUrl, queryString, displayQueryString) {
-    const publicApiUrl = `${publicApiBaseUrl}?_type=json&${queryString}`; // 최종 API URL 생성
-    const displayPublicApiUrl = `${publicApiBaseUrl}?_type=json&${displayQueryString}`;
+    const publicApiUrl = `${publicApiBaseUrl}?serviceKey={서비스키}&_type=json&${queryString}`; // 최종 API URL 생성
+    const displayPublicApiUrl = `${publicApiBaseUrl}?serviceKey={서비스키}&_type=json&${displayQueryString}`;
 
     const apiUrlContainer = document.getElementById('api-url-container'); // URL 컨테이너
     const apiUrlDisplay = document.getElementById('api-url-display'); // URL을 표시할 input 요소

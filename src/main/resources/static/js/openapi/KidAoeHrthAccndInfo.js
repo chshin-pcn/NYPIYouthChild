@@ -5,7 +5,7 @@ import { addPageSizeChangeEventListener, addCopyButtonEventListener, performSear
 const url = {
     filter: "/api/filter?surveyName=아동·청소년인권실태조사",
     table: "/api/kidAoeHrthAccndInfo",
-    publicApiBaseUrl: "https://data.nypi.re.kr/openapi/service/api/KidAoeHrthAccndInfo",
+    publicApiBaseUrl: "https://apis.data.go.kr/B551923/apiKidAoeHrthAccndInfo/KidAoeHrthAccndInfo",
 }
 
 const pageFilterConfig = {
