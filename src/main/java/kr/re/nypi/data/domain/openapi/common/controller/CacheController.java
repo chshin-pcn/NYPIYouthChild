@@ -41,6 +41,7 @@ public class CacheController {
                 log.error("캐시 갱신 중 예외 발생. surveyName={}", surveyName);
                 return ResponseEntity.internalServerError().build();
             }
+            log.info("캐시 갱신 성공. surveyName={}", surveyName);
         }
 
         uri = uriBuilderUtil.buildWholeSearchUri();
@@ -49,6 +50,7 @@ public class CacheController {
             log.error("캐시 갱신 중 예외 발생. surveyName=아동·청소년·청년 데이터 통합검색");
             return ResponseEntity.internalServerError().build();
         }
+        log.info("캐시 갱신 성공. surveyName=아동·청소년·청년 데이터 통합검색");
 
         return ResponseEntity.ok().build();
     }
