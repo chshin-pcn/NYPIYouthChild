@@ -488,9 +488,8 @@ caption,
 
 .side-nav-footer {
     flex-shrink: 0;
-    padding: 45px 0 60px;
+    padding: 45px 0;
     text-align: center;
-    background: #173487;
 }
 
 .side-nav-wrap .btn-menu-close {
