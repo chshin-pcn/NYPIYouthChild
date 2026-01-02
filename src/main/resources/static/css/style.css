@@ -1089,6 +1089,11 @@ footer p {
     color: #777;
 }
 
+footer p a {
+    display: inline-block;
+    vertical-align: top;
+}
+
 /* media query */
 @media (max-width: 1280px) {
     #mainContent {
